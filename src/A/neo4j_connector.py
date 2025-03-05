@@ -40,3 +40,17 @@ class Neo4jConnector:
             """
         self.run_query(load_csv_query)
         logger.succes(f"CSV file '{csv_file}' loaded successfully.")
+        
+if __name__ == "__main__":
+    uri = "bolt://localhost:7687"
+    user = "neo4j"
+    password = "your_password"
+
+    connector = Neo4jConnector(uri, user, password)
+
+    # Example: Load CSV data into Neo4j
+    load_papers_query = """
+    CREATE (:Paper {paperId: row.paperId, title: row.title, year: toInteger(row.year), abstract: row.abstract})
+    """
+    connector.load_csv('papers.csv', load_papers_query)
+    connector.close()
