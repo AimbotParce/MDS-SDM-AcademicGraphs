@@ -42,9 +42,13 @@ class Neo4jConnector:
         logger.succes(f"CSV file '{csv_file}' loaded successfully.")
         
 if __name__ == "__main__":
-    uri = "bolt://localhost:7687"
-    user = "neo4j"
-    password = "your_password"
+    from dotenv import load_dotenv
+    import os
+
+    load_dotenv()
+    uri = os.getenv("NEO4J_URL", "bolt://localhost:7687")    
+    user = os.getenv("NEO4J_USER", "neo4j")
+    password = os.getenv("NEO4J_PASSWORD", "your_password")
 
     connector = Neo4jConnector(uri, user, password)
 
