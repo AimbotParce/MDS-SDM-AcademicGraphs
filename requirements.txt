@@ -1,2 +1,5 @@
 loguru
 neo4j
+pandas
+numpy
+requests
