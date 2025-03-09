@@ -151,13 +151,6 @@ class Dataset(object):
                         logger.info(f"Downloaded {output_file}")
         logger.info("Download complete.")
 
-    def getSize(self):
-        """
-        Get the size of each file in the dataset and add them all up
-        """
-        raise NotImplementedError()
-
-
 if __name__ == "__main__":
     from dotenv import load_dotenv
     import argparse
