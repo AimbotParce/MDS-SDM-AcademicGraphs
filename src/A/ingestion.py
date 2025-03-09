@@ -198,11 +198,11 @@ if __name__ == "__main__":
 
     if not args.dry_run:
         logger.info("Downloading data...")
-        
+
         # Download all files from the latest release
-        latest_release.getDataset('papers').downloadFiles(Path("data"))
-        latest_release.getDataset('authors').downloadFiles(Path("data"))
-        latest_release.getDataset('citations').downloadFiles(Path("data"))
         latest_release.getDataset('publication-venues').downloadFiles(Path("data"))
+        latest_release.getDataset('authors').downloadFiles(Path("data"))
+        latest_release.getDataset('papers').downloadFiles(Path("data"))
+        latest_release.getDataset('citations').downloadFiles(Path("data"))
 
         logger.info("Data downloaded. Remember to unzip the files using 'gzip -dk data/*.gz'")
