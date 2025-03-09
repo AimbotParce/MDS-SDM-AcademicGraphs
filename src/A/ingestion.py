@@ -87,3 +87,4 @@ if __name__ == "__main__":
     
     # Download the papers dataset files
     api.downloadDatasetFiles(latest_release_id, 'papers', 'data')
+    print("Data downloaded. Remember to unzip the files using 'gzip -dk data/*.gz'")
