@@ -197,6 +197,8 @@ if __name__ == "__main__":
                 break
 
     if not args.dry_run:
+        logger.info("Downloading data...")
+        
         # Download all files from the latest release
         latest_release.getDataset('papers').downloadFiles(Path("data"))
         latest_release.getDataset('authors').downloadFiles(Path("data"))
