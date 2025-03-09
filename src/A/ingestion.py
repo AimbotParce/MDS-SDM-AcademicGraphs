@@ -145,10 +145,11 @@ class Dataset(object):
                     logger.error(str(e))
                     output_file.unlink()
                     break
+                else:
+                    logger.info(f"Downloaded {output_file}")
                 finally:
                     if progressbar:
                         bar.close()
-                        logger.info(f"Downloaded {output_file}")
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
