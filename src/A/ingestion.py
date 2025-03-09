@@ -71,20 +71,22 @@ class SemanticScholarAPI:
                         bar.close()
                         logger.info(f"Downloaded {output_file}")
         logger.info("Download complete.")
-
-    def printDatasetInfo(self, release_id: str, dataset_name:str):
-        info = self.get(f"release/{release_id}/dataset/{dataset_name}")
-        logger.info(f"{dataset_name.capitalize()} Dataset:")
-        for line in str.splitlines(info['description']):
+    
+    @staticmethod
+    def printDatasetInfo(dataset_info:dict):
+        papers_files = dataset_info['files']
+        logger.info(f"{dataset_info['name'].capitalize()} Dataset ({len(papers_files)} files):")
+        for line in str.splitlines(dataset_info['description']):
             logger.info("    " + line)
-        papers_files = info['files']
-        logger.info(f"{dataset_name.capitalize()} Dataset Files: {len(papers_files)}")
+
+    def getDataset(self, release_id: str, dataset_name:str):
+        return self.get(f"release/{release_id}/dataset/{dataset_name}")
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
     import argparse
+    import time
     import os
-    import sys
 
     parser = argparse.ArgumentParser(description="Download the Semantic Scholar dataset")
     parser.add_argument("-d", "--dry-run", action="store_true", help="Don't download anything")
@@ -111,36 +113,23 @@ if __name__ == "__main__":
     # 'datasets' is a list of dictionaries with keys 'name', 'description', 'README'.
     logger.info(f"Datasets in Latest Release: {', '.join(d['name'] for d in latest_release['datasets'])}")
 
-
-    # Get info and data from the different datasets.
+    # Print the information of each dataset
     # Each dataset info is a dictionary with keys 'name', 'description', 'README' and 'files'
-
-    ########################################################
-    #                    Papers Dataset                    #
-    ########################################################
-
-    api.printDatasetInfo(latest_release_id, 'papers')
-    if not args.dry_run:    
-        api.downloadDatasetFiles(latest_release_id, 'papers', 'data')
-
-    ########################################################
-    #                   Authors Dataset                    #
-    ########################################################
-
-    api.printDatasetInfo(latest_release_id, 'authors')
-    if not args.dry_run:    
-        api.downloadDatasetFiles(latest_release_id, 'authors', 'data')
-
-
-    ########################################################
-    #                  Citations Dataset                   #
-    ########################################################
-
-    api.printDatasetInfo(latest_release_id, 'citations')
-    if not args.dry_run:    
-        api.downloadDatasetFiles(latest_release_id, 'citations', 'data')
-
-
+    for dataset in latest_release['datasets']:
+        while True:
+            try:
+                SemanticScholarAPI.printDatasetInfo(api.getDataset(latest_release_id, dataset['name']))
+                break
+            except Exception as e:
+                logger.warning("Retrying...")
+                time.sleep(1)
+                continue
 
     if not args.dry_run:
+        # Download all files from the latest release
+        api.downloadDatasetFiles(latest_release_id, 'papers', 'data')
+        api.downloadDatasetFiles(latest_release_id, 'authors', 'data')
+        api.downloadDatasetFiles(latest_release_id, 'citations', 'data')
+        api.downloadDatasetFiles(latest_release_id, 'publication-venues', 'data')
+
         logger.info("Data downloaded. Remember to unzip the files using 'gzip -dk data/*.gz'")
