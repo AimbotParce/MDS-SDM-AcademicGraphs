@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import TypedDict, Union
 import requests
 import urllib.request
 from tqdm import tqdm
@@ -8,6 +9,8 @@ class SemanticScholarAPI:
     def __init__(self, api_url:str, api_key:str=None):
         self.api_url = api_url
         self.api_key = api_key
+
+        self._releases:dict[str, Release] = {}
 
     def get(self, endpoint:str):
 
@@ -31,19 +34,95 @@ class SemanticScholarAPI:
             logger.error(f"Error from {self.api_url}/{endpoint}: {json_res['message']}")
             raise Exception(json_res['message'])
         return json_res
+    
+    def getReleaseIDs(self) -> list[str]:
+        return self.get("release") # No cache. They shouldn't change often, but if they do, we'll get the latest info
+    
+    def getRelease(self, release_id:str) -> 'Release':
+        if release_id in self._releases:
+            return self._releases[release_id]
+        else:
+            self._releases[release_id] = Release(self.get(f"release/{release_id}"), self)
+            return self._releases[release_id]
             
 
-        
+class PrunedDatasetData(TypedDict):
+    name: str
+    description: str
+    README: str
 
-    def downloadDatasetFiles(self, release_id:str, dataset_name:str, output_dir:Path, max_files:int=None, progressbar:bool=True):
+class DatasetData(PrunedDatasetData):
+    files: list[str]
+
+class ReleaseData(TypedDict):
+    release_id: str
+    datasets: list[PrunedDatasetData]
+    README: str
+
+
+class Release(object):
+    def __init__(self, data:ReleaseData, api:SemanticScholarAPI):
+        self.data = data
+        self.api = api
+
+        self._datasets = {}
+
+    @property
+    def release_id(self):
+        return self.data['release_id']
+    
+    @property
+    def README(self):
+        return self.data['README']
+    
+    def getDatasetNames(self):
+        return [dataset['name'] for dataset in self.data['datasets']]
+
+    def getDataset(self, dataset_name:str) -> 'Dataset':
+        if dataset_name in self._datasets:
+            return self._datasets[dataset_name]
+        else:
+            for dataset in self.data['datasets']:
+                if dataset['name'] == dataset_name:
+                    self._datasets[dataset_name] = Dataset(self.api.get(f"release/{self.release_id}/dataset/{dataset_name}"), self)
+                    return self._datasets[dataset_name]
+                
+            raise KeyError(f"Dataset {dataset_name} not found in release {self.release_id}")
+
+
+class Dataset(object):
+    def __init__(self, data:DatasetData, release:Release):
+        self.data = data
+        self.release = release
+    
+    @property
+    def name(self):
+        return self.data['name']
+    
+    @property
+    def description(self):
+        return self.data['description']
+    
+    @property
+    def README(self):
+        return self.data['README']
+    
+    @property
+    def files(self):
+        return self.data['files']
+    
+    def printInfo(self):
+        logger.info(f"{self.name.capitalize()} Dataset ({len(self.files)} files):")
+        for line in str.splitlines(self.description):
+            logger.info("    " + line)
+            
+    def downloadFiles(self, output_dir:Path, max_files:int=None, progressbar:bool=True):
         output_dir = Path(output_dir)
-        dataset = self.get(f"release/{release_id}/dataset/{dataset_name}")
-        files = dataset['files']
-        zeros = len(str(len(files)))
-        for i, file in enumerate(files, 1):
+        zeros = len(str(len(self.files)))
+        for i, file in enumerate(self.files, 1):
             if max_files and i > max_files:
                 break
-            output_file = output_dir / f"rel-{release_id}-{dataset_name}-{i:0{zeros}d}.jsonl.gz"
+            output_file = output_dir / f"rel-{self.release.release_id}-{self.name}-{i:0{zeros}d}.jsonl.gz"
             if output_file.exists():
                 logger.warning(f"File {output_file} already exists. Skipping.")
                 continue
@@ -71,16 +150,13 @@ class SemanticScholarAPI:
                         bar.close()
                         logger.info(f"Downloaded {output_file}")
         logger.info("Download complete.")
-    
-    @staticmethod
-    def printDatasetInfo(dataset_info:dict):
-        papers_files = dataset_info['files']
-        logger.info(f"{dataset_info['name'].capitalize()} Dataset ({len(papers_files)} files):")
-        for line in str.splitlines(dataset_info['description']):
-            logger.info("    " + line)
 
-    def getDataset(self, release_id: str, dataset_name:str):
-        return self.get(f"release/{release_id}/dataset/{dataset_name}")
+    def getSize(self):
+        """
+        Get the size of each file in the dataset and add them all up
+        """
+        raise NotImplementedError()
+
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
@@ -99,7 +175,7 @@ if __name__ == "__main__":
 
 
     # Get all releases
-    release_ids = api.get("release")
+    release_ids = api.getReleaseIDs()
     # Releases is a list of strings, each string is a release ID (Which corresponds to a date of release)
     
     logger.info(f"Earliest Release: {min(release_ids)}")
@@ -108,28 +184,30 @@ if __name__ == "__main__":
 
 
     # Get all information from latest release
-    latest_release = api.get(f"release/{latest_release_id}")
+    latest_release = api.getRelease(latest_release_id)
     # Release information is a dictionary with keys 'release_id', 'datasets', 'README'.
     # 'datasets' is a list of dictionaries with keys 'name', 'description', 'README'.
-    logger.info(f"Datasets in Latest Release: {', '.join(d['name'] for d in latest_release['datasets'])}")
+    logger.info(f"Datasets in Latest Release: {', '.join(latest_release.getDatasetNames())}")
 
     # Print the information of each dataset
     # Each dataset info is a dictionary with keys 'name', 'description', 'README' and 'files'
-    for dataset in latest_release['datasets']:
+    for dataset_name in latest_release.getDatasetNames():
         while True:
             try:
-                SemanticScholarAPI.printDatasetInfo(api.getDataset(latest_release_id, dataset['name']))
-                break
+                dataset = latest_release.getDataset(dataset_name)
             except Exception as e:
                 logger.warning("Retrying...")
                 time.sleep(1)
                 continue
+            else:
+                dataset.printInfo()
+                break
 
     if not args.dry_run:
         # Download all files from the latest release
-        api.downloadDatasetFiles(latest_release_id, 'papers', 'data')
-        api.downloadDatasetFiles(latest_release_id, 'authors', 'data')
-        api.downloadDatasetFiles(latest_release_id, 'citations', 'data')
-        api.downloadDatasetFiles(latest_release_id, 'publication-venues', 'data')
+        latest_release.getDataset('papers').downloadFiles(Path("data"))
+        latest_release.getDataset('authors').downloadFiles(Path("data"))
+        latest_release.getDataset('citations').downloadFiles(Path("data"))
+        latest_release.getDataset('publication-venues').downloadFiles(Path("data"))
 
         logger.info("Data downloaded. Remember to unzip the files using 'gzip -dk data/*.gz'")
