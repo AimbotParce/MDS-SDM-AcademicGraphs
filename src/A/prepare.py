@@ -1,6 +1,10 @@
+import csv
 import json
 import pathlib
 import pprint
+from typing import List, Literal, Optional, TypedDict
+
+from tqdm import tqdm
 
 
 class Venue(TypedDict):
@@ -17,7 +21,7 @@ class Paper(TypedDict):
         volume: int
         pages: str
 
-    corpus_id: int
+    id: str
     author_ids: List[str]
     open_access: bool
     journal: Optional[_Journal]
@@ -26,20 +30,25 @@ class Paper(TypedDict):
     fields_of_study: List[str]
     title: str
     url: str
-    venue: str
     year: int
     embedding: List[float]
     tldr: str
 
 
 class Author(TypedDict):
-    author_id: str
+    id: str
     url: str
     name: str
     affiliations: List[str]
     homepage: str
     h_index: int
 
+
+headers = {
+    "venue": ["id", "name", "type", "alternate_names", "url"],
+    "author": ["id", "name", "affiliations", "homepage", "url", "h_index"],
+    "paper": ["id", "open_access", "publication_date", "title", "url", "year", "embedding", "tldr"],
+}
 
 if __name__ == "__main__":
     import argparse
@@ -58,28 +67,27 @@ if __name__ == "__main__":
         help="Output directory to write the prepared dataset batches to",
         required=True,
     )
+    parser.add_argument(
+        "-t", "--type", type=str, choices=headers.keys(), help="Type of file being loaded", required=True
+    )
     args = parser.parse_args()
+
+    header: list[str] = headers[args.type]
 
     for input_file in args.input_files:
         output_file: pathlib.Path = args.output_dir / f"{input_file.stem}.csv"
         with (
-            open(input_file, encoding="utf-8") as papers_file,
-            open(output_file, "w", encoding="utf-8") as output_file,
+            open(input_file, encoding="utf-8") as input_fd,
+            open(output_file, "w", encoding="utf-8") as output_fd,
         ):
-
-            for line in papers_file:
-                paper: Paper = json.loads(line)
-                output_file.write(
-                    paper["title"],
-                    paper["corpusid"],
-                    paper["isopenaccess"],
-                    paper["publicationdate"],
-                    paper["url"],
-                    paper["year"],
-                )
-
-                pprint.pprint(paper)
-
-                quit()
-
-from typing import List, Literal, Optional, TypedDict
+            writer = csv.writer(output_fd)
+            # Write the header
+            writer.writerow(header)
+            for entry in tqdm(
+                map(json.loads, input_fd),
+                leave=False,
+                desc=f"Parsing {input_file.name}",
+                unit="rows",
+            ):
+                writer.writerow(map(entry.get, header))
+            print(f"Loaded {input_file}!")
