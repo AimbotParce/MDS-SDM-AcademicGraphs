@@ -47,7 +47,16 @@ class Author(TypedDict):
 headers = {
     "venue": ["id", "name", "type", "alternate_names", "url"],
     "author": ["id", "name", "affiliations", "homepage", "url", "h_index"],
-    "paper": ["id", "open_access", "publication_date", "title", "url", "year", "embedding", "tldr"],
+    "paper": [
+        "id",
+        "open_access",
+        "publication_date",
+        "title",
+        "url",
+        "year",
+        "embedding",
+        "tldr",
+    ],
 }
 
 if __name__ == "__main__":
@@ -68,7 +77,12 @@ if __name__ == "__main__":
         required=True,
     )
     parser.add_argument(
-        "-t", "--type", type=str, choices=headers.keys(), help="Type of file being loaded", required=True
+        "-t",
+        "--type",
+        type=str,
+        choices=headers.keys(),
+        help="Type of file being loaded",
+        required=True,
     )
     args = parser.parse_args()
 
