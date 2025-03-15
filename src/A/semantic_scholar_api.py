@@ -69,8 +69,9 @@ class SemanticScholarAPI(object):
                     raise Exception(json_res["message"])
                 return json_res
             except Exception as e:
-                logger.info(f"Retrying {endpoint} after {backoff**attempt} seconds")
-                time.sleep(backoff**attempt)
+                if attempt < max_retries:
+                    logger.info(f"Retrying {endpoint} after {backoff**attempt} seconds")
+                    time.sleep(backoff**attempt)
         raise MaxRetriesException(f"API request failed after {max_retries} retries: {self.api_url}/{endpoint}")
 
 
