@@ -1,58 +1,31 @@
 import urllib.request
 from pathlib import Path
-from typing import TypedDict, Union
+from typing import TypedDict
 
-import requests
 from loguru import logger
+from semantic_scholar_api import SemanticScholarAPI
 from tqdm import tqdm
 
 
-class SemanticScholarAPI:
-    def __init__(self, api_url: str, api_key: str = None):
-        self.api_url = api_url
-        self.api_key = api_key
-
+class S2DatasetAPI(SemanticScholarAPI):
+    def __init__(
+        self,
+        api_url: str = "http://api.semanticscholar.org/datasets/v1",
+        api_key: str = None,
+        default_max_retries: int = 1,
+        default_backoff: float = 2,
+    ):
+        super().__init__(api_url, api_key, default_max_retries, default_backoff)
         self._releases: dict[str, Release] = {}
 
-    def get(self, endpoint: str):
-
-        try:
-            raw_res = requests.get(
-                f"{self.api_url}/{endpoint}", headers={"X-API-KEY": self.api_key}
-            )
-            raw_res.raise_for_status()
-        except requests.exceptions.HTTPError as e:
-            try:
-                json_res = raw_res.json()
-                logger.error(
-                    f"Error from {self.api_url}/{endpoint}: {json_res['message']}"
-                )
-            except Exception:
-                logger.error(f"Error from {self.api_url}/{endpoint}: {e}")
-            raise e
-        try:
-            json_res = raw_res.json()
-        except Exception as e:
-            logger.error(f"Error decoding response from {self.api_url}/{endpoint}: {e}")
-            raise e
-
-        if "message" in json_res:
-            logger.error(f"Error from {self.api_url}/{endpoint}: {json_res['message']}")
-            raise Exception(json_res["message"])
-        return json_res
-
     def getReleaseIDs(self) -> list[str]:
-        return self.get(
-            "release"
-        )  # No cache. They shouldn't change often, but if they do, we'll get the latest info
+        return self.get("release")  # No cache. They shouldn't change often, but if they do, we'll get the latest info
 
     def getRelease(self, release_id: str) -> "Release":
         if release_id in self._releases:
             return self._releases[release_id]
         else:
-            self._releases[release_id] = Release(
-                self.get(f"release/{release_id}"), self
-            )
+            self._releases[release_id] = Release(self.get(f"release/{release_id}"), self)
             return self._releases[release_id]
 
 
@@ -73,7 +46,7 @@ class ReleaseData(TypedDict):
 
 
 class Release(object):
-    def __init__(self, data: ReleaseData, api: SemanticScholarAPI):
+    def __init__(self, data: ReleaseData, api: S2DatasetAPI):
         self.data = data
         self.api = api
 
@@ -97,16 +70,12 @@ class Release(object):
             for dataset in self.data["datasets"]:
                 if dataset["name"] == dataset_name:
                     self._datasets[dataset_name] = Dataset(
-                        self.api.get(
-                            f"release/{self.release_id}/dataset/{dataset_name}"
-                        ),
+                        self.api.get(f"release/{self.release_id}/dataset/{dataset_name}"),
                         self,
                     )
                     return self._datasets[dataset_name]
 
-            raise KeyError(
-                f"Dataset {dataset_name} not found in release {self.release_id}"
-            )
+            raise KeyError(f"Dataset {dataset_name} not found in release {self.release_id}")
 
 
 class Dataset(object):
@@ -135,18 +104,13 @@ class Dataset(object):
         for line in str.splitlines(self.description):
             logger.info("    " + line)
 
-    def downloadFiles(
-        self, output_dir: Path, max_files: int = None, progressbar: bool = True
-    ):
+    def downloadFiles(self, output_dir: Path, max_files: int = None, progressbar: bool = True):
         output_dir = Path(output_dir)
         zeros = len(str(len(self.files)))
         for i, file in enumerate(self.files, 1):
             if max_files and i > max_files:
                 break
-            output_file = (
-                output_dir
-                / f"rel-{self.release.release_id}-{self.name}-{i:0{zeros}d}.jsonl.gz"
-            )
+            output_file = output_dir / f"rel-{self.release.release_id}-{self.name}-{i:0{zeros}d}.jsonl.gz"
             if output_file.exists():
                 logger.warning(f"File {output_file} already exists. Skipping.")
                 continue
@@ -191,18 +155,14 @@ if __name__ == "__main__":
 
     from dotenv import load_dotenv
 
-    parser = argparse.ArgumentParser(
-        description="Download the Semantic Scholar dataset"
-    )
-    parser.add_argument(
-        "-d", "--dry-run", action="store_true", help="Don't download anything"
-    )
+    parser = argparse.ArgumentParser(description="Download the Semantic Scholar dataset")
+    parser.add_argument("-d", "--dry-run", action="store_true", help="Don't download anything")
     args = parser.parse_args()
 
     load_dotenv()
     api_url = os.getenv("S2_API_URL", "http://api.semanticscholar.org/datasets/v1")
     api_key = os.getenv("S2_API_KEY")
-    api = SemanticScholarAPI(api_url, api_key)
+    api = S2DatasetAPI(api_url, api_key)
 
     # Get all releases
     release_ids = api.getReleaseIDs()
@@ -216,9 +176,7 @@ if __name__ == "__main__":
     latest_release = api.getRelease(latest_release_id)
     # Release information is a dictionary with keys 'release_id', 'datasets', 'README'.
     # 'datasets' is a list of dictionaries with keys 'name', 'description', 'README'.
-    logger.info(
-        f"Datasets in Latest Release: {', '.join(latest_release.getDatasetNames())}"
-    )
+    logger.info(f"Datasets in Latest Release: {', '.join(latest_release.getDatasetNames())}")
 
     # Print the information of each dataset
     # Each dataset info is a dictionary with keys 'name', 'description', 'README' and 'files'
@@ -241,6 +199,4 @@ if __name__ == "__main__":
         latest_release.getDataset("publication-venues").downloadFiles(Path("data"))
         latest_release.getDataset("papers").downloadFiles(Path("data"), max_files=5)
 
-        logger.info(
-            "Data downloaded. Remember to unzip the files using 'gzip -dk data/*.gz'"
-        )
+        logger.info("Data downloaded. Remember to unzip the files using 'gzip -dk data/*.gz'")

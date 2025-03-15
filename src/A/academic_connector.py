@@ -1,163 +1,230 @@
-import os
-import json
 import argparse
-import time
-from typing import TypedDict, Union, List, Dict
-import requests
+import json
+import os
+from itertools import batched
+from pathlib import Path
+from typing import List, Literal, Tuple, Union
 
 from loguru import logger
-from pathlib import Path
+from semantic_scholar_api import SemanticScholarAPI
 
 # ===-----------------------------------------------------------------------===#
 # Academic Graph API Connector                                                 #
 #                                                                              #
-# Author: Walter J.T.V                                                         #
+# Authors: Walter J.T.V, Marc Parcerisa                                        #
 # ===-----------------------------------------------------------------------===#
 
 
-class S2AcademicAPIConnector:
-    def __init__(self):
-        self.paper_url = "https://api.semanticscholar.org/graph/v1/paper"
-        self.author_url = "https://api.semanticscholar.org/graph/v1/author"
-        self.api_key = os.getenv("S2_API_KEY")
-
-    def fetch(
+class S2AcademicAPI(SemanticScholarAPI):
+    def __init__(
         self,
-        url: str,
-        api_params: dict,
-        max_retries: int = 3,
-        backoff: int = 2,
-        strict_raise: bool = False,
-    ) -> dict:
-
-        for attempt in range(1, max_retries + 1):
-            try:
-                response = requests.get(url, params=api_params)
-                if strict_raise:
-                    response.raise_for_status()
-                if response.status_code == 200:
-                    return response.json()
-                logger.warning(
-                    f"[Fetch] Attempt {attempt}/{max_retries} failed (Status {response.status_code})"
-                )
-                time.sleep(backoff**attempt)
-            except requests.RequestException as e:
-                logger.error(f"[Fetch] API request error: {e}")
-        raise Exception(
-            f"[Fetch] API request failed after {max_retries} retries: {url}"
-        )
+        api_url: str = "https://api.semanticscholar.org/graph/v1",
+        api_key: str = None,
+        default_max_retries: int = 1,
+        default_backoff: float = 2,
+    ):
+        super().__init__(api_url, api_key, default_max_retries, default_backoff)
 
     # This function returns a list of papers ids stored in json dicts
-    def bulk_retrieve_papers(self, params: dict) -> list[dict]:
+    def bulk_retrieve_papers(
+        self,
+        query: str,
+        token: str = None,
+        fields: list[str] = None,
+        sort: str = None,
+        publicationTypes: list[str] = None,
+        openAccessPdf: bool = False,
+        minCitationCount: int = None,
+        publicationDateOrYear: str = None,
+        year: str = None,
+        venue: list[str] = None,
+        fieldsOfStudy: list[str] = None,
+    ) -> Tuple[int, str, list[dict]]:
+        """
+        Retrieve a list of papers based on a query.
+
+        Args:
+            query (str): The query string to search for.
+            token (str): The cursor token to use for pagination.
+            fields (list[str]): The fields to return in the response.
+            sort (str): The field to sort by.
+            publicationTypes (list[str]): The publication types to filter by.
+            openAccessPdf (bool): Whether to filter by open access PDF.
+            minCitationCount (int): The minimum citation count to filter by.
+            publicationDateOrYear (str): The publication date or year to filter by. (e.g. 2021-01-01, 2021 or 2015:2018)
+            year (str): The year to filter by. (e.g. 2021 or 2015:2018)
+            venue (list[str]): The venue to filter by.
+            fieldsOfStudy (list[str]): The fields of study to filter by.
+
+        Returns:
+            Tuple[int, str, list[dict]]: The total number of papers, the next token, and the list of papers.
+        """
+
+        params = {"query": query}
+        if token:
+            params["token"] = token
+        if fields:
+            params["fields"] = ",".join(fields)
+        if sort:
+            params["sort"] = sort
+        if publicationTypes:
+            params["publicationTypes"] = ",".join(publicationTypes)
+        if openAccessPdf:
+            params["openAccessPdf"] = openAccessPdf
+        if minCitationCount:
+            params["minCitationCount"] = minCitationCount
+        if publicationDateOrYear:
+            params["publicationDateOrYear"] = publicationDateOrYear
+        if year:
+            params["year"] = year
+        if venue:
+            params["venue"] = ",".join(venue)
+        if fieldsOfStudy:
+            params["fieldsOfStudy"] = ",".join(fieldsOfStudy)
+
         try:
-            url = f"{self.paper_url}/search/bulk"
-            data = self.fetch(url=url, api_params=params)
-            return data
+            data = self.get("paper/search/bulk", params=params)
+            return data["total"], data["token"], data["data"]
         except Exception as e:
             logger.error("Failed to do a bulk retrieval of papers")
-            exit()
-
-    def chunk_list(self, lst, chunk_size):
-        for i in range(0, len(lst), chunk_size):
-            yield lst[i : i + chunk_size]
+            raise e
 
     # This function returns a list of paper_details (dict/json) that can be identified by paperId
-    def bulk_retrieve_details(self, data: list, params: dict) -> list[dict]:
+    def bulk_retrieve_details(self, paper_ids: list[str], fields: list[str], batch_size: int = None) -> list[dict]:
+        """
+        Retrieve the details for a list of papers.
+
+        Args:
+            paper_ids (list[str]): The list of paper IDs to retrieve details for.
+            fields (list[str]): The fields to return in the response.
+            batch_size (int): The number of papers to retrieve per request.
+
+        Returns:
+            list[dict]: The list of paper details.
+        """
         try:
-            paper_ids = [paper["paperId"] for paper in data["data"]]
-
-            if not paper_ids:
-                logger.warning("[Bulk Retrieve] No paper IDs provided")
-                return []
-
-            url = f"{self.paper_url}/batch"
-            chunk_size = 500
-            paper_chunks = list(self.chunk_list(paper_ids, chunk_size))
-            total_chunks = len(paper_chunks)
-
-            logger.warning(
-                f"[Bulk Retrieve] Sending {total_chunks} request(s) to the API (max {chunk_size} papers per request)."
-            )
+            if batch_size is not None:
+                if not batch_size > 0:
+                    raise ValueError("batch size must be greater than 0 or None")
+                paper_chunks = list(batched(paper_ids, batch_size))
+                logger.warning(
+                    f"[Bulk Retrieve] Sending {len(paper_chunks)} request(s) to the API (max {batch_size} papers per request)."
+                )
+            else:
+                paper_chunks = [paper_ids]
 
             all_results = []
-
             for index, chunk in enumerate(paper_chunks, start=1):
                 try:
-                    response = requests.post(url, params=params, json={"ids": chunk})
-                    response.raise_for_status()
-
-                    if response.status_code == 200:
-                        logger.success(
-                            f"[Chunk {index}/{total_chunks}] Successfully retrieved {len(chunk)} paper details."
-                        )
-                        all_results.extend(response.json())
-                    else:
-                        logger.error(
-                            f"[Chunk {index}/{total_chunks}] Failed to fetch paper details: {response.status_code} - {response.text}"
-                        )
-
-                except requests.RequestException as req_err:
-                    logger.error(
-                        f"[Chunk {index}/{total_chunks}] Request failed: {req_err}"
-                    )
-
+                    response = self.post("paper/batch", params={"fields": ",".join(fields)}, json={"ids": chunk})
+                except Exception as req_err:
+                    logger.error(f"[Chunk {index}/{len(paper_chunks)}] Request failed: {req_err}")
+                else:
+                    all_results.extend(response)
             return all_results
 
         except Exception as e:
             logger.error(f"Exception in bulk_retrieve_details: {e}")
             return None
 
-    def retrieve_citations(self, paper_id: str, params: dict) -> List[dict]:
+    def retrieve_citations(
+        self, paper_id: str, fields: list[str], limit: int = None, offset: int = None
+    ) -> Tuple[int, int, List[dict]]:
+        """
+        Retrieve the citations for a paper.
+
+        Args:
+            paper_id (str): The paper ID to retrieve citations for.
+            fields (list[str]): The fields to return in the response.
+            limit (int): The number of citations to return.
+            offset (int): The offset to start from.
+
+        Returns:
+            Tuple[int, int, List[dict]]: The starting position of this batch,
+            the starting position of the next batch, and the list of citations.
+        """
+        params = {"fields": ",".join(fields)}
+        if limit:
+            params["limit"] = limit
+        if offset:
+            params["offset"] = offset
+
         try:
-            url = f"{self.paper_url}/{paper_id}/citations"
-            data = self.fetch(url, api_params=params, backoff=0)
+            data = self.get(f"paper/{paper_id}/citations", params=params)
             return data
-            logger.warning(f"No citations found for paper {paper_id}")
-            return []
         except Exception as e:
             logger.error(f"Error fetching citations for {paper_id}: {e}")
             return []
 
-    def retrieve_references(self, paper_id: str, params: dict) -> list:
+    def retrieve_references(
+        self, paper_id: str, fields: list[str], limit: int = None, offset: int = None
+    ) -> Tuple[int, int, List[dict]]:
+        """
+        Retrieve the references for a paper.
+
+        Args:
+            paper_id (str): The paper ID to retrieve references for.
+            fields (list[str]): The fields to return in the response.
+            limit (int): The number of references to return.
+            offset (int): The offset to start from.
+
+        Returns:
+            Tuple[int, int, List[dict]]: The starting position of this batch,
+            the starting position of the next batch, and the list of references.
+        """
+        params = {"fields": ",".join(fields)}
+        if limit:
+            params["limit"] = limit
+        if offset:
+            params["offset"] = offset
+
         try:
-            url = f"{self.paper_url}/{paper_id}/references"
-            data = self.fetch(url, api_params=params, backoff=0)
+            data = self.get(f"paper/{paper_id}/references", params=params)
             return data
-            logger.warning(f"No references found for paper {paper_id}")
-            return []
         except Exception as e:
             logger.error(f"Error fetching references for {paper_id}: {e}")
             return []
 
+    def bulk_retrieve_citations(self, paper_ids: list[str], fields: list[str]) -> Tuple[int, dict[str, List[dict]]]:
+        """
+        Retrieve the citations for a list of papers.
 
-    def bulk_fetch_citations_and_references(
-        self, data: list, cit_params: dict, ref_params: dict
-    ) -> Union[dict, dict]:
-        all_citations = []
-        all_references = []
-        for paper in data.get("data", []):
-            paper_id = paper["paperId"]
+        Args:
+            paper_ids (list[str]): The list of paper IDs to retrieve citations for.
+            fields (list[str]): The fields to return in the response.
 
-            # Fetch citations
-            citations = self.retrieve_citations(paper_id, cit_params)
-            citations["paperId"] = paper_id
-            all_citations.append(citations)
+        Returns:
+            Tuple[int, dict[str, List[dict]]]: The total number of citations and the list of citations for each paper.
+        """
+        all_citations = {}
+        citation_count = 0
+        for paper_id in paper_ids:
+            citations = self.retrieve_citations(paper_id, fields)
+            all_citations[paper_id] = citations
+            citation_count += len(citations)
+        return citation_count, all_citations
 
-            # Fetch references
-            references = self.retrieve_references(paper_id, ref_params)
-            references["paperId"] = paper_id
-            all_references.append(references)
+    def bulk_retrieve_references(self, paper_ids: list[str], fields: list[str]) -> Tuple[int, dict[str, List[dict]]]:
+        """
+        Retrieve the references for a list of papers.
 
-        logger.success("Successfully retrieved citations and references for all papers.")
-        return all_citations, all_references
+        Args:
+            paper_ids (list[str]): The list of paper IDs to retrieve references for.
+            fields (list[str]): The fields to return in the response.
+
+        Returns:
+            Tuple[int, dict[str, List[dict]]]: The total number of references and the list of references for each paper.
+        """
+        all_references = {}
+        reference_count = 0
+        for paper_id in paper_ids:
+            references = self.retrieve_references(paper_id, fields)
+            all_references[paper_id] = references
+            reference_count += len(references)
+        return reference_count, all_references
 
     def bulk_retrieve_authors(self):
         pass
-
-
-
-
-
 
 
 def save_json(data, filename):
@@ -167,6 +234,8 @@ def save_json(data, filename):
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
     logger.success(f"Saved {file_path}")
+
+
 # This main showcases how to extract the main relevant information
 # - Papers details
 # - Authors details
@@ -175,44 +244,72 @@ def save_json(data, filename):
 # - Venues
 # - Embeddings
 def main(args):
-    connector = S2AcademicAPIConnector()
+    connector = S2AcademicAPI(api_key=os.getenv("S2_API_KEY"))
 
     if args.dry_run:
         logger.info("Running in DRY RUN mode. No data will be saved.")
 
     # Step 1: Retrieve Papers (4 in this case)
-    compiler_params = {
-        "query": "neural network",
-        "sort": "citationCount:desc",
-        "minCitationCount": 80000,
-        "limit": 10000
-    }
-    bulk_papers = connector.bulk_retrieve_papers(compiler_params)
-    logger.success(f"Retrieved {bulk_papers.get('total', 0)} papers.")
-
-    # Step 2: Retrieve Paper Details
-    details_params = {
-        "fields": "isOpenAccess,journal,publicationDate,publicationVenue,fieldsOfStudy,title,abstract,url,year,embedding,tldr,citationCount,referenceCount,authors.authorId,authors.url,authors.name,authors.affiliations,authors.homepage,authors.hIndex",
-    }
-    bulk_details = connector.bulk_retrieve_details(bulk_papers, details_params)
-    logger.success(f"Retrieved details for {len(bulk_details)} papers.")
-
-    # Step 3: Retrieve Citations & References
-    citations_params = {"fields": "contexts,title,authors,intents,isInfluential", "offset": 0}
-    references_params = {"fields": "contexts,title,authors,intents,isInfluential", "offset": 0}
-    citations, references = connector.bulk_fetch_citations_and_references(
-        bulk_papers, citations_params, references_params
+    total, token, bulk_papers = connector.bulk_retrieve_papers(
+        "neural network", sort="citationCount:desc", minCitationCount=80000
     )
-    logger.success("Retrieved citations and references.")
+    logger.success(f"Retrieved {total} papers.")
+    paper_ids: list[str] = list(paper["paperId"] for paper in bulk_papers)
 
-    # Step 4: Save data (if not dry run)
     if not args.dry_run:
         save_json(bulk_papers, "bulk_papers.json")
+    del bulk_papers  # Free up memory
+
+    # Step 2: Retrieve Paper Details
+    fields = (
+        "isOpenAccess",
+        "journal",
+        "publicationDate",
+        "publicationVenue",
+        "fieldsOfStudy",
+        "title",
+        "abstract",
+        "url",
+        "year",
+        "embedding",
+        "tldr",
+        "citationCount",
+        "referenceCount",
+        "authors.authorId",
+        "authors.url",
+        "authors.name",
+        "authors.affiliations",
+        "authors.homepage",
+        "authors.hIndex",
+    )
+
+    bulk_details = connector.bulk_retrieve_details(paper_ids, fields)
+    logger.success(f"Retrieved details for {len(bulk_details)} papers.")
+
+    if not args.dry_run:
         save_json(bulk_details, "bulk_details.json")
+    del bulk_details  # Free up memory
+
+    # Step 3: Retrieve Citations & References
+    citation_fields = "contexts", "title", "authors", "intents", "isInfluential"
+    total, citations = connector.bulk_retrieve_citations(paper_ids, citation_fields)
+    logger.success(f"Retrieved {total} citations.")
+
+    if not args.dry_run:
         save_json(citations, "citations.json")
+    del citations  # Free up memory
+
+    reference_fields = "contexts", "title", "authors", "intents", "isInfluential"
+    total, references = connector.bulk_retrieve_references(paper_ids, reference_fields)
+    logger.success(f"Retrieved {total} references.")
+
+    if not args.dry_run:
         save_json(references, "references.json")
-    else:
+    del references  # Free up memory
+
+    if args.dry_run:
         logger.warning("Dry run complete. No data was saved.")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Academic Paper Data Retrieval")
