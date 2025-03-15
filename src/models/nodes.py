@@ -70,11 +70,11 @@ class Author(BaseModel):
 
     url: str
     name: str
+    homepage: str
+    hIndex: int
 
 
 class Organization(BaseModel):
     "An organization, e.g. a university, a company, etc. to which one or more authors are affiliated"
 
     name: str
-    homepage: str
-    hIndex: int
