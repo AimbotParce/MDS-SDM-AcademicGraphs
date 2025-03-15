@@ -263,7 +263,7 @@ def main(args):
     paper_ids: list[str] = list(paper["paperId"] for paper in bulk_papers)
 
     if not args.dry_run:
-        saveJSONL(bulk_papers, "bulk_papers.jsonl")
+        saveJSONL(bulk_papers, "papers.jsonl")
     del bulk_papers  # Free up memory
 
     # Step 2: Retrieve Paper Details
@@ -293,7 +293,7 @@ def main(args):
     logger.success(f"Retrieved details for {len(bulk_details)} papers.")
 
     if not args.dry_run:
-        saveJSONL(bulk_details, "bulk_details.jsonl")
+        saveJSONL(bulk_details, "details.jsonl")
     del bulk_details  # Free up memory
 
     # Step 3: Retrieve Citations & References
