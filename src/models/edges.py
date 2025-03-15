@@ -37,8 +37,8 @@ class Reviewed(BaseModel):
     "(Author) -[Reviewed]-> (Publication)"
 
     accepted: bool
-    minorRevisionCount: int
-    majorRevisionCount: int
+    minorRevisions: int
+    majorRevisions: int
     reviewContent: str
 
 
