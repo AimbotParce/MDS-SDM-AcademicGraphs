@@ -151,10 +151,10 @@ class S2AcademicAPI(SemanticScholarAPI):
 
         try:
             data = self.get(f"paper/{paper_id}/citations", params=params)
-            return data
+            return data["offset"], data["next"], data["data"]
         except Exception as e:
             logger.error(f"Error fetching citations for {paper_id}: {e}")
-            return []
+            return 0, 0, []
 
     def retrieve_references(
         self, paper_id: str, fields: list[str], limit: int = None, offset: int = None
@@ -180,10 +180,10 @@ class S2AcademicAPI(SemanticScholarAPI):
 
         try:
             data = self.get(f"paper/{paper_id}/references", params=params)
-            return data
+            return data["offset"], data["next"], data["data"]
         except Exception as e:
             logger.error(f"Error fetching references for {paper_id}: {e}")
-            return []
+            return 0, 0, []
 
     def bulk_retrieve_citations(self, paper_ids: list[str], fields: list[str]) -> Tuple[int, dict[str, List[dict]]]:
         """
@@ -199,7 +199,7 @@ class S2AcademicAPI(SemanticScholarAPI):
         all_citations = {}
         citation_count = 0
         for paper_id in paper_ids:
-            citations = self.retrieve_citations(paper_id, fields)
+            _, _, citations = self.retrieve_citations(paper_id, fields)
             all_citations[paper_id] = citations
             citation_count += len(citations)
         return citation_count, all_citations
@@ -218,7 +218,7 @@ class S2AcademicAPI(SemanticScholarAPI):
         all_references = {}
         reference_count = 0
         for paper_id in paper_ids:
-            references = self.retrieve_references(paper_id, fields)
+            _, _, references = self.retrieve_references(paper_id, fields)
             all_references[paper_id] = references
             reference_count += len(references)
         return reference_count, all_references
@@ -227,7 +227,7 @@ class S2AcademicAPI(SemanticScholarAPI):
         pass
 
 
-def save_json(data, filename):
+def saveJSONL(data: list[dict], filename):
     DATA_DIR = Path("data")
     DATA_DIR.mkdir(exist_ok=True)
     file_path = DATA_DIR / filename  # Save inside 'data' folder
@@ -257,7 +257,7 @@ def main(args):
     paper_ids: list[str] = list(paper["paperId"] for paper in bulk_papers)
 
     if not args.dry_run:
-        save_json(bulk_papers, "bulk_papers.json")
+        saveJSONL(bulk_papers, "bulk_papers.json")
     del bulk_papers  # Free up memory
 
     # Step 2: Retrieve Paper Details
@@ -287,7 +287,7 @@ def main(args):
     logger.success(f"Retrieved details for {len(bulk_details)} papers.")
 
     if not args.dry_run:
-        save_json(bulk_details, "bulk_details.json")
+        saveJSONL(bulk_details, "bulk_details.json")
     del bulk_details  # Free up memory
 
     # Step 3: Retrieve Citations & References
@@ -296,7 +296,7 @@ def main(args):
     logger.success(f"Retrieved {total} citations.")
 
     if not args.dry_run:
-        save_json(citations, "citations.json")
+        saveJSONL(citations, "citations.json")
     del citations  # Free up memory
 
     reference_fields = "contexts", "title", "authors", "intents", "isInfluential"
@@ -304,7 +304,7 @@ def main(args):
     logger.success(f"Retrieved {total} references.")
 
     if not args.dry_run:
-        save_json(references, "references.json")
+        saveJSONL(references, "references.json")
     del references  # Free up memory
 
     if args.dry_run:
