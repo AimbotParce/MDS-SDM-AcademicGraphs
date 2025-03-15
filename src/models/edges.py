@@ -54,3 +54,7 @@ class IsEditionOf(BaseModel):
     or
     (Proceedings) -[IsEditionOf]-> (Conference|Workshop)
     """
+
+
+class IsHeldIn(BaseModel):
+    "(Proceedings) -[IsHeldIn]-> (City)"
