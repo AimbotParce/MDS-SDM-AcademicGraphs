@@ -3,7 +3,7 @@ import json
 import os
 from itertools import batched
 from pathlib import Path
-from typing import List, Literal, Tuple, Union
+from typing import List, Literal, Optional, Tuple, Union
 
 from loguru import logger
 from semantic_scholar_api import SemanticScholarAPI
@@ -129,7 +129,7 @@ class S2AcademicAPI(SemanticScholarAPI):
 
     def retrieve_citations(
         self, paper_id: str, fields: list[str], limit: int = None, offset: int = None
-    ) -> Tuple[int, int, List[dict]]:
+    ) -> Tuple[Optional[int], Optional[int], List[dict]]:
         """
         Retrieve the citations for a paper.
 
@@ -151,14 +151,14 @@ class S2AcademicAPI(SemanticScholarAPI):
 
         try:
             data = self.get(f"paper/{paper_id}/citations", params=params)
-            return data["offset"], data["next"], data["data"]
+            return data["offset"], data.get("next"), data["data"]
         except Exception as e:
             logger.error(f"Error fetching citations for {paper_id}: {e}")
-            return 0, 0, []
+            return None, None, []
 
     def retrieve_references(
         self, paper_id: str, fields: list[str], limit: int = None, offset: int = None
-    ) -> Tuple[int, int, List[dict]]:
+    ) -> Tuple[Optional[int], Optional[int], List[dict]]:
         """
         Retrieve the references for a paper.
 
@@ -180,10 +180,10 @@ class S2AcademicAPI(SemanticScholarAPI):
 
         try:
             data = self.get(f"paper/{paper_id}/references", params=params)
-            return data["offset"], data["next"], data["data"]
+            return data["offset"], data.get("next"), data["data"]
         except Exception as e:
             logger.error(f"Error fetching references for {paper_id}: {e}")
-            return 0, 0, []
+            return None, None, []
 
     def bulk_retrieve_citations(self, paper_ids: list[str], fields: list[str]) -> Tuple[int, dict[str, List[dict]]]:
         """
