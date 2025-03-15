@@ -71,7 +71,7 @@ class Author(BaseModel):
     url: str
     name: str
     homepage: str
-    hIndex: int
+    hIndex: str
 
 
 class Organization(BaseModel):
