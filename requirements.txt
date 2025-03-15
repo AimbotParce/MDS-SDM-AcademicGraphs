@@ -1,7 +1,8 @@
 loguru
 neo4j
-python - dotenv
+python-dotenv
 pandas
 numpy
 requests
 tqdm
+pydantic
