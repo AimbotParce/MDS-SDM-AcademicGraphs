@@ -244,7 +244,7 @@ def saveJSONL(data: list[dict], filename):
 # - Venues
 # - Embeddings
 def main(args):
-    connector = S2AcademicAPI(api_key=os.getenv("S2_API_KEY"))
+    connector = S2AcademicAPI(api_key=os.getenv("S2_API_KEY"), default_max_retries=3)
 
     if args.dry_run:
         logger.info("Running in DRY RUN mode. No data will be saved.")
