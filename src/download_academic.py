@@ -69,19 +69,19 @@ def main(args):
             pass
         logger.success(f"Retrieved {i} paper details.")
 
-    # Get all the citations
-    logger.info("Retrieving citations...")
-    citation_fields = "citingPaper.paperId", "isInfluential", "contextsWithIntent"
-    citations = connector.bulk_retrieve_citations(paper_ids, citation_fields, stream=True)
+    # Get all the references
+    logger.info("Retrieving references...")
+    reference_fields = "citedPaper.paperId", "isInfluential", "contextsWithIntent"
+    references = connector.bulk_retrieve_references(paper_ids, reference_fields, stream=True)
     if not args.dry_run:
-        with BatchedWriter(args.output / "raw-citations-{batch}.jsonl", batch_size=args.batch_size) as writer:
-            for i, citation in enumerate(citations, start=1):
-                writer.write(json.dumps(citation, ensure_ascii=False) + "\n")
-            logger.success(f"Stored {i} citations.")
+        with BatchedWriter(args.output / "raw-references-{batch}.jsonl", batch_size=args.batch_size) as writer:
+            for i, reference in enumerate(references, start=1):
+                writer.write(json.dumps(reference, ensure_ascii=False) + "\n")
+            logger.success(f"Stored {i} references.")
     else:
-        for i, citation in enumerate(citations, start=1):
+        for i, reference in enumerate(references, start=1):
             pass
-        logger.success(f"Retrieved {i} citations.")
+        logger.success(f"Retrieved {i} references.")
 
 
 if __name__ == "__main__":

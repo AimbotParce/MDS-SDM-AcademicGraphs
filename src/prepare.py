@@ -39,7 +39,7 @@ if __name__ == "__main__":
         "-t",
         "--type",
         type=str,
-        choices=["papers", "citations"],
+        choices=["papers", "citations", "references"],
         help="Type of file being loaded",
         required=True,
     )
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     output_dir: Path = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    if file_type == "citations":
+    if file_type in ["citations", "references"]:  # They are the same
         with BatchedWriter(output_dir / "edges-citations-{batch}.csv", batch_size) as output_file:
             writer = csv.DictWriter(
                 output_file, fieldnames=["citedPaperID", "citingPaperID", "isInfluential", "contextsWithIntent"]
