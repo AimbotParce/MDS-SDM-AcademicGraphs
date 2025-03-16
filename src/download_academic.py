@@ -9,15 +9,19 @@ from loguru import logger
 from lib.semantic_scholar import S2AcademicAPI
 
 
-def saveJSONL(data: list[dict], filename):
-    DATA_DIR = Path("data")
-    DATA_DIR.mkdir(exist_ok=True)
-    file_path = DATA_DIR / filename  # Save inside 'data' folder
-    with open(file_path, "w", encoding="utf-8") as f:
-        for line in data:
-            f.write(json.dumps(line, ensure_ascii=False) + "\n")  # Write each dict as a JSON line
+def jsonlSaver(folder: os.PathLike):
+    folder = Path(folder)
+    folder.mkdir(exist_ok=True)
 
-    logger.success(f"Saved {file_path}")
+    def saveJSONL(data: list[dict], filename):
+        file_path = folder / filename
+        with open(file_path, "w", encoding="utf-8") as f:
+            for line in data:
+                f.write(json.dumps(line, ensure_ascii=False) + "\n")  # Write each dict as a JSON line
+
+        logger.success(f"Saved {file_path}")
+
+    return saveJSONL
 
 
 # This main showcases how to extract the main relevant information
@@ -29,6 +33,7 @@ def saveJSONL(data: list[dict], filename):
 # - Embeddings
 def main(args):
     connector = S2AcademicAPI(api_key=os.getenv("S2_API_KEY"), default_max_retries=3)
+    saveJSONL = jsonlSaver(args.output) if not args.dry_run else lambda x, y: None
 
     if args.dry_run:
         logger.info("Running in DRY RUN mode. No data will be saved.")
@@ -102,6 +107,9 @@ if __name__ == "__main__":
         "--year", type=str, help="Year of publication (YYYY | YYYY-YYYY | YYYY- | -YYYY)", default=None
     )
     parser.add_argument("--fields", type=str, help="Fields of study to filter by", nargs="*", default=None)
+    parser.add_argument("--output", type=str, help="Output file name", default=None)
     parser.add_argument("--dry-run", action="store_true", help="Run without saving any data")
     args = parser.parse_args()
+    if not args.dry_run and not args.output:
+        parser.error("--output is required when not running in dry-run mode.")
     main(args)
