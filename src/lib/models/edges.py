@@ -50,7 +50,7 @@ class Reviewed(BaseModel):
 class IsPublishedIn(BaseModel):
     "(Publication) -[PublishedIn]-> (JournalVolume|Proceedings)"
 
-    pageNumberRange: Optional[str]
+    pages: Optional[str]
 
 
 class IsEditionOf(BaseModel):

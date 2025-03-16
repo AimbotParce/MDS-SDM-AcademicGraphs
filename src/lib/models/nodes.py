@@ -31,7 +31,7 @@ class Publication(BaseModel):
     year: int
     isOpenAccess: bool
     openAccessPDFUrl: Optional[str]
-    publicationType: str
+    publicationTypes: List[str]
     embedding: Optional[_Embedding]
     tldr: Optional[_Tdlr]
 
@@ -45,12 +45,15 @@ class FieldOfStudy(BaseModel):
 class Proceedings(BaseModel):
     "A conference or workshop proceedings"
 
+    proceedingsID: str
     year: int
 
 
 class JournalVolume(BaseModel):
     "A volume of a journal"
 
+    journalVolumeID: str
+    volume: str
     year: int
 
 
@@ -59,6 +62,8 @@ class Journal(BaseModel):
 
     journalID: str
     name: str
+    url: Optional[str]
+    alternateNames: List[str]
 
 
 class Workshop(BaseModel):
@@ -66,6 +71,8 @@ class Workshop(BaseModel):
 
     workshopID: str
     name: str
+    url: Optional[str]
+    alternateNames: List[str]
 
 
 class Conference(BaseModel):
@@ -73,6 +80,8 @@ class Conference(BaseModel):
 
     conferenceID: str
     name: str
+    url: Optional[str]
+    alternateNames: List[str]
 
 
 class City(BaseModel):
