@@ -46,6 +46,7 @@ def main(args):
         fieldsOfStudy=args.fields,
         stream=True,
         limit=args.limit,
+        sort="citationCount:desc",
     )
     paper_ids: list[str] = list(paper["paperId"] for paper in papers)
     logger.success(f"Retrieved {len(paper_ids)} papers.")
