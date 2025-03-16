@@ -34,7 +34,9 @@ def main(args):
         logger.info("Running in DRY RUN mode. No data will be saved.")
 
     # Step 1: Retrieve Papers (4 in this case)
-    total_papers, _, papers = connector.bulk_retrieve_papers("neural network", minCitationCount=80000)
+    total_papers, _, papers = connector.bulk_retrieve_papers(
+        args.query, minCitationCount=args.min_citations, year=args.year, fieldsOfStudy=args.fields
+    )
     logger.success(f"Retrieved {total_papers} papers.")
     paper_ids: list[str] = list(paper["paperId"] for paper in papers)
     del papers  # Free up memory
@@ -74,7 +76,7 @@ def main(args):
         logger.info(f"[Batch {i}] Retrieved {len(papers)} paper details.")
         total_details += len(papers)
         if not args.dry_run:
-            saveJSONL(papers, f"papers-{i}.jsonl")
+            saveJSONL(papers, f"raw-papers-{i}.jsonl")
 
     logger.success(f"Retrieved {total_details} paper details.")
 
@@ -87,13 +89,19 @@ def main(args):
         logger.info(f"[Batch {i}] Retrieved {len(citations)} citations.")
         total_citations += len(citations)
         if not args.dry_run:
-            saveJSONL(citations, f"citations-{i}.jsonl")
+            saveJSONL(citations, f"raw-citations-{i}.jsonl")
 
     logger.success(f"Retrieved {total_citations} citations.")
 
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="Academic Paper Data Retrieval")
+    parser.add_argument("query", type=str, help="Query to search for")
+    parser.add_argument("--min-citations", type=int, default=None, help="Minimum number of citations")
+    parser.add_argument(
+        "--year", type=str, help="Year of publication (YYYY | YYYY-YYYY | YYYY- | -YYYY)", default=None
+    )
+    parser.add_argument("--fields", type=str, help="Fields of study to filter by", nargs="*", default=None)
     parser.add_argument("--dry-run", action="store_true", help="Run without saving any data")
     args = parser.parse_args()
     main(args)
