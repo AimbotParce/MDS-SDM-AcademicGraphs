@@ -244,6 +244,10 @@ class S2AcademicAPI(SemanticScholarAPI):
             all_data = data["data"]
 
         while data.get("next"):
+            if data.get("next") > 10_000:
+                # This seems to be a hard limit of the Semantic Scholar API
+                logger.warning("Citation count exceeds 10000. Only the first 10000 citations will be retrieved.")
+                break
             data = self.get(f"paper/{paper_id}/citations", params={**params, "offset": data["next"]})
             if stream:
                 yield from data["data"]
@@ -285,6 +289,10 @@ class S2AcademicAPI(SemanticScholarAPI):
             all_data = data["data"]
 
         while data.get("next"):
+            if data.get("next") > 10_000:
+                # This seems to be a hard limit of the Semantic Scholar API
+                logger.warning("Reference count exceeds 10000. Only the first 10000 references will be retrieved.")
+                break
             data = self.get(f"paper/{paper_id}/references", params={**params, "offset": data["next"]})
             if stream:
                 yield from data["data"]

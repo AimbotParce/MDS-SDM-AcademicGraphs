@@ -55,7 +55,7 @@ class SemanticScholarAPI(object):
                         logger.error(f"Error from {self.api_url}/{endpoint}: {e}")
                     else:
                         logger.error(
-                            f"Error from {self.api_url}/{endpoint}: {json_res.get('message', 'Unknown error')}"
+                            f"Error from {self.api_url}/{endpoint}: {json_res.get('message', json_res.get('error', 'Unknown error'))}"
                         )
                     raise e
                 try:
