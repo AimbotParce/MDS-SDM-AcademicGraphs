@@ -256,65 +256,33 @@ def main(args):
         logger.info("Running in DRY RUN mode. No data will be saved.")
 
     # Step 1: Retrieve Papers (4 in this case)
-    total, token, bulk_papers = connector.bulk_retrieve_papers(
-        "neural network", sort="citationCount:desc", minCitationCount=80000
-    )
+    total, _, papers = connector.bulk_retrieve_papers("neural network", minCitationCount=80000)
     logger.success(f"Retrieved {total} papers.")
-    paper_ids: list[str] = list(paper["paperId"] for paper in bulk_papers)
+    paper_ids: list[str] = list(paper["paperId"] for paper in papers)
+    del papers  # Free up memory
 
-    if not args.dry_run:
-        saveJSONL(bulk_papers, "papers.jsonl")
-    del bulk_papers  # Free up memory
-
-    # Step 2: Retrieve Paper Details
-    fields = (
-        "isOpenAccess",
-        "journal",
-        "publicationDate",
-        "publicationVenue",
-        "fieldsOfStudy",
-        "title",
-        "abstract",
-        "url",
-        "year",
+    logger.info("Retrieving missing paper details...")
+    missing_fields = (
+        "paperId",
         "embedding",
         "tldr",
-        "citationCount",
-        "referenceCount",
-        "authors.authorId",
-        "authors.url",
-        "authors.name",
-        "authors.affiliations",
-        "authors.homepage",
-        "authors.hIndex",
+        "url",
+        "title",
+        "abstract",
+        "year",
+        "isOpenAccess",
+        "openAccessPdf",
+        "publicationTypes",
+        "references",
+        "citations",
+        "authors",
     )
-
-    bulk_details = connector.bulk_retrieve_details(paper_ids, fields)
-    logger.success(f"Retrieved details for {len(bulk_details)} papers.")
-
-    if not args.dry_run:
-        saveJSONL(bulk_details, "details.jsonl")
-    del bulk_details  # Free up memory
-
-    # Step 3: Retrieve Citations & References
-    citation_fields = "contexts", "title", "authors", "intents", "isInfluential"
-    total, citations = connector.bulk_retrieve_citations(paper_ids, citation_fields)
-    logger.success(f"Retrieved {total} citations.")
+    paper_details = connector.bulk_retrieve_details(paper_ids, missing_fields, batch_size=10)
+    logger.success(f"Retrieved {len(paper_details)} paper details.")
 
     if not args.dry_run:
-        saveJSONL(citations, "citations.jsonl")
-    del citations  # Free up memory
-
-    reference_fields = "contexts", "title", "authors", "intents", "isInfluential"
-    total, references = connector.bulk_retrieve_references(paper_ids, reference_fields)
-    logger.success(f"Retrieved {total} references.")
-
-    if not args.dry_run:
-        saveJSONL(references, "references.jsonl")
-    del references  # Free up memory
-
-    if args.dry_run:
-        logger.warning("Dry run complete. No data was saved.")
+        saveJSONL(paper_details, "papers.jsonl")
+    del paper_details  # Free up memory
 
 
 if __name__ == "__main__":

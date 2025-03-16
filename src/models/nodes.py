@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -12,15 +12,27 @@ from pydantic import BaseModel
 class Publication(BaseModel):
     "A publication in the academic world"
 
+    class _Embedding(BaseModel):
+        "The embedding of a publication"
+
+        embedding: List[float]
+        model: str
+
+    class _Tdlr(BaseModel):
+        "The TLDR of a publication"
+
+        model: str
+        text: str
+
     url: str
     title: str
     abstract: str
     year: int
     isOpenAccess: bool
-    openAccessPDFUrl: str
+    openAccessPDFUrl: Optional[str]
     publicationType: str
-    embedding: List[float]
-    tldr: str
+    embedding: Optional[_Embedding]
+    tldr: Optional[_Tdlr]
 
 
 class FieldOfStudy(BaseModel):
