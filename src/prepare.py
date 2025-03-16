@@ -5,6 +5,7 @@ from io import TextIOBase
 from pathlib import Path
 from typing import List
 
+from loguru import logger
 from tqdm import tqdm
 
 from lib.models import *
@@ -372,5 +373,10 @@ if __name__ == "__main__":
                         "pages": paper.get("journal", {}).get("pages"),
                     }
                 )
+
+        logger.success("Dataset files prepared successfully")
+        logger.warning("The following objects could not be extracted and will have to be generated manually:")
+        logger.warning("- City of a conference/workshop")
+        logger.warning("- Review details")
     else:
         raise ValueError(f"Unknown file type: {file_type}")
