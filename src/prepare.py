@@ -26,15 +26,18 @@ class BatchedWriter(TextIOBase):
 
         self.batch_number = 1
         self.current_batch_size = 0
+        self._is_closed = False
         self.output_file = open(self.file.format(batch=self.batch_number), "w")
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        self.output_file.close()
+        self.close()
 
     def write(self, line: str):
+        if self._is_closed:
+            raise ValueError("I/O operation on closed file")
         if self.current_batch_size >= self.batch_size:
             self.output_file.close()
             self.batch_number += 1
@@ -46,6 +49,15 @@ class BatchedWriter(TextIOBase):
     def writelines(self, lines: List[str]):
         for line in lines:
             self.write(line)
+
+    def flush(self):
+        self.output_file.flush()
+
+    def close(self):
+        if self._is_closed:
+            return
+        self._is_closed = True
+        self.output_file.close()
 
 
 if __name__ == "__main__":
@@ -94,7 +106,7 @@ if __name__ == "__main__":
                 output_file, fieldnames=["citedPaperID", "citingPaperID", "isInfluential", "contextsWithIntent"]
             )
             writer.writeheader()
-            for citation in tqdm(yieldFromFiles(input_files), desc="Preparing Citations"):
+            for citation in tqdm(yieldFromFiles(input_files), desc="Preparing Citations", unit="citations"):
                 writer.writerow(
                     {
                         "citedPaperID": citation.get("citedPaper", {}).get("paperId"),
