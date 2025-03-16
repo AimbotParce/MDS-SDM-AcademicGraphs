@@ -247,9 +247,12 @@ class S2AcademicAPI(SemanticScholarAPI):
             all_data = data["data"]
 
         while data.get("next"):
-            if data.get("next") > 10_000:
+            if data.get("next") >= self.MAX_DATA_RETRIEVAL - 1:
                 # This seems to be a hard limit of the Semantic Scholar API
-                logger.warning("Citation count exceeds 10000. Only the first 10000 citations will be retrieved.")
+                logger.warning(
+                    f"Citation count exceeds {self.MAX_DATA_RETRIEVAL}. "
+                    f"Only the first {self.MAX_DATA_RETRIEVAL} citations will be retrieved."
+                )
                 break
             data = self.get(
                 f"paper/{paper_id}/citations",
@@ -299,9 +302,12 @@ class S2AcademicAPI(SemanticScholarAPI):
             all_data = data["data"]
 
         while data.get("next"):
-            if data.get("next") > 10_000:
+            if data.get("next") >= self.MAX_DATA_RETRIEVAL - 1:
                 # This seems to be a hard limit of the Semantic Scholar API
-                logger.warning("Reference count exceeds 10000. Only the first 10000 references will be retrieved.")
+                logger.warning(
+                    f"Reference count exceeds {self.MAX_DATA_RETRIEVAL}. "
+                    f"Only the first {self.MAX_DATA_RETRIEVAL} references will be retrieved."
+                )
                 break
             data = self.get(
                 f"paper/{paper_id}/references",
