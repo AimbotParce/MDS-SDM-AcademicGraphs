@@ -54,7 +54,13 @@ class JournalVolume(BaseModel):
 
     journalVolumeID: str
     volume: str
-    year: int
+
+
+class OtherPublicationVenue(BaseModel):
+    venueID: str
+    name: str
+    url: Optional[str]
+    alternateNames: List[str]
 
 
 class Journal(BaseModel):

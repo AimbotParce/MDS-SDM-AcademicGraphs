@@ -1,6 +1,7 @@
 import csv
 import json
 import os
+from collections import defaultdict
 from io import TextIOBase
 from pathlib import Path
 from typing import List
@@ -107,7 +108,10 @@ if __name__ == "__main__":
                 output_file, fieldnames=["citedPaperID", "citingPaperID", "isInfluential", "contextsWithIntent"]
             )
             writer.writeheader()
-            for citation in tqdm(yieldFromFiles(input_files), desc="Preparing Citations", unit="citations"):
+            iters = 0
+            for citation in tqdm(
+                yieldFromFiles(input_files), desc="Preparing Citations", unit="citations", leave=False
+            ):
                 writer.writerow(
                     {
                         "citedPaperID": citation["citedPaper"]["paperId"],
@@ -116,6 +120,8 @@ if __name__ == "__main__":
                         "contextsWithIntent": json.dumps(citation["contextsWithIntent"]),
                     }
                 )
+                iters += 1
+            logger.success(f"Prepared {iters} citations in {output_file.batch_number} batches")
     elif file_type == "papers":
         papers = csv.DictWriter(
             BatchedWriter(output_dir / "nodes-papers-{batch}.csv", batch_size),
@@ -145,7 +151,7 @@ if __name__ == "__main__":
         proceedings.writeheader()
         journalvolumes = csv.DictWriter(
             BatchedWriter(output_dir / "nodes-journalvolumes-{batch}.csv", batch_size),
-            fieldnames=["journalVolumeID", "year", "volume"],
+            fieldnames=["journalVolumeID", "volume"],
         )
         journalvolumes.writeheader()
         journals = csv.DictWriter(
@@ -167,6 +173,11 @@ if __name__ == "__main__":
             BatchedWriter(output_dir / "nodes-cities-{batch}.csv", batch_size),
             fieldnames=["name"],
         )
+        otherpublicationvenues = csv.DictWriter(
+            BatchedWriter(output_dir / "nodes-otherpublicationvenues-{batch}.csv", batch_size),
+            fieldnames=["venueID", "name", "url", "alternateNames"],
+        )
+        otherpublicationvenues.writeheader()
         cities.writeheader()
         authors = csv.DictWriter(
             BatchedWriter(output_dir / "nodes-authors-{batch}.csv", batch_size),
@@ -203,6 +214,11 @@ if __name__ == "__main__":
             fieldnames=["paperID", "authorID", "accepted", "minorRevisions", "majorRevisions", "reviewContent"],
         )
         reviewed.writeheader()
+        ispublishedinotherpublicationvenue = csv.DictWriter(
+            BatchedWriter(output_dir / "edges-ispublishedinotherpublicationvenue-{batch}.csv", batch_size),
+            fieldnames=["paperID", "venueID", "pages"],
+        )
+        ispublishedinotherpublicationvenue.writeheader()
         ispublishedinjournal = csv.DictWriter(
             BatchedWriter(output_dir / "edges-ispublishedinjournal-{batch}.csv", batch_size),
             fieldnames=["paperID", "journalVolumeID", "pages"],
@@ -237,13 +253,19 @@ if __name__ == "__main__":
         unique_fields_of_study = set()
         unique_proceedings_ids = set()
         unique_journal_volume_ids = set()
+        unique_other_publication_venue_ids = set()
         unique_journal_ids = set()
         unique_workshop_ids = set()
         unique_conference_ids = set()
         unique_city_names = set()
         unique_author_ids = set()
         unique_organization_names = set()
-        for paper in tqdm(yieldFromFiles(input_files), desc="Preparing Papers", unit="papers"):
+
+        errors: dict[str, set[str]] = defaultdict(set)  # Error: Paper IDs
+        warnings: dict[str, set[str]] = defaultdict(set)  # Warning: Paper IDs
+
+        iters = 0
+        for paper in tqdm(yieldFromFiles(input_files), desc="Preparing Papers", unit="papers", leave=False):
             papers.writerow(
                 {
                     "paperID": paper["paperId"],
@@ -258,11 +280,15 @@ if __name__ == "__main__":
                     "tldr": paper.get("tldr"),
                 }
             )
-            for fos in paper["fieldsOfStudy"]:
-                if not fos in unique_fields_of_study:
-                    fieldsofstudy.writerow({"name": fos})
-                    unique_fields_of_study.add(fos)
-                hasfieldofstudy.writerow({"paperID": paper["paperId"], "fieldOfStudy": fos})
+            fields_of_study = paper.get("fieldsOfStudy", [])
+            if not fields_of_study:
+                errors["Missing Paper Fields of Study"].add(paper["paperId"])
+            else:
+                for fos in fields_of_study:
+                    if not fos in unique_fields_of_study:
+                        fieldsofstudy.writerow({"name": fos})
+                        unique_fields_of_study.add(fos)
+                    hasfieldofstudy.writerow({"paperID": paper["paperId"], "fieldOfStudy": fos})
             for author in paper["authors"]:
                 if not author["authorId"] in unique_author_ids:
                     authors.writerow(
@@ -281,102 +307,140 @@ if __name__ == "__main__":
                         organizations.writerow({"name": affiliation})
                         unique_organization_names.add(affiliation)
                     isaffiliatedwith.writerow({"authorID": author["authorId"], "organization": affiliation})
-            main_author = paper["authors"][0]  # We'll assume the first author is the main author
-            mainauthor.writerow({"paperID": paper["paperId"], "authorID": main_author["authorId"]})
+
+            if len(paper["authors"]) == 0:
+                errors["Missing Paper Authors"].add(paper["paperId"])
+            else:
+                main_author = paper["authors"][0]  # We'll assume the first author is the main author
+                mainauthor.writerow({"paperID": paper["paperId"], "authorID": main_author["authorId"]})
+
+            errors["Unknown Paper Review Details"].add(paper["paperId"])
 
             # Publications
             venue = paper["publicationVenue"]
-            if venue["type"] == "journal":
-                if not venue["id"] in unique_journal_ids:
-                    journals.writerow(
+            if venue is None:
+                errors["Missing Paper Publication Venue"].add(paper["paperId"])
+            else:
+                if not "type" in venue:
+                    warnings["Missing Publication Venue Type"].add(paper["paperId"])
+                    if not venue["id"] in unique_other_publication_venue_ids:
+                        otherpublicationvenues.writerow(
+                            {
+                                "venueID": venue["id"],
+                                "name": venue["name"],
+                                "url": venue.get("url"),
+                                "alternateNames": json.dumps(venue.get("alternate_names", [])),
+                            }
+                        )
+                        unique_other_publication_venue_ids.add(venue["id"])
+                    ispublishedinotherpublicationvenue.writerow(
                         {
-                            "journalID": venue["id"],
-                            "name": venue["name"],
-                            "url": venue.get("url"),
-                            "alternateNames": json.dumps(venue["alternate_names"]),
+                            "paperID": paper["paperId"],
+                            "venueID": venue["id"],
+                            "pages": paper.get("journal", {}).get("pages"),
                         }
                     )
-                    unique_journal_ids.add(venue["id"])
-                journal_volume_id = (venue["id"], paper["journal"]["volume"])
-                if not journal_volume_id in unique_journal_volume_ids:
-                    journalvolumes.writerow(
+                elif venue["type"] == "journal":
+                    if not venue["id"] in unique_journal_ids:
+                        journals.writerow(
+                            {
+                                "journalID": venue["id"],
+                                "name": venue["name"],
+                                "url": venue.get("url"),
+                                "alternateNames": json.dumps(venue.get("alternate_names", [])),
+                            }
+                        )
+                        unique_journal_ids.add(venue["id"])
+                    journal_volume_id = (venue["id"], paper["journal"].get("volume"))
+                    if not journal_volume_id in unique_journal_volume_ids:
+                        journalvolumes.writerow(
+                            {
+                                "journalVolumeID": json.dumps(list(journal_volume_id)),
+                                "volume": paper["journal"].get("volume"),
+                            }
+                        )
+                        unique_journal_volume_ids.add(journal_volume_id)
+                        iseditionofjournal.writerow(
+                            {"journalVolumeID": json.dumps(list(journal_volume_id)), "journalID": venue["id"]}
+                        )
+                    ispublishedinjournal.writerow(
                         {
+                            "paperID": paper["paperId"],
                             "journalVolumeID": json.dumps(list(journal_volume_id)),
-                            "year": paper["year"],
-                            "volume": paper["journal"]["volume"],
+                            "pages": paper["journal"].get("pages"),
                         }
                     )
-                    unique_journal_volume_ids.add(journal_volume_id)
-                    iseditionofjournal.writerow(
-                        {"journalVolumeID": json.dumps(list(journal_volume_id)), "journalID": venue["id"]}
-                    )
-                ispublishedinjournal.writerow(
-                    {
-                        "paperID": paper["paperId"],
-                        "journalVolumeID": json.dumps(list(journal_volume_id)),
-                        "pages": paper["journal"].get("pages"),
-                    }
-                )
-            if venue["type"] == "conference":
-                if not venue["id"] in unique_conference_ids:
-                    conferences.writerow(
+                elif venue["type"] == "conference":
+                    if not venue["id"] in unique_conference_ids:
+                        conferences.writerow(
+                            {
+                                "conferenceID": venue["id"],
+                                "name": venue["name"],
+                                "url": venue.get("url"),
+                                "alternateNames": json.dumps(venue.get("alternate_names", [])),
+                            }
+                        )
+                        unique_conference_ids.add(venue["id"])
+                    proceedings_id = (venue["id"], paper["year"])
+                    if not proceedings_id in unique_proceedings_ids:
+                        proceedings.writerow(
+                            {"year": paper["year"], "proceedingsID": json.dumps(list(proceedings_id))}
+                        )
+                        unique_proceedings_ids.add(proceedings_id)
+                        iseditionofconference.writerow(
+                            {"proceedingsID": json.dumps(list(proceedings_id)), "conferenceID": venue["id"]}
+                        )
+                        errors["Unknown Proceedings City"].add(venue["id"])
+
+                    ispublishedinproceedings.writerow(
                         {
-                            "conferenceID": venue["id"],
-                            "name": venue["name"],
-                            "url": venue.get("url"),
-                            "alternateNames": json.dumps(venue["alternate_names"]),
+                            "paperID": paper["paperId"],
+                            "proceedingsID": json.dumps(list(proceedings_id)),
+                            "pages": paper.get("journal", {}).get("pages"),
                         }
                     )
-                    unique_conference_ids.add(venue["id"])
-                proceedings_id = (venue["id"], paper["year"])
-                if not proceedings_id in unique_proceedings_ids:
-                    proceedings.writerow({"year": paper["year"], "proceedingsID": json.dumps(list(proceedings_id))})
-                    unique_proceedings_ids.add(proceedings_id)
-                    iseditionofconference.writerow(
-                        {"proceedingsID": json.dumps(list(proceedings_id)), "conferenceID": venue["id"]}
-                    )
-                    isheldin.writerow({"proceedingsID": json.dumps(list(proceedings_id)), "city": None})
+                elif venue["type"] == "workshop":
+                    if not venue["id"] in unique_workshop_ids:
+                        workshops.writerow(
+                            {
+                                "workshopID": venue["id"],
+                                "name": venue["name"],
+                                "url": venue.get("url"),
+                                "alternateNames": json.dumps(venue.get("alternate_names", [])),
+                            }
+                        )
+                        unique_workshop_ids.add(venue["id"])
+                    proceedings_id = (venue["id"], paper["year"])
+                    if not proceedings_id in unique_proceedings_ids:
+                        proceedings.writerow(
+                            {"year": paper["year"], "proceedingsID": json.dumps(list(proceedings_id))}
+                        )
+                        unique_proceedings_ids.add(proceedings_id)
+                        iseditionofworkshop.writerow(
+                            {"proceedingsID": json.dumps(list(proceedings_id)), "workshopID": venue["id"]}
+                        )
+                        errors["Unknown Proceedings City"].add(venue["id"])
 
-                ispublishedinproceedings.writerow(
-                    {
-                        "paperID": paper["paperId"],
-                        "proceedingsID": json.dumps(list(proceedings_id)),
-                        "pages": paper.get("journal", {}).get("pages"),
-                    }
-                )
-            if venue["type"] == "workshop":
-                if not venue["id"] in unique_workshop_ids:
-                    workshops.writerow(
+                    ispublishedinproceedings.writerow(
                         {
-                            "workshopID": venue["id"],
-                            "name": venue["name"],
-                            "url": venue.get("url"),
-                            "alternateNames": json.dumps(venue["alternate_names"]),
+                            "paperID": paper["paperId"],
+                            "proceedingsID": json.dumps(list(proceedings_id)),
+                            "pages": paper.get("journal", {}).get("pages"),
                         }
                     )
-                    unique_workshop_ids.add(venue["id"])
-                proceedings_id = (venue["id"], paper["year"])
-                if not proceedings_id in unique_proceedings_ids:
-                    proceedings.writerow({"year": paper["year"], "proceedingsID": json.dumps(list(proceedings_id))})
-                    unique_proceedings_ids.add(proceedings_id)
-                    iseditionofworkshop.writerow(
-                        {"proceedingsID": json.dumps(list(proceedings_id)), "workshopID": venue["id"]}
-                    )
-                    isheldin.writerow(
-                        {"proceedingsID": json.dumps(list(proceedings_id)), "city": paper["journal"]["city"]}
-                    )
+                else:
+                    errors["Unknown Publication Venue Type"].add(paper["paperId"])
 
-                ispublishedinproceedings.writerow(
-                    {
-                        "paperID": paper["paperId"],
-                        "proceedingsID": json.dumps(list(proceedings_id)),
-                        "pages": paper.get("journal", {}).get("pages"),
-                    }
-                )
+            iters += 1
 
-        logger.success("Dataset files prepared successfully")
-        logger.warning("The following objects could not be extracted and will have to be generated manually:")
-        logger.warning("- City of a conference/workshop")
-        logger.warning("- Review details")
+        logger.success(f"Prepared {iters} papers.")
+        if warnings:
+            logger.warning("The following warnings were found:")
+            for warning, paper_ids in warnings.items():
+                logger.warning(f"- {warning}: {len(paper_ids)}")
+        if errors:
+            logger.error("The following errors were found:")
+            for error, paper_ids in errors.items():
+                logger.error(f"- {error}: {len(paper_ids)}")
     else:
         raise ValueError(f"Unknown file type: {file_type}")
