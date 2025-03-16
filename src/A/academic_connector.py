@@ -306,7 +306,7 @@ def main(args):
     paper_ids: list[str] = list(paper["paperId"] for paper in papers)
     del papers  # Free up memory
 
-    logger.info("Retrieving missing paper details...")
+    logger.info("Retrieving paper details...")
     missing_fields = (
         "paperId",
         "embedding",
@@ -318,12 +318,22 @@ def main(args):
         "isOpenAccess",
         "openAccessPdf",
         "publicationTypes",
+        # Author fields
         "authors.authorId",
         "authors.url",
         "authors.name",
         "authors.affiliations",
         "authors.homepage",
         "authors.hIndex",
+        # Field of study fields
+        "fieldsOfStudy",
+        # Publication venue or journal
+        "journal",
+        "publicationVenue",
+        # If the paper is published in a Journal, "journal" has the information about the page number and things
+        # about the journal. Also, publicationVenue might have some extra information about it.
+        # If it is published in the Proceedings of a conference, "publicationVenue" has the information about the
+        # conference and "journal" might have some extra information about where in the proceedings the paper is.
     )
     paper_details = connector.bulk_retrieve_details(paper_ids, missing_fields, batch_size=500)
     total_details = 0
