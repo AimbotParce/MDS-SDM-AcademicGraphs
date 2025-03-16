@@ -3,7 +3,7 @@ import json
 import os
 from itertools import batched
 from pathlib import Path
-from typing import Generator, Iterable, List, Literal, Optional, Tuple, overload
+from typing import Generator, Iterable, List, Literal, Optional, Tuple, Union, overload
 
 from loguru import logger
 
@@ -203,7 +203,7 @@ class S2AcademicAPI(SemanticScholarAPI):
                 raise ValueError("batch size must be greater than 0 or None")
             paper_chunks = batched(paper_ids, batch_size)
             total_chunks = len(paper_ids) // batch_size + ((len(paper_ids) % batch_size) > 0)
-            logger.warning(
+            logger.info(
                 f"[Bulk Retrieve] Sending {total_chunks} request(s) to the API (max {batch_size} papers per request)."
             )
             for chunk in paper_chunks:
@@ -211,63 +211,87 @@ class S2AcademicAPI(SemanticScholarAPI):
         else:
             return _download_chunk(paper_ids)
 
+    @overload
+    def retrieve_citations(self, paper_id: str, fields: list[str]) -> List[dict]: ...
+    @overload
+    def retrieve_citations(self, paper_id: str, fields: list[str], stream: Literal[False]) -> List[dict]: ...
+    @overload
     def retrieve_citations(
-        self, paper_id: str, fields: list[str], limit: int = None, offset: int = None
-    ) -> Tuple[Optional[int], Optional[int], List[dict]]:
+        self, paper_id: str, fields: list[str], stream: Literal[True]
+    ) -> Generator[dict, None, None]: ...
+
+    def retrieve_citations(
+        self, paper_id: str, fields: list[str], stream: bool = False
+    ) -> Union[List[dict], Generator[dict, None, None]]:
         """
         Retrieve the citations for a paper.
 
         Args:
             paper_id (str): The paper ID to retrieve citations for.
             fields (list[str]): The fields to return in the response.
-            limit (int): The number of citations to return.
-            offset (int): The offset to start from.
+            stream (bool): Whether to stream the results.
 
         Returns:
-            Tuple[int, int, List[dict]]: The starting position of this batch,
-            the starting position of the next batch, and the list of citations.
+            citations (list[dict] | Generator[dict, None, None]): If stream is False, a list of citations.
+            Otherwise, a generator of citations.
         """
         params = {"fields": ",".join(fields)}
-        if limit:
-            params["limit"] = limit
-        if offset:
-            params["offset"] = offset
 
-        try:
-            data = self.get(f"paper/{paper_id}/citations", params=params)
-            return data["offset"], data.get("next"), data["data"]
-        except Exception as e:
-            logger.error(f"Error fetching citations for {paper_id}: {e}")
-            return None, None, []
+        data = self.get(f"paper/{paper_id}/citations", params=params)
+        if stream:
+            yield from data["data"]
+        else:
+            all_data = data["data"]
+
+        while data.get("next"):
+            data = self.get(f"paper/{paper_id}/citations", params={**params, "offset": data["next"]})
+            if stream:
+                yield from data["data"]
+            else:
+                all_data.extend(data["data"])
+        if not stream:
+            return all_data
+
+    @overload
+    def retrieve_references(self, paper_id: str, fields: list[str]) -> List[dict]: ...
+    @overload
+    def retrieve_references(self, paper_id: str, fields: list[str], stream: Literal[False]) -> List[dict]: ...
+    @overload
+    def retrieve_references(
+        self, paper_id: str, fields: list[str], stream: Literal[True]
+    ) -> Generator[dict, None, None]: ...
 
     def retrieve_references(
-        self, paper_id: str, fields: list[str], limit: int = None, offset: int = None
-    ) -> Tuple[Optional[int], Optional[int], List[dict]]:
+        self, paper_id: str, fields: list[str], stream: bool = False
+    ) -> Union[List[dict], Generator[dict, None, None]]:
         """
         Retrieve the references for a paper.
 
         Args:
             paper_id (str): The paper ID to retrieve references for.
             fields (list[str]): The fields to return in the response.
-            limit (int): The number of references to return.
-            offset (int): The offset to start from.
+            stream (bool): Whether to stream the results.
 
         Returns:
-            Tuple[int, int, List[dict]]: The starting position of this batch,
-            the starting position of the next batch, and the list of references.
+            references (list[dict] | Generator[dict, None, None]): If stream is False, a list of references.
+            Otherwise, a generator of references.
         """
         params = {"fields": ",".join(fields)}
-        if limit:
-            params["limit"] = limit
-        if offset:
-            params["offset"] = offset
 
-        try:
-            data = self.get(f"paper/{paper_id}/references", params=params)
-            return data["offset"], data.get("next"), data["data"]
-        except Exception as e:
-            logger.error(f"Error fetching references for {paper_id}: {e}")
-            return None, None, []
+        data = self.get(f"paper/{paper_id}/references", params=params)
+        if stream:
+            yield from data["data"]
+        else:
+            all_data = data["data"]
+
+        while data.get("next"):
+            data = self.get(f"paper/{paper_id}/references", params={**params, "offset": data["next"]})
+            if stream:
+                yield from data["data"]
+            else:
+                all_data.extend(data["data"])
+        if not stream:
+            return all_data
 
     @overload
     def bulk_retrieve_citations(
@@ -295,11 +319,17 @@ class S2AcademicAPI(SemanticScholarAPI):
             If the batch size is None, a list of citations. Otherwise, a generator of citations.
         """
 
-        def _download_citations(paper_id: str) -> List[dict]:
-            _, _, citations = self.retrieve_citations(paper_id, fields)
+        def _download_citations(paper_id: str):
+            citations = self.retrieve_citations(paper_id, fields, stream=stream)
+            all_citations = []
             for citation in citations:
                 citation["citedPaper"] = {"paperId": paper_id}
-            return citations
+                if stream:
+                    yield citation
+                else:
+                    all_citations.append(citation)
+            if not stream:
+                return all_citations
 
         if not stream:
             all_citations = []
@@ -337,11 +367,17 @@ class S2AcademicAPI(SemanticScholarAPI):
             If the batch size is None, a list of references. Otherwise, a generator of references.
         """
 
-        def _download_references(paper_id: str) -> List[dict]:
-            _, _, references = self.retrieve_references(paper_id, fields)
+        def _download_references(paper_id: str):
+            references = self.retrieve_references(paper_id, fields, stream=stream)
+            all_references = []
             for reference in references:
                 reference["citingPaper"] = {"paperId": paper_id}
-            return references
+                if stream:
+                    yield reference
+                else:
+                    all_references.append(reference)
+            if not stream:
+                return all_references
 
         if not stream:
             all_references = []
