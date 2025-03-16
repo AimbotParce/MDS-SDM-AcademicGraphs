@@ -3,7 +3,7 @@ import json
 import os
 from itertools import batched
 from pathlib import Path
-from typing import List, Literal, Optional, Tuple, Union
+from typing import Generator, Iterable, Iterator, List, Literal, Optional, Tuple, Union, overload
 
 from loguru import logger
 from semantic_scholar_api import SemanticScholarAPI
@@ -89,8 +89,18 @@ class S2AcademicAPI(SemanticScholarAPI):
             logger.error("Failed to do a bulk retrieval of papers")
             raise e
 
+    @overload
+    def bulk_retrieve_details(
+        self, paper_ids: Iterable[str], fields: Iterable[str], batch_size: None
+    ) -> List[dict]: ...
+
+    @overload
+    def bulk_retrieve_details(
+        self, paper_ids: Iterable[str], fields: Iterable[str], batch_size: int
+    ) -> Generator[dict, None, None]: ...
+
     # This function returns a list of paper_details (dict/json) that can be identified by paperId
-    def bulk_retrieve_details(self, paper_ids: list[str], fields: list[str], batch_size: int = None) -> list[dict]:
+    def bulk_retrieve_details(self, paper_ids: Iterable[str], fields: Iterable[str], batch_size: Optional[int] = None):
         """
         Retrieve the details for a list of papers.
 
@@ -100,32 +110,25 @@ class S2AcademicAPI(SemanticScholarAPI):
             batch_size (int): The number of papers to retrieve per request.
 
         Returns:
-            list[dict]: The list of paper details.
+            details (Generator[dict, None, None] | list[dict]): If the batch size is None, a list of paper details.
+            Otherwise, a generator of paper details.
         """
-        try:
-            if batch_size is not None:
-                if not batch_size > 0:
-                    raise ValueError("batch size must be greater than 0 or None")
-                paper_chunks = list(batched(paper_ids, batch_size))
-                logger.warning(
-                    f"[Bulk Retrieve] Sending {len(paper_chunks)} request(s) to the API (max {batch_size} papers per request)."
-                )
-            else:
-                paper_chunks = [paper_ids]
 
-            all_results = []
+        def _download_chunk(chunk: list[str]) -> list[dict]:
+            return self.post("paper/batch", params={"fields": ",".join(fields)}, json={"ids": chunk})
+
+        if batch_size is not None:
+            if not batch_size > 0:
+                raise ValueError("batch size must be greater than 0 or None")
+            paper_chunks = batched(paper_ids, batch_size)
+            total_chunks = len(paper_ids) // batch_size + ((len(paper_ids) % batch_size) > 0)
+            logger.warning(
+                f"[Bulk Retrieve] Sending {total_chunks} request(s) to the API (max {batch_size} papers per request)."
+            )
             for index, chunk in enumerate(paper_chunks, start=1):
-                try:
-                    response = self.post("paper/batch", params={"fields": ",".join(fields)}, json={"ids": chunk})
-                except Exception as req_err:
-                    logger.error(f"[Chunk {index}/{len(paper_chunks)}] Request failed: {req_err}")
-                else:
-                    all_results.extend(response)
-            return all_results
-
-        except Exception as e:
-            logger.error(f"Exception in bulk_retrieve_details: {e}")
-            return None
+                yield from _download_chunk(chunk)
+        else:
+            return _download_chunk(paper_ids)
 
     def retrieve_citations(
         self, paper_id: str, fields: list[str], limit: int = None, offset: int = None
@@ -256,8 +259,8 @@ def main(args):
         logger.info("Running in DRY RUN mode. No data will be saved.")
 
     # Step 1: Retrieve Papers (4 in this case)
-    total, _, papers = connector.bulk_retrieve_papers("neural network", minCitationCount=80000)
-    logger.success(f"Retrieved {total} papers.")
+    total_papers, _, papers = connector.bulk_retrieve_papers("neural network", minCitationCount=80000)
+    logger.success(f"Retrieved {total_papers} papers.")
     paper_ids: list[str] = list(paper["paperId"] for paper in papers)
     del papers  # Free up memory
 
@@ -277,12 +280,16 @@ def main(args):
         "citations",
         "authors",
     )
-    paper_details = connector.bulk_retrieve_details(paper_ids, missing_fields, batch_size=10)
-    logger.success(f"Retrieved {len(paper_details)} paper details.")
+    paper_details = connector.bulk_retrieve_details(paper_ids, missing_fields, batch_size=500)
+    total_details = 0
+    for i, papers in enumerate(batched(paper_details, 2), start=1):
+        logger.info(f"Retrieved {len(papers)} paper details.")
+        total_details += len(papers)
+        if not args.dry_run:
+            maxsize = len(str(total_papers))
+            saveJSONL(papers, f"papers-{i:0{maxsize}d}.jsonl")
 
-    if not args.dry_run:
-        saveJSONL(paper_details, "papers.jsonl")
-    del paper_details  # Free up memory
+    logger.success(f"Retrieved {total_details} paper details.")
 
 
 if __name__ == "__main__":
