@@ -24,6 +24,7 @@ class Publication(BaseModel):
         model: str
         text: str
 
+    paperID: str
     url: str
     title: str
     abstract: str
@@ -56,18 +57,21 @@ class JournalVolume(BaseModel):
 class Journal(BaseModel):
     "A journal"
 
+    journalID: str
     name: str
 
 
 class Workshop(BaseModel):
     "A workshop venue"
 
+    workshopID: str
     name: str
 
 
 class Conference(BaseModel):
     "A conference venue"
 
+    conferenceID: str
     name: str
 
 
@@ -80,6 +84,7 @@ class City(BaseModel):
 class Author(BaseModel):
     "An author of one or many publications"
 
+    authorID: str
     url: str
     name: str
     homepage: str
