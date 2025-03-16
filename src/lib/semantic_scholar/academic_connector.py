@@ -26,7 +26,7 @@ class S2AcademicAPI(SemanticScholarAPI):
     ):
         super().__init__(api_url, api_key, default_max_retries, default_backoff)
 
-    # This function returns a list of papers ids stored in json dicts
+    @overload
     def bulk_retrieve_papers(
         self,
         query: str,
@@ -40,7 +40,61 @@ class S2AcademicAPI(SemanticScholarAPI):
         year: str = None,
         venue: list[str] = None,
         fieldsOfStudy: list[str] = None,
-    ) -> Tuple[int, str, list[dict]]:
+        limit: int = None,
+    ) -> list[dict]: ...
+
+    @overload
+    def bulk_retrieve_papers(
+        self,
+        query: str,
+        token: str = None,
+        fields: list[str] = None,
+        sort: str = None,
+        publicationTypes: list[str] = None,
+        openAccessPdf: bool = False,
+        minCitationCount: int = None,
+        publicationDateOrYear: str = None,
+        year: str = None,
+        venue: list[str] = None,
+        fieldsOfStudy: list[str] = None,
+        limit: int = None,
+        stream: Literal[False] = False,
+    ) -> list[dict]: ...
+
+    @overload
+    def bulk_retrieve_papers(
+        self,
+        query: str,
+        token: str = None,
+        fields: list[str] = None,
+        sort: str = None,
+        publicationTypes: list[str] = None,
+        openAccessPdf: bool = False,
+        minCitationCount: int = None,
+        publicationDateOrYear: str = None,
+        year: str = None,
+        venue: list[str] = None,
+        fieldsOfStudy: list[str] = None,
+        limit: int = None,
+        stream: Literal[True] = False,
+    ) -> Generator[dict, None, None]: ...
+
+    def bulk_retrieve_papers(
+        self,
+        query: str,
+        token: str = None,
+        fields: list[str] = None,
+        sort: str = None,
+        publicationTypes: list[str] = None,
+        openAccessPdf: bool = False,
+        minCitationCount: int = None,
+        publicationDateOrYear: str = None,
+        year: str = None,
+        venue: list[str] = None,
+        fieldsOfStudy: list[str] = None,
+        limit: int = None,
+        stream: bool = False,
+    ):
         """
         Retrieve a list of papers based on a query.
 
@@ -58,7 +112,8 @@ class S2AcademicAPI(SemanticScholarAPI):
             fieldsOfStudy (list[str]): The fields of study to filter by.
 
         Returns:
-            Tuple[int, str, list[dict]]: The total number of papers, the next token, and the list of papers.
+            papers (list[dict] | Generator[dict, None, None]): If stream is False, a list of papers.
+            Otherwise, a generator of papers.
         """
 
         params = {"query": query}
@@ -83,12 +138,34 @@ class S2AcademicAPI(SemanticScholarAPI):
         if fieldsOfStudy:
             params["fieldsOfStudy"] = ",".join(fieldsOfStudy)
 
-        try:
+        if not stream:
             data = self.get("paper/search/bulk", params=params)
-            return data["total"], data["token"], data["data"]
-        except Exception as e:
-            logger.error("Failed to do a bulk retrieval of papers")
-            raise e
+            result = data["data"]
+            while data.get("token"):
+                if limit is not None and len(result) >= limit:
+                    break
+                data = self.get("paper/search/bulk", params={**params, "token": data["token"]})
+                result.extend(data["data"])
+            return result[:limit] if limit else result
+        else:
+            data = self.get("paper/search/bulk", params=params)
+            total_yielded = 0
+            if limit is not None and len(data["data"]) > limit:
+                yield from data["data"][0:limit]
+                total_yielded += limit
+            else:
+                yield from data["data"]
+                total_yielded += len(data["data"])
+            while data.get("token"):
+                if limit is not None and total_yielded >= limit:
+                    break
+                data = self.get("paper/search/bulk", params={**params, "token": data["token"]})
+                if limit is not None and len(data["data"]) + total_yielded > limit:
+                    yield from data["data"][0 : limit - total_yielded]
+                    total_yielded += limit - total_yielded
+                else:
+                    yield from data["data"]
+                    total_yielded += len(data["data"])
 
     @overload
     def bulk_retrieve_details(

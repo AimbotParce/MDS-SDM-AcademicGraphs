@@ -39,11 +39,16 @@ def main(args):
         logger.info("Running in DRY RUN mode. No data will be saved.")
 
     # Step 1: Retrieve Papers (4 in this case)
-    total_papers, _, papers = connector.bulk_retrieve_papers(
-        args.query, minCitationCount=args.min_citations, year=args.year, fieldsOfStudy=args.fields
+    papers = connector.bulk_retrieve_papers(
+        args.query,
+        minCitationCount=args.min_citations,
+        year=args.year,
+        fieldsOfStudy=args.fields,
+        stream=True,
+        limit=args.limit,
     )
-    logger.success(f"Retrieved {total_papers} papers.")
     paper_ids: list[str] = list(paper["paperId"] for paper in papers)
+    logger.success(f"Retrieved {len(paper_ids)} papers.")
     del papers  # Free up memory
 
     logger.info("Retrieving paper details...")
@@ -108,6 +113,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--fields", type=str, help="Fields of study to filter by", nargs="*", default=None)
     parser.add_argument("--output", type=str, help="Output file name", default=None)
+    parser.add_argument("--limit", type=int, help="Limit the number of papers to retrieve", default=None)
     parser.add_argument("--dry-run", action="store_true", help="Run without saving any data")
     args = parser.parse_args()
     if not args.dry_run and not args.output:
