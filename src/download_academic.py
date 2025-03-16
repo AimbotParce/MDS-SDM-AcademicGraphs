@@ -1,39 +1,16 @@
 import json
 import os
 from argparse import ArgumentParser
-from itertools import batched
 from pathlib import Path
 
 from loguru import logger
 
+from lib.io import BatchedWriter
 from lib.semantic_scholar import S2AcademicAPI
 
 
-def jsonlSaver(folder: os.PathLike):
-    folder = Path(folder)
-    folder.mkdir(exist_ok=True)
-
-    def saveJSONL(data: list[dict], filename):
-        file_path = folder / filename
-        with open(file_path, "w", encoding="utf-8") as f:
-            for line in data:
-                f.write(json.dumps(line, ensure_ascii=False) + "\n")  # Write each dict as a JSON line
-
-        logger.success(f"Saved {file_path}")
-
-    return saveJSONL
-
-
-# This main showcases how to extract the main relevant information
-# - Papers details
-# - Authors details
-# - References
-# - Citations
-# - Venues
-# - Embeddings
 def main(args):
     connector = S2AcademicAPI(api_key=os.getenv("S2_API_KEY"), default_max_retries=3)
-    saveJSONL = jsonlSaver(args.output) if not args.dry_run else lambda x, y: None
 
     if args.dry_run:
         logger.info("Running in DRY RUN mode. No data will be saved.")
@@ -82,27 +59,29 @@ def main(args):
         # conference and "journal" might have some extra information about where in the proceedings the paper is.
     )
     paper_details = connector.bulk_retrieve_details(paper_ids, missing_fields, batch_size=500)
-    total_details = 0
-    for i, papers in enumerate(batched(paper_details, 1000), start=1):
-        logger.info(f"[Batch {i}] Retrieved {len(papers)} paper details.")
-        total_details += len(papers)
-        if not args.dry_run:
-            saveJSONL(papers, f"raw-papers-{i}.jsonl")
-
-    logger.success(f"Retrieved {total_details} paper details.")
+    if not args.dry_run:
+        with BatchedWriter(args.output / "raw-papers-{batch}.jsonl", batch_size=args.batch_size) as writer:
+            for i, paper in enumerate(paper_details, start=1):
+                writer.write(json.dumps(paper, ensure_ascii=False) + "\n")
+            logger.success(f"Stored {i} paper details.")
+    else:
+        for i, paper in enumerate(paper_details, start=1):
+            pass
+        logger.success(f"Retrieved {i} paper details.")
 
     # Get all the citations
     logger.info("Retrieving citations...")
     citation_fields = "citingPaper.paperId", "isInfluential", "contextsWithIntent"
     citations = connector.bulk_retrieve_citations(paper_ids, citation_fields, stream=True)
-    total_citations = 0
-    for i, citations in enumerate(batched(citations, 1000), start=1):
-        logger.info(f"[Batch {i}] Retrieved {len(citations)} citations.")
-        total_citations += len(citations)
-        if not args.dry_run:
-            saveJSONL(citations, f"raw-citations-{i}.jsonl")
-
-    logger.success(f"Retrieved {total_citations} citations.")
+    if not args.dry_run:
+        with BatchedWriter(args.output / "raw-citations-{batch}.jsonl", batch_size=args.batch_size) as writer:
+            for i, citation in enumerate(citations, start=1):
+                writer.write(json.dumps(citation, ensure_ascii=False) + "\n")
+            logger.success(f"Stored {i} citations.")
+    else:
+        for i, citation in enumerate(citations, start=1):
+            pass
+        logger.success(f"Retrieved {i} citations.")
 
 
 if __name__ == "__main__":
@@ -113,8 +92,9 @@ if __name__ == "__main__":
         "--year", type=str, help="Year of publication (YYYY | YYYY-YYYY | YYYY- | -YYYY)", default=None
     )
     parser.add_argument("--fields", type=str, help="Fields of study to filter by", nargs="*", default=None)
-    parser.add_argument("--output", type=str, help="Output file name", default=None)
+    parser.add_argument("--output", type=Path, help="Output folder", default=None)
     parser.add_argument("--limit", type=int, help="Limit the number of papers to retrieve", default=None)
+    parser.add_argument("--batch-size", type=int, help="Batch size for retrieving details", default=10000)
     parser.add_argument("--dry-run", action="store_true", help="Run without saving any data")
     args = parser.parse_args()
     if not args.dry_run and not args.output:
