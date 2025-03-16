@@ -264,6 +264,9 @@ if __name__ == "__main__":
                     unique_fields_of_study.add(fos)
                 hasfieldofstudy.writerow({"paperID": paper["paperId"], "fieldOfStudy": fos})
             for author in paper["authors"]:
+                if author["authorId"] is None:
+                    logger.warning(f"Author ID is None for author: {author}")
+                    continue  # Skip this author
                 if not author["authorId"] in unique_author_ids:
                     authors.writerow(
                         {
