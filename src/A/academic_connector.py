@@ -95,6 +95,9 @@ class S2AcademicAPI(SemanticScholarAPI):
     ) -> List[dict]: ...
 
     @overload
+    def bulk_retrieve_details(self, paper_ids: Iterable[str], fields: Iterable[str]) -> List[dict]: ...
+
+    @overload
     def bulk_retrieve_details(
         self, paper_ids: Iterable[str], fields: Iterable[str], batch_size: int
     ) -> Generator[dict, None, None]: ...
@@ -125,7 +128,7 @@ class S2AcademicAPI(SemanticScholarAPI):
             logger.warning(
                 f"[Bulk Retrieve] Sending {total_chunks} request(s) to the API (max {batch_size} papers per request)."
             )
-            for index, chunk in enumerate(paper_chunks, start=1):
+            for chunk in paper_chunks:
                 yield from _download_chunk(chunk)
         else:
             return _download_chunk(paper_ids)
@@ -188,7 +191,20 @@ class S2AcademicAPI(SemanticScholarAPI):
             logger.error(f"Error fetching references for {paper_id}: {e}")
             return None, None, []
 
-    def bulk_retrieve_citations(self, paper_ids: list[str], fields: list[str]) -> Tuple[int, List[dict]]:
+    @overload
+    def bulk_retrieve_citations(
+        self, paper_ids: Iterable[str], fields: Iterable[str], stream: Literal[False]
+    ) -> List[dict]: ...
+
+    @overload
+    def bulk_retrieve_citations(self, paper_ids: Iterable[str], fields: Iterable[str]) -> List[dict]: ...
+
+    @overload
+    def bulk_retrieve_citations(
+        self, paper_ids: Iterable[str], fields: Iterable[str], stream: Literal[True]
+    ) -> Generator[dict, None, None]: ...
+
+    def bulk_retrieve_citations(self, paper_ids: Iterable[str], fields: Iterable[str], stream: bool = False):
         """
         Retrieve the citations for a list of papers.
 
@@ -197,19 +213,40 @@ class S2AcademicAPI(SemanticScholarAPI):
             fields (list[str]): The fields to return in the response.
 
         Returns:
-            Tuple[int, List[dict]]: The total number of citations and the list of all citations.
+            citations (Generator[dict, None, None] | List[dict]):
+            If the batch size is None, a list of citations. Otherwise, a generator of citations.
         """
-        all_citations = []
-        citation_count = 0
-        for paper_id in paper_ids:
+
+        def _download_citations(paper_id: str) -> List[dict]:
             _, _, citations = self.retrieve_citations(paper_id, fields)
             for citation in citations:
                 citation["citedPaper"] = {"paperId": paper_id}
-            all_citations.extend(citations)
-            citation_count += len(citations)
-        return citation_count, all_citations
+            return citations
 
-    def bulk_retrieve_references(self, paper_ids: list[str], fields: list[str]) -> Tuple[int, List[dict]]:
+        if not stream:
+            all_citations = []
+            for paper_id in paper_ids:
+                citations = _download_citations(paper_id)
+                all_citations.extend(citations)
+            return all_citations
+        else:
+            for paper_id in paper_ids:
+                yield from _download_citations(paper_id)
+
+    @overload
+    def bulk_retrieve_references(
+        self, paper_ids: Iterable[str], fields: Iterable[str], stream: Literal[False]
+    ) -> List[dict]: ...
+
+    @overload
+    def bulk_retrieve_references(self, paper_ids: Iterable[str], fields: Iterable[str]) -> List[dict]: ...
+
+    @overload
+    def bulk_retrieve_references(
+        self, paper_ids: Iterable[str], fields: Iterable[str], stream: Literal[True]
+    ) -> Generator[dict, None, None]: ...
+
+    def bulk_retrieve_references(self, paper_ids: list[str], fields: list[str], stream: bool = False):
         """
         Retrieve the references for a list of papers.
 
@@ -218,20 +255,25 @@ class S2AcademicAPI(SemanticScholarAPI):
             fields (list[str]): The fields to return in the response.
 
         Returns:
-            Tuple[int, List[dict]]: The total number of references and the list of all references.
+            references (Generator[dict, None, None] | List[dict]):
+            If the batch size is None, a list of references. Otherwise, a generator of references.
         """
-        all_references = []
-        reference_count = 0
-        for paper_id in paper_ids:
+
+        def _download_references(paper_id: str) -> List[dict]:
             _, _, references = self.retrieve_references(paper_id, fields)
             for reference in references:
                 reference["citingPaper"] = {"paperId": paper_id}
-            all_references.extend(references)
-            reference_count += len(references)
-        return reference_count, all_references
+            return references
 
-    def bulk_retrieve_authors(self):
-        pass
+        if not stream:
+            all_references = []
+            for paper_id in paper_ids:
+                references = _download_references(paper_id)
+                all_references.extend(references)
+            return all_references
+        else:
+            for paper_id in paper_ids:
+                yield from _download_references(paper_id)
 
 
 def saveJSONL(data: list[dict], filename):
@@ -276,20 +318,35 @@ def main(args):
         "isOpenAccess",
         "openAccessPdf",
         "publicationTypes",
-        "references",
-        "citations",
-        "authors",
+        "authors.authorId",
+        "authors.url",
+        "authors.name",
+        "authors.affiliations",
+        "authors.homepage",
+        "authors.hIndex",
     )
     paper_details = connector.bulk_retrieve_details(paper_ids, missing_fields, batch_size=500)
     total_details = 0
-    for i, papers in enumerate(batched(paper_details, 2), start=1):
-        logger.info(f"Retrieved {len(papers)} paper details.")
+    for i, papers in enumerate(batched(paper_details, 1000), start=1):
+        logger.info(f"[Batch {i}] Retrieved {len(papers)} paper details.")
         total_details += len(papers)
         if not args.dry_run:
-            maxsize = len(str(total_papers))
-            saveJSONL(papers, f"papers-{i:0{maxsize}d}.jsonl")
+            saveJSONL(papers, f"papers-{i}.jsonl")
 
     logger.success(f"Retrieved {total_details} paper details.")
+
+    # Get all the citations
+    logger.info("Retrieving citations...")
+    citation_fields = "citingPaper.paperId", "isInfluential", "contextsWithIntent"
+    citations = connector.bulk_retrieve_citations(paper_ids, citation_fields, stream=True)
+    total_citations = 0
+    for i, citations in enumerate(batched(citations, 1000), start=1):
+        logger.info(f"[Batch {i}] Retrieved {len(citations)} citations.")
+        total_citations += len(citations)
+        if not args.dry_run:
+            saveJSONL(citations, f"citations-{i}.jsonl")
+
+    logger.success(f"Retrieved {total_citations} citations.")
 
 
 if __name__ == "__main__":

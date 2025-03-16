@@ -12,9 +12,14 @@ from pydantic import BaseModel
 class Cites(BaseModel):
     "(Citation) -[Cites]-> (Publication)"
 
+    class _ContextWithIntents(BaseModel):
+        "The context of the citation"
+
+        context: str
+        intents: List[str]
+
     isInfluential: bool
-    contexts: List[str]
-    intents: List[str]
+    contextsWithIntents: List[_ContextWithIntents]
 
 
 class HasFieldOfStudy(BaseModel):
