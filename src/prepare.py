@@ -1,4 +1,5 @@
 import csv
+import glob
 import json
 import os
 from collections import defaultdict
@@ -68,9 +69,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Prepare the Semantic Scholar dataset")
     parser.add_argument(
         "input_files",
-        type=Path,
+        type=str,
         nargs="+",
-        help="Input JSONL files to prepare",
+        help="Input JSONL files to prepare. Allows wildcards (e.g. *.jsonl)",
     )
     parser.add_argument(
         "-o",
@@ -96,7 +97,10 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    input_files: list[Path] = args.input_files
+    input_files: list[str] = args.input_files
+    # If input files have wildcards, expand them
+    input_files = [Path(file) for pattern in input_files for file in glob.glob(pattern)]
+
     batch_size: int = args.batch_size
     file_type: str = args.type
     output_dir: Path = args.output_dir
