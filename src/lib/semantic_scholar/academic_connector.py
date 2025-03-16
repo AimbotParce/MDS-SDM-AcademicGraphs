@@ -256,7 +256,7 @@ class S2AcademicAPI(SemanticScholarAPI):
                 params={
                     **params,
                     "offset": data["next"],
-                    "limit": min(self.MAX_LIMIT, self.MAX_DATA_RETRIEVAL - data["next"]),
+                    "limit": min(self.MAX_LIMIT, self.MAX_DATA_RETRIEVAL - data["next"] - 1),
                 },
             )
             if stream:
@@ -308,7 +308,7 @@ class S2AcademicAPI(SemanticScholarAPI):
                 params={
                     **params,
                     "offset": data["next"],
-                    "limit": min(self.MAX_LIMIT, self.MAX_DATA_RETRIEVAL - data["next"]),
+                    "limit": min(self.MAX_LIMIT, self.MAX_DATA_RETRIEVAL - data["next"] - 1),
                 },
             )
             if stream:
