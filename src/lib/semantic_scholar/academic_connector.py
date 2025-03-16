@@ -17,7 +17,7 @@ from .api_connector import SemanticScholarAPI
 
 
 class S2AcademicAPI(SemanticScholarAPI):
-    MAX_LIMIT = 1000
+    MAX_BATCH_SIZE = 1000
     MAX_DATA_RETRIEVAL = 10_000
 
     def __init__(
@@ -171,44 +171,36 @@ class S2AcademicAPI(SemanticScholarAPI):
                     total_yielded += len(data["data"])
 
     @overload
-    def bulk_retrieve_details(
-        self, paper_ids: Iterable[str], fields: Iterable[str], batch_size: None
-    ) -> List[dict]: ...
-
-    @overload
     def bulk_retrieve_details(self, paper_ids: Iterable[str], fields: Iterable[str]) -> List[dict]: ...
-
     @overload
     def bulk_retrieve_details(
-        self, paper_ids: Iterable[str], fields: Iterable[str], batch_size: int
+        self, paper_ids: Iterable[str], fields: Iterable[str], stream: Literal[False]
+    ) -> List[dict]: ...
+    @overload
+    def bulk_retrieve_details(
+        self, paper_ids: Iterable[str], fields: Iterable[str], stream: Literal[True]
     ) -> Generator[dict, None, None]: ...
 
     # This function returns a list of paper_details (dict/json) that can be identified by paperId
-    def bulk_retrieve_details(self, paper_ids: Iterable[str], fields: Iterable[str], batch_size: Optional[int] = None):
+    def bulk_retrieve_details(self, paper_ids: Iterable[str], fields: Iterable[str], stream: bool = False):
         """
         Retrieve the details for a list of papers.
 
         Args:
             paper_ids (list[str]): The list of paper IDs to retrieve details for.
             fields (list[str]): The fields to return in the response.
-            batch_size (int): The number of papers to retrieve per request.
+            stream (bool): Whether to stream the results.
 
         Returns:
-            details (Generator[dict, None, None] | list[dict]): If the batch size is None, a list of paper details.
+            details (Generator[dict, None, None] | List[dict]): If stream is False, a list of paper details.
             Otherwise, a generator of paper details.
         """
 
-        def _download_chunk(chunk: list[str]) -> list[dict]:
+        def _download_chunk(chunk: list[str]) -> List[dict]:
             return self.post("paper/batch", params={"fields": ",".join(fields)}, json={"ids": chunk})
 
-        if batch_size is not None:
-            if not batch_size > 0:
-                raise ValueError("batch size must be greater than 0 or None")
-            paper_chunks = batched(paper_ids, batch_size)
-            total_chunks = len(paper_ids) // batch_size + ((len(paper_ids) % batch_size) > 0)
-            logger.info(
-                f"[Bulk Retrieve] Sending {total_chunks} request(s) to the API (max {batch_size} papers per request)."
-            )
+        if stream or len(paper_ids) > self.MAX_BATCH_SIZE:
+            paper_chunks = batched(paper_ids, self.MAX_BATCH_SIZE)
             for chunk in paper_chunks:
                 yield from _download_chunk(chunk)
         else:
@@ -259,7 +251,7 @@ class S2AcademicAPI(SemanticScholarAPI):
                 params={
                     **params,
                     "offset": data["next"],
-                    "limit": min(self.MAX_LIMIT, self.MAX_DATA_RETRIEVAL - data["next"] - 1),
+                    "limit": min(self.MAX_BATCH_SIZE, self.MAX_DATA_RETRIEVAL - data["next"] - 1),
                 },
             )
             if stream:
@@ -314,7 +306,7 @@ class S2AcademicAPI(SemanticScholarAPI):
                 params={
                     **params,
                     "offset": data["next"],
-                    "limit": min(self.MAX_LIMIT, self.MAX_DATA_RETRIEVAL - data["next"] - 1),
+                    "limit": min(self.MAX_BATCH_SIZE, self.MAX_DATA_RETRIEVAL - data["next"] - 1),
                 },
             )
             if stream:

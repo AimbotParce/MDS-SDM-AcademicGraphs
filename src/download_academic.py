@@ -15,15 +15,15 @@ def main(args):
     if args.dry_run:
         logger.info("Running in DRY RUN mode. No data will be saved.")
 
-    # Step 1: Retrieve Papers (4 in this case)
+    logger.info("Retrieving papers...")
     papers = connector.bulk_retrieve_papers(
         args.query,
         minCitationCount=args.min_citations,
         year=args.year,
         fieldsOfStudy=args.fields,
-        stream=True,
         limit=args.limit,
         sort="citationCount:desc",
+        stream=True,
     )
     paper_ids: list[str] = list(paper["paperId"] for paper in papers)
     logger.success(f"Retrieved {len(paper_ids)} papers.")
@@ -58,7 +58,7 @@ def main(args):
         # If it is published in the Proceedings of a conference, "publicationVenue" has the information about the
         # conference and "journal" might have some extra information about where in the proceedings the paper is.
     )
-    paper_details = connector.bulk_retrieve_details(paper_ids, missing_fields, batch_size=500)
+    paper_details = connector.bulk_retrieve_details(paper_ids, missing_fields, stream=True)
     if not args.dry_run:
         with BatchedWriter(args.output / "raw-papers-{batch}.jsonl", batch_size=args.batch_size) as writer:
             for i, paper in enumerate(paper_details, start=1):
