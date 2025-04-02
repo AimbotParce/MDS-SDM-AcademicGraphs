@@ -4,7 +4,7 @@ from typing import List
 
 
 class BatchedWriter(TextIOBase):
-    def __init__(self, file: os.PathLike, batch_size: int):
+    def __init__(self, file: os.PathLike, batch_size: int, encoding: str = "utf-8"):
         """
         A file writer that writes to multiple files in batches.
 
@@ -21,7 +21,8 @@ class BatchedWriter(TextIOBase):
         self.batch_number = 1
         self.current_batch_size = 0
         self._is_closed = False
-        self.output_file = open(self.file.format(batch=self.batch_number), "w")
+        self._encoding = encoding
+        self.output_file = open(self.file.format(batch=self.batch_number), "w", encoding=encoding)
 
     def __enter__(self):
         return self
@@ -36,7 +37,7 @@ class BatchedWriter(TextIOBase):
             self.output_file.close()
             self.batch_number += 1
             self.current_batch_size = 0
-            self.output_file = open(self.file.format(batch=self.batch_number), "w")
+            self.output_file = open(self.file.format(batch=self.batch_number), "w", encoding=self._encoding)
         self.output_file.write(line)
         self.current_batch_size += 1
 
