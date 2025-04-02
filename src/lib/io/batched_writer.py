@@ -22,7 +22,7 @@ class BatchedWriter(TextIOBase):
         self.current_batch_size = 0
         self._is_closed = False
         self._encoding = encoding
-        self.output_file = open(self.file.format(batch=self.batch_number), "w", encoding=encoding)
+        self.output_file = open(self.file.format(batch=self.batch_number), "w", encoding=encoding, newline="")
 
     def __enter__(self):
         return self
@@ -37,9 +37,12 @@ class BatchedWriter(TextIOBase):
             self.output_file.close()
             self.batch_number += 1
             self.current_batch_size = 0
-            self.output_file = open(self.file.format(batch=self.batch_number), "w", encoding=self._encoding)
-        self.output_file.write(line)
+            self.output_file = open(
+                self.file.format(batch=self.batch_number), "w", encoding=self._encoding, newline=""
+            )
+        res = self.output_file.write(line)
         self.current_batch_size += 1
+        return res
 
     def writelines(self, lines: List[str]):
         for line in lines:
