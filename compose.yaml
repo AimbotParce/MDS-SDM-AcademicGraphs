@@ -11,5 +11,4 @@ services:
       - ./neo4j/logs:/logs
       - ./neo4j/import:/import
       - ./neo4j/plugins:/plugins
-      - ./data:/external-data # Mounting this to be able to load the data from the host
 
