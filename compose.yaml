@@ -21,12 +21,12 @@ services:
       - neo4j
     command: ["python", "etl_script.py"]  
 
-  streamlit:
-    build: .  # Use the shared Dockerfile
-    container_name: streamlit
-    restart: always
-    ports:
-      - "8501:8501"
-    depends_on:
-      - neo4j
-    command: ["streamlit", "run", "home.py"]  
+  # streamlit:
+  #   build: .  # Use the shared Dockerfile
+  #   container_name: streamlit
+  #   restart: always
+  #   ports:
+  #     - "8501:8501"
+  #   depends_on:
+  #     - neo4j
+  #   command: ["streamlit", "run", "home.py"]  
