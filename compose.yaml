@@ -5,9 +5,11 @@ services:
     ports:
       - "7474:7474"
       - "7687:7687"
-    env_file: .neo4j.env
+    env_file: .neo4j.env # In this env, provide NEO4J_AUTH=user/password
     volumes:
       - ./neo4j/data:/data
       - ./neo4j/logs:/logs
       - ./neo4j/import:/import
       - ./neo4j/plugins:/plugins
+      - ./data:/external-data # Mounting this to be able to load the data from the host
+
