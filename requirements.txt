@@ -6,3 +6,4 @@ numpy
 requests
 tqdm
 pydantic
+streamlit
