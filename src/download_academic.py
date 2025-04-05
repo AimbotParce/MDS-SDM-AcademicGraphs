@@ -88,13 +88,11 @@ if __name__ == "__main__":
     parser = ArgumentParser(description="Academic Paper Data Retrieval")
     parser.add_argument("query", type=str, help="Query to search for")
     parser.add_argument("--min-citations", type=int, default=None, help="Minimum number of citations")
-    parser.add_argument(
-        "--year", type=str, help="Year of publication (YYYY | YYYY-YYYY | YYYY- | -YYYY)", default=None
-    )
+    parser.add_argument("--year", type=str, help="Year of publication (YYYY | YYYY-YYYY | YYYY- | -YYYY)", default=None)
     parser.add_argument("--fields", type=str, help="Fields of study to filter by", nargs="*", default=None)
     parser.add_argument("--output", type=Path, help="Output folder", default=None)
     parser.add_argument("--limit", type=int, help="Limit the number of papers to retrieve", default=None)
-    parser.add_argument("--batch-size", type=int, help="Batch size for retrieving details", default=10000)
+    parser.add_argument("--batch-size", type=int, help="Batch size for retrieving details", default=float("inf"))
     parser.add_argument("--dry-run", action="store_true", help="Run without saving any data")
     args = parser.parse_args()
     if not args.dry_run and not args.output:

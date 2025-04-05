@@ -30,7 +30,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-o",
-        "--output-dir",
+        "--output",
         type=Path,
         help="Output directory to write the prepared dataset batches to",
         required=True,
@@ -47,7 +47,7 @@ if __name__ == "__main__":
         "-b",
         "--batch-size",
         type=int,
-        default=10000,
+        default=float("inf"),
         help="Batch size to write the prepared dataset",
     )
     args = parser.parse_args()
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     batch_size: int = args.batch_size
     file_type: str = args.type
-    output_dir: Path = args.output_dir
+    output_dir: Path = args.output
     output_dir.mkdir(parents=True, exist_ok=True)
 
     if file_type in ["citations", "references"]:  # They are the same
@@ -84,7 +84,7 @@ if __name__ == "__main__":
                         "isInfluential": citation.get("isInfluential", False),
                         "contextsWithIntent": json.dumps(citation["contextsWithIntent"])
                         .replace("\n", " ")
-                        .replace("\\", "\\\\"),
+                        .replace("\\", ""),
                     }
                 )
                 iters += 1
@@ -252,7 +252,11 @@ if __name__ == "__main__":
                     "openAccessPDFUrl": paper.get("openAccessPdfUrl"),
                     "publicationTypes": paper["publicationTypes"],
                     "embedding": json.dumps(paper.get("embedding")) if paper.get("embedding") else None,
-                    "tldr": json.dumps(paper.get("tldr")).replace("\n", " ") if paper.get("tldr") else None,
+                    "tldr": (
+                        json.dumps(paper.get("tldr")).replace("\n", " ").replace("\\", "")
+                        if paper.get("tldr")
+                        else None
+                    ),
                 }
             )
             fields_of_study = paper.get("fieldsOfStudy", [])

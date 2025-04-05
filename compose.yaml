@@ -5,10 +5,97 @@ services:
     ports:
       - "7474:7474"
       - "7687:7687"
-    env_file: .neo4j.env # In this env, provide NEO4J_AUTH=user/password
+    environment:
+      - NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
+      - NEO4J_dbms_memory_pagecache_size=1G
+      - NEO4J_dbms_memory_heap_max__size=1G
     volumes:
       - ./neo4j/data:/data
       - ./neo4j/logs:/logs
       - ./neo4j/import:/var/lib/neo4j/import
       - ./neo4j/plugins:/plugins
 
+  neo4j-download:
+    # Basic image that runs the download and setup scripts
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    container_name: neo4j-download
+    depends_on:
+      - neo4j
+    volumes:
+      - ./neo4j/logs:/app/logs
+      - ./neo4j/import:/app/import
+      - ./src:/app/src
+    working_dir: /app
+    entrypoint: /bin/bash
+    environment:
+      - S2_API_KEY=${S2_API_KEY}
+      - S2_QUERY=${S2_QUERY}
+      - S2_MIN_CITATIONS=${S2_MIN_CITATIONS:-1}
+      - S2_PUBLICATION_YEAR=${S2_PUBLICATION_YEAR:-1900-9999}
+      - S2_LIMIT=${S2_LIMIT:-100}
+    user: root
+    command:
+      - -c
+      - |
+        # Check if the data was already downloaded by accessing the logs
+        if [ -f /app/logs/neo4j-download.flag ]; then
+          echo "Neo4j data already downloaded."
+        else 
+          # Execute the download script
+          echo "Downloading Neo4j data..."
+          mkdir -p /app/raw
+          python3 src/download_academic.py "$${S2_QUERY}" --output /app/raw \
+            --min-citations $${S2_MIN_CITATIONS} \
+            --year $${S2_PUBLICATION_YEAR} \
+            --limit $${S2_LIMIT}
+
+          # Execute the preparation script for papers
+          echo "Preparing Neo4j papers data..."
+          python3 src/prepare.py /app/raw/raw-papers-1.jsonl --output /app/import --type papers
+
+          # Execute the preparation script for citations
+          echo "Preparing Neo4j citations data..."
+          python3 src/prepare.py /app/raw/raw-references-1.jsonl --output /app/import --type references
+
+          # Finalize the preparation by creating a flag file
+          touch /app/logs/neo4j-download.flag
+          echo "Neo4j data download and preparation finalized."
+        fi
+
+  neo4j-import:
+    # Basic image that runs the import cypher script
+    image: neo4j:latest
+    container_name: neo4j-import
+    depends_on:
+      neo4j-download:
+        condition: service_completed_successfully
+    volumes:
+      - ./neo4j/logs:/app/logs
+      - ./src/load_data.cyp:/app/load_data.cyp
+    working_dir: /app
+    entrypoint: /bin/bash
+    environment:
+      - NEO4J_USER=${NEO4J_USER}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+      - NEO4J_HOST=neo4j
+      - NEO4J_PORT=7687
+      - NEO4J_DATABASE=neo4j
+    user: root
+    command:
+      - -c
+      - |
+        # Check if the data was already imported by accessing the logs
+        if [ -f /app/logs/neo4j-import.flag ]; then
+          echo "Neo4j data already imported."
+        else 
+          # Execute the import script to Neo4j
+          echo "Importing Neo4j data..."
+          cypher-shell --address neo4j://neo4j:7687 --username $${NEO4J_USER} \
+            --password $${NEO4J_PASSWORD} --database neo4j --file load_data.cyp
+
+          # Create a flag file to indicate that the import is complete
+          touch /app/logs/neo4j-import.flag
+          echo "Neo4j data import finalized."
+        fi

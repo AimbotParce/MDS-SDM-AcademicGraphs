@@ -7,3 +7,4 @@ requests
 tqdm
 pydantic
 streamlit
+more-itertools

@@ -1,11 +1,11 @@
 import argparse
 import json
 import os
-from itertools import batched
 from pathlib import Path
 from typing import Generator, Iterable, List, Literal, Optional, Tuple, Union, overload
 
 from loguru import logger
+from more_itertools import batched
 
 from .api_connector import SemanticScholarAPI
 
