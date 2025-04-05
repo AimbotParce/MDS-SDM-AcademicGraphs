@@ -27,11 +27,11 @@ class Publication(BaseModel):
     paperID: str
     url: str
     title: str
-    abstract: str
-    year: int
     isOpenAccess: bool
+    abstract: Optional[str]
+    year: Optional[int]
     openAccessPDFUrl: Optional[str]
-    publicationTypes: List[str]
+    publicationTypes: Optional[List[str]]
     embedding: Optional[_Embedding]
     tldr: Optional[_Tdlr]
 
@@ -53,7 +53,7 @@ class JournalVolume(BaseModel):
     "A volume of a journal"
 
     journalVolumeID: str
-    volume: str
+    volume: int
 
 
 class OtherPublicationVenue(BaseModel):
@@ -102,8 +102,8 @@ class Author(BaseModel):
     authorID: str
     url: str
     name: str
-    homepage: str
-    hIndex: str
+    homepage: Optional[str]
+    hIndex: Optional[int]
 
 
 class Organization(BaseModel):

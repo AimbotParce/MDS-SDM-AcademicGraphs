@@ -9,23 +9,6 @@ services:
     volumes:
       - ./neo4j/data:/data
       - ./neo4j/logs:/logs
-      - ./neo4j/import:/import
+      - ./neo4j/import:/var/lib/neo4j/import
       - ./neo4j/plugins:/plugins
 
-  etl:
-    build: .  # Use the shared Dockerfile
-    container_name: etl
-    restart: always
-    depends_on:
-      - neo4j
-    command: ["python", "etl_script.py"]  
-
-  # streamlit:
-  #   build: .  # Use the shared Dockerfile
-  #   container_name: streamlit
-  #   restart: always
-  #   ports:
-  #     - "8501:8501"
-  #   depends_on:
-  #     - neo4j
-  #   command: ["streamlit", "run", "home.py"]  

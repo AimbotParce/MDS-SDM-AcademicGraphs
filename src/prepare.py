@@ -62,6 +62,8 @@ if __name__ == "__main__":
     output_dir.mkdir(parents=True, exist_ok=True)
 
     if file_type in ["citations", "references"]:  # They are the same
+        errors: dict[str, set[str]] = defaultdict(set)  # Error: Paper IDs
+        warnings: dict[str, set[str]] = defaultdict(set)  # Warning: Paper IDs
         with BatchedWriter(output_dir / "edges-citations-{batch}.csv", batch_size) as output_file:
             writer = csv.DictWriter(
                 output_file, fieldnames=["citedPaperID", "citingPaperID", "isInfluential", "contextsWithIntent"]
@@ -71,16 +73,30 @@ if __name__ == "__main__":
             for citation in tqdm(
                 yieldFromFiles(input_files), desc="Preparing Citations", unit="citations", leave=False
             ):
+                if not citation.get("citedPaper").get("paperId"):
+                    errors["Missing Cited Paper"].add(citation["citingPaper"]["paperId"])
+                    continue
+
                 writer.writerow(
                     {
                         "citedPaperID": citation["citedPaper"]["paperId"],
                         "citingPaperID": citation["citingPaper"]["paperId"],
                         "isInfluential": citation.get("isInfluential", False),
-                        "contextsWithIntent": json.dumps(citation["contextsWithIntent"]),
+                        "contextsWithIntent": json.dumps(citation["contextsWithIntent"])
+                        .replace("\n", " ")
+                        .replace("\\", "\\\\"),
                     }
                 )
                 iters += 1
-            logger.success(f"Prepared {iters} citations in {output_file.batch_number} batches")
+        logger.success(f"Prepared {iters} citations in {output_file.batch_number} batches")
+        if warnings:
+            logger.warning("The following warnings were found:")
+            for warning, paper_ids in warnings.items():
+                logger.warning(f"- {warning}: {len(paper_ids)}")
+        if errors:
+            logger.error("The following errors were found:")
+            for error, paper_ids in errors.items():
+                logger.error(f"- {error}: {len(paper_ids)}")
     elif file_type == "papers":
         papers = csv.DictWriter(
             BatchedWriter(output_dir / "nodes-papers-{batch}.csv", batch_size),
@@ -230,13 +246,13 @@ if __name__ == "__main__":
                     "paperID": paper["paperId"],
                     "url": paper["url"],
                     "title": paper["title"],
-                    "abstract": paper["abstract"],
+                    "abstract": paper["abstract"].replace("\n", " ") if paper["abstract"] else None,
                     "year": paper["year"],
                     "isOpenAccess": paper["isOpenAccess"],
                     "openAccessPDFUrl": paper.get("openAccessPdfUrl"),
                     "publicationTypes": paper["publicationTypes"],
-                    "embedding": json.dumps(paper.get("embedding")),
-                    "tldr": paper.get("tldr"),
+                    "embedding": json.dumps(paper.get("embedding")) if paper.get("embedding") else None,
+                    "tldr": json.dumps(paper.get("tldr")).replace("\n", " ") if paper.get("tldr") else None,
                 }
             )
             fields_of_study = paper.get("fieldsOfStudy", [])
@@ -250,6 +266,15 @@ if __name__ == "__main__":
                     hasfieldofstudy.writerow({"paperID": paper["paperId"], "fieldOfStudy": fos})
             for author in paper["authors"]:
                 if not author["authorId"] in unique_author_ids:
+                    if not author.get("authorId"):
+                        errors["Missing Author ID"].add(paper["paperId"])
+                        continue
+                    if not author.get("name"):
+                        errors["Missing Author Name"].add(paper["paperId"])
+                        continue
+                    if not author.get("url"):
+                        errors["Missing Author URL"].add(paper["paperId"])
+                        continue
                     authors.writerow(
                         {
                             "authorID": author["authorId"],
@@ -342,9 +367,7 @@ if __name__ == "__main__":
                         unique_conference_ids.add(venue["id"])
                     proceedings_id = (venue["id"], paper["year"])
                     if not proceedings_id in unique_proceedings_ids:
-                        proceedings.writerow(
-                            {"year": paper["year"], "proceedingsID": json.dumps(list(proceedings_id))}
-                        )
+                        proceedings.writerow({"year": paper["year"], "proceedingsID": json.dumps(list(proceedings_id))})
                         unique_proceedings_ids.add(proceedings_id)
                         iseditionofconference.writerow(
                             {"proceedingsID": json.dumps(list(proceedings_id)), "conferenceID": venue["id"]}
@@ -371,9 +394,7 @@ if __name__ == "__main__":
                         unique_workshop_ids.add(venue["id"])
                     proceedings_id = (venue["id"], paper["year"])
                     if not proceedings_id in unique_proceedings_ids:
-                        proceedings.writerow(
-                            {"year": paper["year"], "proceedingsID": json.dumps(list(proceedings_id))}
-                        )
+                        proceedings.writerow({"year": paper["year"], "proceedingsID": json.dumps(list(proceedings_id))})
                         unique_proceedings_ids.add(proceedings_id)
                         iseditionofworkshop.writerow(
                             {"proceedingsID": json.dumps(list(proceedings_id)), "workshopID": venue["id"]}
