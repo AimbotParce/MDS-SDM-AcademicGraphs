@@ -92,7 +92,7 @@ a Neo4j instance. You can use the Neo4j Desktop application or a remote instance
     - `raw-papers-1.jsonl`: A JSONL file containing the papers data.
     - `raw-references-1.jsonl`: A JSONL file containing the citation data.
   
->[!WARNING] Limit your data download
+>[!WARNING]
 >It is highly advisable to use the `--limit` option to avoid downloading too
 >much data. Otherwise, you can add the `--batch-size` option to break the
 >files into smaller chunks. By default, there is no batch size applied.
