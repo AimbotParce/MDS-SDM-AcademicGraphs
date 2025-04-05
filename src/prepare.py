@@ -351,7 +351,11 @@ if __name__ == "__main__":
                         {
                             "paperID": paper["paperId"],
                             "journalVolumeID": json.dumps(list(journal_volume_id)),
-                            "pages": paper["journal"].get("pages"),
+                            "pages": (
+                                paper["journal"].get("pages").replace("\n", "").replace(" ", "")
+                                if paper["journal"].get("pages")
+                                else None
+                            ),
                         }
                     )
                 elif venue["type"] == "conference":

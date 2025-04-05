@@ -9,12 +9,10 @@
 // After you have copied the csv files into the "import" folder, you can run 
 // the following commands in the Neo4j browser to import the data.
 
-// Publication Nodes
 load csv with headers from 'file:///nodes-papers-1.csv' as row
 merge (p:Publication {paperID:row.paperID, url:row.url, title:row.title, isOpenAccess:row.isOpenAccess})
 set p.openAccessPDFUrl=row.openAccessPDFUrl, p.embedding=row.embedding, p.tldr=row.tldr, p.abstract=row.abstract, p.year=row.year, p.publicationTypes=row.publicationTypes;
 
-// Field of Study Nodes
 load csv with headers from 'file:///nodes-fieldsofstudy-1.csv' as row
 merge (f:FieldOfStudy {name:row.name});
 
@@ -52,8 +50,70 @@ merge (o:Organization {name: row.name});
 
 // ------- Edges -------
 
-// Citation Edges
 load csv with headers from 'file:///edges-citations-1.csv' as row
 match (cited:Publication {paperID:row.citedPaperID})
 match (citing:Publication {paperID:row.citingPaperID})
 merge (citing)-[c:Cites {isInfluential:row.isInfluential, contextsWithIntent:row.contextsWithIntent}]->(cited);
+
+load csv with headers from 'file:///edges-hasfieldofstudy-1.csv' as row
+match (p:Publication {paperID:row.paperID})
+match (f:FieldOfStudy {name:row.fieldOfStudy})
+merge (p)-[:HasFieldOfStudy]->(f);
+
+load csv with headers from 'file:///edges-wrote-1.csv' as row
+match (p:Publication {paperID:row.paperID})
+match (a:Author {authorID:row.authorID})
+merge (a)-[:Wrote]->(p);
+
+load csv with headers from 'file:///edges-mainauthor-1.csv' as row
+match (p:Publication {paperID:row.paperID})
+match (a:Author {authorID:row.authorID})
+merge (p)-[:MainAuthor]->(a);
+
+load csv with headers from 'file:///edges-isaffiliatedwith-1.csv' as row
+match (a:Author {authorID:row.authorID})
+match (o:Organization {name:row.organization})
+merge (a)-[:IsAffiliatedWith]->(o);
+
+load csv with headers from 'file:///edges-reviewed-1.csv' as row
+match (a:Author {authorID:row.authorID})
+match (p:Publication {paperID:row.paperID})
+merge (a)-[r:Reviewed {accepted:row.accepted, minorRevisions:row.minorRevisions, majorRevisions:row.majorRevisions, reviewContent:row.reviewContent}]->(p);
+
+load csv with headers from 'file:///edges-ispublishedinjournal-1.csv' as row
+match (p:Publication {paperID:row.paperID})
+match (j:JournalVolume {journalVolumeID:row.journalVolumeID})
+merge (p)-[e:IsPublishedIn]->(j)
+set e.pages=row.pages;
+
+load csv with headers from 'file:///edges-ispublishedinproceedings-1.csv' as row
+match (p:Publication {paperID:row.paperID})
+match (r:Proceedings {proceedingsID:row.proceedingsID})
+merge (p)-[e:IsPublishedIn]->(j)
+set e.pages=row.pages;
+
+load csv with headers from 'file:///edges-ispublishedinotherpublicationvenue-1.csv' as row
+match (p:Publication {paperID:row.paperID})
+match (v:OtherPublicationVenue {venueID:row.venueID})
+merge (p)-[e:IsPublishedIn]->(j)
+set e.pages=row.pages;
+
+load csv with headers from 'file:///edges-iseditionofjournal-1.csv' as row
+match (jv:JournalVolume {journalVolumeID:row.journalVolumeID})
+match (j:Journal {journalID:row.journalID})
+merge (jv)-[e:IsEditionOf]->(j);
+
+load csv with headers from 'file:///edges-iseditionofworkshop-1.csv' as row
+match (p:Proceedings {proceedingsID:row.proceedingsID})
+match (w:Workshop {workshopID:row.workshopID})
+merge (p)-[e:IsEditionOf]->(w);
+
+load csv with headers from 'file:///edges-iseditionofconference-1.csv' as row
+match (p:Proceedings {proceedingsID:row.proceedingsID})
+match (c:Conference {conferenceID:row.conferenceID})
+merge (p)-[e:IsEditionOf]->(c);
+
+load csv with headers from 'file:///edges-isheldin-1.csv' as row
+match (p:Proceedings {proceedingsID:row.proceedingsID})
+match (c:City {name:row.city})
+merge (p)-[e:IsHeldIn]->(c);

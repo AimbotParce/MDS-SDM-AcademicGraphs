@@ -48,7 +48,7 @@ class Reviewed(BaseModel):
 
 
 class IsPublishedIn(BaseModel):
-    "(Publication) -[PublishedIn]-> (JournalVolume|Proceedings)"
+    "(Publication) -[PublishedIn]-> (JournalVolume|Proceedings|OtherPublicationVenue)"
 
     pages: Optional[str]
 
