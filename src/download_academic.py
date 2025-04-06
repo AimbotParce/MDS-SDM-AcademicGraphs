@@ -10,7 +10,7 @@ from lib.semantic_scholar import S2AcademicAPI
 
 
 def main(args):
-    connector = S2AcademicAPI(api_key=os.getenv("S2_API_KEY"), default_max_retries=3)
+    connector = S2AcademicAPI(api_key=os.getenv("S2_API_KEY"), default_max_retries=args.max_retries)
 
     if args.dry_run:
         logger.info("Running in DRY RUN mode. No data will be saved.")
@@ -93,6 +93,7 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=Path, help="Output folder", default=None)
     parser.add_argument("--limit", type=int, help="Limit the number of papers to retrieve", default=None)
     parser.add_argument("--batch-size", type=int, help="Batch size for retrieving details", default=float("inf"))
+    parser.add_argument("--max-retries", type=int, help="Maximum number of retries for each request", default=3)
     parser.add_argument("--dry-run", action="store_true", help="Run without saving any data")
     args = parser.parse_args()
     if not args.dry_run and not args.output:
