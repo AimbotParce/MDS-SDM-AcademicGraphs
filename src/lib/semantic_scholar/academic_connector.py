@@ -17,7 +17,7 @@ from .api_connector import SemanticScholarAPI
 
 
 class S2AcademicAPI(SemanticScholarAPI):
-    MAX_BATCH_SIZE = 1000
+    MAX_BATCH_SIZE = 500
     MAX_DATA_RETRIEVAL = 10_000
 
     def __init__(
