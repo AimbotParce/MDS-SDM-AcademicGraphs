@@ -10,17 +10,17 @@
 // the following commands in the Neo4j browser to import the data.
 
 load csv with headers from 'file:///nodes-papers-1.csv' as row
-merge (p:Publication {paperID:row.paperID, url:row.url, title:row.title, isOpenAccess:row.isOpenAccess})
-set p.openAccessPDFUrl=row.openAccessPDFUrl, p.embedding=row.embedding, p.tldr=row.tldr, p.abstract=row.abstract, p.year=row.year, p.publicationTypes=row.publicationTypes;
+merge (p:Publication {paperID:row.paperID, url:row.url, title:row.title, isOpenAccess:toBoolean(row.isOpenAccess)})
+set p.openAccessPDFUrl=row.openAccessPDFUrl, p.embedding=row.embedding, p.tldr=row.tldr, p.abstract=row.abstract, p.year=toInteger(row.year), p.publicationTypes=row.publicationTypes;
 
 load csv with headers from 'file:///nodes-fieldsofstudy-1.csv' as row
 merge (f:FieldOfStudy {name:row.name});
 
 load csv with headers from 'file:///nodes-proceedings-1.csv' as row
-merge (p:Proceedings {proceedingsID:row.proceedingsID, year:row.year});
+merge (p:Proceedings {proceedingsID:row.proceedingsID, year:toInteger(row.year)});
 
 load csv with headers from 'file:///nodes-journalvolumes-1.csv' as row
-merge (j:JournalVolume {journalVolumeID:row.journalVolumeID, volume:row.volume});
+merge (j:JournalVolume {journalVolumeID:row.journalVolumeID, volume:toInteger(row.volume)});
 
 load csv with headers from 'file:///nodes-otherpublicationvenues-1.csv' as row
 merge (v:OtherPublicationVenue {venueID:row.venueID, name:row.name, alternateNames: row.alternateNames})
@@ -43,7 +43,7 @@ merge (c:City {name: row.name});
 
 load csv with headers from 'file:///nodes-authors-1.csv' as row
 merge (a:Author {authorID: row.authorID, url: row.url, name: row.name})
-set a.homepage=row.homepage, a.hIndex=row.hIndex;
+set a.homepage=row.homepage, a.hIndex=toInteger(row.hIndex);
 
 load csv with headers from 'file:///nodes-organizations-1.csv' as row
 merge (o:Organization {name: row.name});
@@ -53,7 +53,7 @@ merge (o:Organization {name: row.name});
 load csv with headers from 'file:///edges-citations-1.csv' as row
 match (cited:Publication {paperID:row.citedPaperID})
 match (citing:Publication {paperID:row.citingPaperID})
-merge (citing)-[c:Cites {isInfluential:row.isInfluential, contextsWithIntent:row.contextsWithIntent}]->(cited);
+merge (citing)-[c:Cites {isInfluential:toBoolean(row.isInfluential), contextsWithIntent:row.contextsWithIntent}]->(cited);
 
 load csv with headers from 'file:///edges-hasfieldofstudy-1.csv' as row
 match (p:Publication {paperID:row.paperID})
@@ -78,7 +78,7 @@ merge (a)-[:IsAffiliatedWith]->(o);
 load csv with headers from 'file:///edges-reviewed-1.csv' as row
 match (a:Author {authorID:row.authorID})
 match (p:Publication {paperID:row.paperID})
-merge (a)-[r:Reviewed {accepted:row.accepted, minorRevisions:row.minorRevisions, majorRevisions:row.majorRevisions, reviewContent:row.reviewContent}]->(p);
+merge (a)-[r:Reviewed {accepted:toBoolean(row.accepted), minorRevisions:toInteger(row.minorRevisions), majorRevisions:toInteger(row.majorRevisions), reviewContent:row.reviewContent}]->(p);
 
 load csv with headers from 'file:///edges-ispublishedinjournal-1.csv' as row
 match (p:Publication {paperID:row.paperID})
