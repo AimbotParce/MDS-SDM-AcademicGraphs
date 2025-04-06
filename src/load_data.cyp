@@ -89,13 +89,13 @@ set e.pages=row.pages;
 load csv with headers from 'file:///edges-ispublishedinproceedings-1.csv' as row
 match (p:Publication {paperID:row.paperID})
 match (r:Proceedings {proceedingsID:row.proceedingsID})
-merge (p)-[e:IsPublishedIn]->(j)
+merge (p)-[e:IsPublishedIn]->(r)
 set e.pages=row.pages;
 
 load csv with headers from 'file:///edges-ispublishedinotherpublicationvenue-1.csv' as row
 match (p:Publication {paperID:row.paperID})
 match (v:OtherPublicationVenue {venueID:row.venueID})
-merge (p)-[e:IsPublishedIn]->(j)
+merge (p)-[e:IsPublishedIn]->(v)
 set e.pages=row.pages;
 
 load csv with headers from 'file:///edges-iseditionofjournal-1.csv' as row
