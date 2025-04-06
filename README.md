@@ -138,6 +138,7 @@ Remaining tasks for the 1st delivery:
 - [ ] script to create synthetic data
 - [x] Neo4J data loading script
 - [x] Improve the Docker compose for the automatic ingestion
+- [ ] Check what is happening with the `IsPublishedIn` edges that go to empty nodes
 - [ ] Do the "evolving the graph" A.3 section 
 - [ ] Code the 4 queries in Cypher (2 for each member)
 - [ ] Code the 4 recommending queries in Cypher (2 for each member)
