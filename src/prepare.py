@@ -247,7 +247,7 @@ if __name__ == "__main__":
                     "url": paper["url"],
                     "title": paper["title"],
                     "abstract": paper["abstract"].replace("\n", " ") if paper["abstract"] else None,
-                    "year": paper["year"],
+                    "year": int(paper["year"]) if paper["year"] else None,
                     "isOpenAccess": paper["isOpenAccess"],
                     "openAccessPDFUrl": paper.get("openAccessPdfUrl"),
                     "publicationTypes": paper["publicationTypes"],
