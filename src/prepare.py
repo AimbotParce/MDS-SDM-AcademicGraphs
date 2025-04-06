@@ -339,29 +339,32 @@ if __name__ == "__main__":
                             }
                         )
                         unique_journal_ids.add(venue["id"])
-                    journal_volume_id = (venue["id"], paper["journal"].get("volume"))
-                    if not journal_volume_id in unique_journal_volume_ids:
-                        journalvolumes.writerow(
+                    if not paper["journal"].get("volume"):
+                        warnings["Missing Journal Volume"].add(paper["paperId"])
+                    else:
+                        journal_volume_id = (venue["id"], paper["journal"].get("volume"))
+                        if not journal_volume_id in unique_journal_volume_ids:
+                            journalvolumes.writerow(
+                                {
+                                    "journalVolumeID": json.dumps(list(journal_volume_id)),
+                                    "volume": paper["journal"].get("volume"),
+                                }
+                            )
+                            unique_journal_volume_ids.add(journal_volume_id)
+                            iseditionofjournal.writerow(
+                                {"journalVolumeID": json.dumps(list(journal_volume_id)), "journalID": venue["id"]}
+                            )
+                        ispublishedinjournal.writerow(
                             {
+                                "paperID": paper["paperId"],
                                 "journalVolumeID": json.dumps(list(journal_volume_id)),
-                                "volume": paper["journal"].get("volume"),
+                                "pages": (
+                                    paper["journal"].get("pages").replace("\n", "").replace(" ", "")
+                                    if paper["journal"].get("pages")
+                                    else None
+                                ),
                             }
                         )
-                        unique_journal_volume_ids.add(journal_volume_id)
-                        iseditionofjournal.writerow(
-                            {"journalVolumeID": json.dumps(list(journal_volume_id)), "journalID": venue["id"]}
-                        )
-                    ispublishedinjournal.writerow(
-                        {
-                            "paperID": paper["paperId"],
-                            "journalVolumeID": json.dumps(list(journal_volume_id)),
-                            "pages": (
-                                paper["journal"].get("pages").replace("\n", "").replace(" ", "")
-                                if paper["journal"].get("pages")
-                                else None
-                            ),
-                        }
-                    )
                 elif venue["type"] == "conference":
                     if not venue["id"] in unique_conference_ids:
                         conferences.writerow(
