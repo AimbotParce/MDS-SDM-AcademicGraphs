@@ -14,6 +14,11 @@ services:
       - ./neo4j/logs:/logs
       - ./neo4j/import:/var/lib/neo4j/import
       - ./neo4j/plugins:/plugins
+    healthcheck:
+      test: ["CMD", "cypher-shell", "-u", "${NEO4J_USER}", "-p", "${NEO4J_PASSWORD}", "--database=neo4j", "RETURN 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   neo4j-download:
     # Basic image that runs the download and setup scripts
@@ -71,6 +76,8 @@ services:
     depends_on:
       neo4j-download:
         condition: service_completed_successfully
+      neo4j:
+        condition: service_healthy
     volumes:
       - ./neo4j/logs:/app/logs
       - ./src/load_data.cyp:/app/load_data.cyp
