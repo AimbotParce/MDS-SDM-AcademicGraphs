@@ -40,6 +40,7 @@ services:
       - S2_MIN_CITATIONS=${S2_MIN_CITATIONS:-1}
       - S2_PUBLICATION_YEAR=${S2_PUBLICATION_YEAR:-1900-9999}
       - S2_LIMIT=${S2_LIMIT:-100}
+      - S2_MAX_RETRIES=${MAX_RETRIES:-3}
     user: root
     command:
       - -c
@@ -54,7 +55,8 @@ services:
           python3 src/download_academic.py "$${S2_QUERY}" --output /app/raw \
             --min-citations $${S2_MIN_CITATIONS} \
             --year $${S2_PUBLICATION_YEAR} \
-            --limit $${S2_LIMIT}
+            --limit $${S2_LIMIT} \
+            --max-retries $${S2_MAX_RETRIES}
 
           # Execute the preparation script for papers
           echo "Preparing Neo4j papers data..."
