@@ -55,7 +55,7 @@ services:
           # Execute the download script
           echo "Downloading Neo4j data..."
           mkdir -p /app/raw
-          python3 src/download_academic.py "$${S2_QUERY}" --output /app/raw \
+          python3 src/download_graph.py "$${S2_QUERY}" --output /app/raw \
             --min-citations $${S2_MIN_CITATIONS} \
             --year $${S2_PUBLICATION_YEAR} \
             --limit $${S2_LIMIT} \
