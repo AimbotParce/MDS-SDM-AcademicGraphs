@@ -45,6 +45,8 @@ services:
     command:
       - -c
       - |
+        set -euo pipefail
+        # Exit on error, unset variable, or pipe failure
         # Check if the data was already downloaded by accessing the logs
         if [ -f /app/logs/neo4j-download.flag ]; then
           echo "Neo4j data already downloaded."
@@ -65,6 +67,10 @@ services:
           # Execute the preparation script for citations
           echo "Preparing Neo4j citations data..."
           python3 src/prepare.py /app/raw/raw-references-1.jsonl --output /app/import --type references
+
+          # Execute the generation script (cities, reviews and proceedings' cities)
+          echo "Generating additional data..."
+          python3 src/generate.py --output /app/import cities reviews proceedings-cities
 
           # Finalize the preparation by creating a flag file
           touch /app/logs/neo4j-download.flag
@@ -95,6 +101,8 @@ services:
     command:
       - -c
       - |
+        set -euo pipefail
+        # Exit on error, unset variable, or pipe failure
         # Check if the data was already imported by accessing the logs
         if [ -f /app/logs/neo4j-import.flag ]; then
           echo "Neo4j data already imported."
