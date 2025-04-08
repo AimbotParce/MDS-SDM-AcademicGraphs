@@ -59,7 +59,7 @@ services:
             --min-citations $${S2_MIN_CITATIONS} \
             --year $${S2_PUBLICATION_YEAR} \
             --limit $${S2_LIMIT} \
-            --max-retries $${S2_MAX_RETRIES}
+            --max-retries $${S2_MAX_RETRIES} \
             --batch-size 1000
 
           # Execute the preparation script for papers
