@@ -21,7 +21,7 @@ merge (p:Proceedings {proceedingsID:row.proceedingsID, year:toInteger(row.year)}
 
 load csv with headers from 'file:///nodes-journalvolumes-1.csv' as row
 merge (j:JournalVolume {journalVolumeID:row.journalVolumeID})
-set j.volume:toInteger(row.volume);
+set j.volume=toInteger(row.volume);
 
 load csv with headers from 'file:///nodes-otherpublicationvenues-1.csv' as row
 merge (v:OtherPublicationVenue {venueID:row.venueID, name:row.name, alternateNames: row.alternateNames})
