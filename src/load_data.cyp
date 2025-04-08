@@ -79,7 +79,7 @@ merge (a)-[:IsAffiliatedWith]->(o);
 load csv with headers from 'file:///edges-reviewed-1.csv' as row
 match (a:Author {authorID:row.authorID})
 match (p:Publication {paperID:row.paperID})
-merge (a)-[r:Reviewed {accepted:toBoolean(row.accepted), minorRevisions:toInteger(row.minorRevisions), majorRevisions:toInteger(row.majorRevisions), reviewContent:row.reviewContent}]->(p);
+merge (a)-[:Reviewed]->(p);
 
 load csv with headers from 'file:///edges-ispublishedinjournal-1.csv' as row
 match (p:Publication {paperID:row.paperID})

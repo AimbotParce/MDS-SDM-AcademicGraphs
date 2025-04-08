@@ -234,7 +234,6 @@ if __name__ == "__main__":
         unique_conference_ids = set()
         unique_city_names = set()
         unique_author_ids = set()
-        unique_organization_names = set()
 
         errors: dict[str, set[str]] = defaultdict(set)  # Error: Paper IDs
         warnings: dict[str, set[str]] = defaultdict(set)  # Warning: Paper IDs
@@ -261,7 +260,7 @@ if __name__ == "__main__":
             )
             fields_of_study = paper.get("fieldsOfStudy", [])
             if not fields_of_study:
-                errors["Missing Paper Fields of Study"].add(paper["paperId"])
+                warnings["Missing Paper Fields of Study"].add(paper["paperId"])
             else:
                 for fos in fields_of_study:
                     if not fos in unique_fields_of_study:
@@ -290,14 +289,9 @@ if __name__ == "__main__":
                     )
                     unique_author_ids.add(author["authorId"])
                 wrote.writerow({"paperID": paper["paperId"], "authorID": author["authorId"]})
-                for affiliation in author["affiliations"]:
-                    if not affiliation in unique_organization_names:
-                        organizations.writerow({"name": affiliation})
-                        unique_organization_names.add(affiliation)
-                    isaffiliatedwith.writerow({"authorID": author["authorId"], "organization": affiliation})
 
             if len(paper["authors"]) == 0:
-                errors["Missing Paper Authors"].add(paper["paperId"])
+                warnings["Missing Paper Authors"].add(paper["paperId"])
             else:
                 main_author = paper["authors"][0]  # We'll assume the first author is the main author
                 mainauthor.writerow({"paperID": paper["paperId"], "authorID": main_author["authorId"]})
@@ -307,7 +301,7 @@ if __name__ == "__main__":
             # Publications
             venue = paper["publicationVenue"]
             if venue is None:
-                errors["Missing Paper Publication Venue"].add(paper["paperId"])
+                warnings["Missing Paper Publication Venue"].add(paper["paperId"])
             else:
                 if not "type" in venue:
                     warnings["Missing Publication Venue Type"].add(paper["paperId"])
