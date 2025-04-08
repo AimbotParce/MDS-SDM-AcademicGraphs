@@ -53,7 +53,7 @@ class JournalVolume(BaseModel):
     "A volume of a journal"
 
     journalVolumeID: str
-    volume: int
+    volume: Optional[int]
 
 
 class OtherPublicationVenue(BaseModel):
