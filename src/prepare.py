@@ -389,7 +389,7 @@ if __name__ == "__main__":
                         {
                             "paperID": paper["paperId"],
                             "proceedingsID": json.dumps(list(proceedings_id)),
-                            "pages": paper.get("journal", {}).get("pages"),
+                            "pages": paper.get("journal", {}).get("pages") if paper.get("journal") else None,
                         }
                     )
                 elif venue["type"] == "workshop":
