@@ -32,6 +32,7 @@ services:
       - ./neo4j/logs:/app/logs
       - ./neo4j/import:/app/import
       - ./src:/app/src
+      - ./neo4j/raw:/app/raw
     working_dir: /app
     entrypoint: /bin/bash
     environment:
@@ -59,14 +60,15 @@ services:
             --year $${S2_PUBLICATION_YEAR} \
             --limit $${S2_LIMIT} \
             --max-retries $${S2_MAX_RETRIES}
+            --batch-size 1000
 
           # Execute the preparation script for papers
           echo "Preparing Neo4j papers data..."
-          python3 src/prepare.py /app/raw/raw-papers-1.jsonl --output /app/import --type papers
+          python3 src/prepare.py /app/raw/raw-papers-*.jsonl --output /app/import --type papers
 
           # Execute the preparation script for citations
           echo "Preparing Neo4j citations data..."
-          python3 src/prepare.py /app/raw/raw-references-1.jsonl --output /app/import --type references
+          python3 src/prepare.py /app/raw/raw-references-*.jsonl --output /app/import --type references
 
           # Execute the generation script (cities, reviews and proceedings' cities)
           echo "Generating additional data..."
