@@ -16,7 +16,7 @@ from lib.io import BatchedWriter
 from lib.models import *
 
 
-def yieldFromFiles(files: List[Path]):
+def yieldFromCSVFiles(files: List[Path]):
     """
     Loads CSV files sequentially and yields the rows one by one in a dictionary format.
     """
@@ -86,11 +86,11 @@ if __name__ == "__main__":
 
             author_pool: set[str] = set()
             # We'll create an author pool and we'll use it to generate the reviews
-            for author in yieldFromFiles(authors_files):
+            for author in yieldFromCSVFiles(authors_files):
                 author_pool.add(author["authorID"])
             author_pool = list(sorted(author_pool))  # Need to sort here for reproducibility
 
-            authorship_generator = yieldFromFiles(wrote_files)
+            authorship_generator = yieldFromCSVFiles(wrote_files)
             # We'll use a small trick here. Because we know that the authorship files, the authors and the papers
             # files were all generated in the same order, we can assume that the authorship files
             # are sorted in the same order as the papers were generated. Thus, we don't need to
@@ -104,7 +104,7 @@ if __name__ == "__main__":
             except StopIteration:
                 logger.error("No authorship files found in the output directory")
                 exit(1)
-            for paper in tqdm(yieldFromFiles(papers_files), desc="Preparing Reviews", unit="reviews", leave=False):
+            for paper in tqdm(yieldFromCSVFiles(papers_files), desc="Preparing Reviews", unit="reviews", leave=False):
                 total_papers += 1
                 paper_id = paper["paperID"]
 
@@ -189,7 +189,7 @@ if __name__ == "__main__":
 
         # We'll use the cities files to generate the proceedings' cities
         cities: set[str] = set()
-        for city in yieldFromFiles(cities_files):
+        for city in yieldFromCSVFiles(cities_files):
             cities.add(city["name"])
         cities = list(sorted(cities))  # Need to sort here for reproducibility
 
@@ -203,7 +203,10 @@ if __name__ == "__main__":
 
             # We'll use the proceedings files to generate the proceedings' cities
             for proceeding in tqdm(
-                yieldFromFiles(proceedings_files), desc="Preparing Proceedings' Cities", unit="proceedings", leave=False
+                yieldFromCSVFiles(proceedings_files),
+                desc="Preparing Proceedings' Cities",
+                unit="proceedings",
+                leave=False,
             ):
                 proceeding_id = proceeding["proceedingsID"]
                 # Generate a random city for the proceeding
@@ -234,7 +237,7 @@ if __name__ == "__main__":
             kw_nodes_writer.writeheader()
 
             unique_keywords: set[str] = set()
-            for paper in tqdm(yieldFromFiles(papers_files), desc="Preparing Keywords", unit="papers", leave=False):
+            for paper in tqdm(yieldFromCSVFiles(papers_files), desc="Preparing Keywords", unit="papers", leave=False):
                 paper_id = paper["paperID"]
                 title = paper["title"]
                 tldr = paper.get("tldr", "")  # Could be missing

@@ -12,7 +12,7 @@ from lib.io import BatchedWriter
 from lib.models import *
 
 
-def yieldFromFiles(files: List[Path]):
+def yieldFromJSONLFiles(files: List[Path]):
     for file in files:
         with open(file, "r", encoding="utf-8") as f:
             yield from map(json.loads, f)
@@ -71,7 +71,7 @@ if __name__ == "__main__":
             writer.writeheader()
             iters = 0
             for citation in tqdm(
-                yieldFromFiles(input_files), desc="Preparing Citations", unit="citations", leave=False
+                yieldFromJSONLFiles(input_files), desc="Preparing Citations", unit="citations", leave=False
             ):
                 if not citation.get("citedPaper").get("paperId"):
                     errors["Missing Cited Paper"].add(citation["citingPaper"]["paperId"])
@@ -239,7 +239,7 @@ if __name__ == "__main__":
         warnings: dict[str, set[str]] = defaultdict(set)  # Warning: Paper IDs
 
         iters = 0
-        for paper in tqdm(yieldFromFiles(input_files), desc="Preparing Papers", unit="papers", leave=False):
+        for paper in tqdm(yieldFromJSONLFiles(input_files), desc="Preparing Papers", unit="papers", leave=False):
             papers.writerow(
                 {
                     "paperID": paper["paperId"],
