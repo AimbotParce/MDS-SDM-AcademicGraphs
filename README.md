@@ -96,6 +96,8 @@ docker-compose up -d
 > 
 > ```sh
 > touch neo4j/logs/neo4j-download.flag 
+> touch neo4j/logs/neo4j-prepare.flag
+> touch neo4j/logs/neo4j-generate.flag
 > touch neo4j/logs/neo4j-import.flag
 > ```
 

@@ -50,12 +50,12 @@ services:
       - |
         set -euo pipefail
         # Exit on error, unset variable, or pipe failure
-        # Check if the data was already downloaded by accessing the logs
+
         if [ -f /app/logs/neo4j-download.flag ]; then
           echo "Neo4j data already downloaded."
         else 
-          # Execute the download script
           echo "Downloading Neo4j data..."
+          
           mkdir -p /app/raw
           python3 src/download_graph.py "$${S2_QUERY}" --output /app/raw \
             --min-citations $${S2_MIN_CITATIONS} \
@@ -64,21 +64,37 @@ services:
             --max-retries $${S2_MAX_RETRIES} \
             --batch-size 1000
 
-          # Execute the preparation script for papers
+          # Create a flag file to indicate that the download is complete
+          touch /app/logs/neo4j-download.flag
+          echo "Neo4j data download finalized."
+        fi
+
+        if [ -f /app/logs/neo4j-prepare.flag ]; then
+          echo "Neo4j data already prepared."
+        else
           echo "Preparing Neo4j papers data..."
+
           python3 src/prepare.py /app/raw/raw-papers-*.jsonl --output /app/import --type papers
 
-          # Execute the preparation script for citations
           echo "Preparing Neo4j citations data..."
+
           python3 src/prepare.py /app/raw/raw-references-*.jsonl --output /app/import --type references
 
-          # Execute the generation script (cities, reviews and proceedings' cities)
+          # Create a flag file to indicate that the preparation is complete
+          touch /app/logs/neo4j-prepare.flag
+          echo "Neo4j data preparation finalized."
+        fi
+
+        if [ -f /app/logs/neo4j-generate.flag ]; then
+          echo "Neo4j additional data already generated."
+        else
           echo "Generating additional data..."
+
           python3 src/generate.py --output /app/import cities reviews proceedings-cities keywords
 
-          # Finalize the preparation by creating a flag file
-          touch /app/logs/neo4j-download.flag
-          echo "Neo4j data download and preparation finalized."
+          # Create a flag file to indicate that the generation is complete
+          touch /app/logs/neo4j-generate.flag
+          echo "Neo4j synthetic data generation finalized."
         fi
 
   neo4j-import:
