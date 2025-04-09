@@ -133,6 +133,17 @@ a Neo4j instance. You can use the Neo4j Desktop application or a remote instance
 After that, you should be able to see the data in your Neo4j instance. You can
 use the Neo4j Browser to visualize the graph and run queries on it.
 
+### Execution Flags
+
+In order to avoid repeated execution after downloading all papers one can set up the following flags to avoid download/import by using: 
+
+```sh
+touch neo4j/logs/neo4j-download.flag 
+touch neo4j/logs/neo4j-import.flag
+# To remove the flags
+sudo rm neo4j/logs/*.flag 
+```
+
 ## TO-DO list
 Remaining tasks for the 1st delivery:
 - [ ] script to create synthetic data

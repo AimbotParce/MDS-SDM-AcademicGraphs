@@ -8,3 +8,4 @@ tqdm
 pydantic
 streamlit
 more-itertools
+yake

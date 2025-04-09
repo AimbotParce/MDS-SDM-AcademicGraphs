@@ -339,7 +339,7 @@ if __name__ == "__main__":
                             }
                         )
                         unique_journal_ids.add(venue["id"])
-                    if not paper["journal"].get("volume"):
+                    if not paper.get("journal") or not paper["journal"].get("volume"):
                         warnings["Missing Journal Volume"].add(paper["paperId"])
                     else:
                         journal_volume_id = (venue["id"], paper["journal"].get("volume"))
