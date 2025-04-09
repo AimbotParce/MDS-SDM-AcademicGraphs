@@ -26,6 +26,10 @@ class HasFieldOfStudy(BaseModel):
     "(Publication) -[HasFieldOfStudy]-> (FieldOfStudy)"
 
 
+class HasKeyWord(BaseModel):
+    "(Publication) -[HasKeyWord]-> (KeyWord)"
+
+
 class Wrote(BaseModel):
     "(Author) -[Wrote]-> (Publication)"
 

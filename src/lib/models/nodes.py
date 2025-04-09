@@ -42,6 +42,12 @@ class FieldOfStudy(BaseModel):
     name: str
 
 
+class KeyWord(BaseModel):
+    "A keyword from the content of a publication"
+
+    name: str
+
+
 class Proceedings(BaseModel):
     "A conference or workshop proceedings"
 

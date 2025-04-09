@@ -74,7 +74,7 @@ services:
 
           # Execute the generation script (cities, reviews and proceedings' cities)
           echo "Generating additional data..."
-          python3 src/generate.py --output /app/import cities reviews proceedings-cities
+          python3 src/generate.py --output /app/import cities reviews proceedings-cities keywords
 
           # Finalize the preparation by creating a flag file
           touch /app/logs/neo4j-download.flag

@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import List
 
 import requests
+import yake
 from loguru import logger
 from tqdm import tqdm
 
@@ -31,7 +32,11 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Generate synthetic data for the academic graph.")
     parser.add_argument(
-        "types", type=str, nargs="+", help="Data types to generate", choices=["reviews", "cities", "proceedings-cities"]
+        "types",
+        type=str,
+        nargs="+",
+        help="Data types to generate",
+        choices=["reviews", "cities", "proceedings-cities", "keywords"],
     )
     parser.add_argument(
         "-o",
@@ -207,3 +212,47 @@ if __name__ == "__main__":
                 total_proceedings += 1
 
         logger.info(f"Generated {total_proceedings} proceedings' cities")
+
+    if "keywords" in types:
+        logger.info("Generating publications' keywords")
+
+        # Check if there exists already a "papers" csv file.
+        papers_files = sorted(output_dir.glob("nodes-papers-*.csv"))
+        if not papers_files:
+            logger.error("No papers files found in the output directory")
+            exit(1)
+
+        kw_extractor = yake.KeywordExtractor(lan="en", n=2, top=5, dedupLim=0.9)
+
+        with (
+            BatchedWriter(output_dir / "edges-haskeyword-{batch}.csv", batch_size) as kw_edges_output_file,
+            BatchedWriter(output_dir / "nodes-keywords-{batch}.csv", batch_size) as kw_output_file,
+        ):
+            kw_edges_writer = csv.DictWriter(kw_edges_output_file, fieldnames=["paperID", "keyword"])
+            kw_edges_writer.writeheader()
+            kw_nodes_writer = csv.DictWriter(kw_output_file, fieldnames=["name"])
+            kw_nodes_writer.writeheader()
+
+            unique_keywords: set[str] = set()
+            for paper in tqdm(yieldFromFiles(papers_files), desc="Preparing Keywords", unit="papers", leave=False):
+                paper_id = paper["paperID"]
+                title = paper["title"]
+                tldr = paper.get("tldr", "")  # Could be missing
+                abstract = paper.get("abstract", "")  # Could be missing
+
+                # Combine title with tldr if available, otherwise fallback to abstract
+                if isinstance(tldr, str) and tldr.strip():
+                    combined_text = f"{title} {tldr}"
+                elif isinstance(abstract, str) and abstract.strip():
+                    combined_text = f"{title} {abstract}"
+                else:
+                    combined_text = f"{title}"
+
+                if combined_text.strip():
+                    keywords = kw_extractor.extract_keywords(combined_text)
+                    for keyword, _ in keywords:
+                        keyword = keyword.strip().lower().capitalize()
+                        if keyword not in unique_keywords:
+                            unique_keywords.add(keyword)
+                            kw_nodes_writer.writerow({"name": keyword})
+                        kw_edges_writer.writerow({"paperID": paper_id, "keyword": keyword})

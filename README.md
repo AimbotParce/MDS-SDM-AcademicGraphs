@@ -154,13 +154,13 @@ a Neo4j instance. You can use the Neo4j Desktop application or a remote instance
     the following script:
 
     ```sh
-    python3 src/generate.py --output neo4j/import reviews cities proceedings-cities
+    python3 src/generate.py --output neo4j/import reviews cities proceedings-cities keywords
     ```
 
     This script will read some of the pre-generated `.csv` files in the output
     directory provided, and generate new ones with synthetic data (specifically
-    `edges-reviews-1.csv`, `nodes-cities-1.csv` and
-    `edges-isheldin-1.csv`).
+    `edges-reviews-1.csv`, `nodes-cities-1.csv`, `edges-isheldin-1.csv`, 
+    `nodes-keywords-1.csv` and `edges-haskeyword-1.csv`).
 
 5. Finally, run the following command to load the data into Neo4j:
 
