@@ -41,7 +41,14 @@ Alternatively, a Docker compose file is provided to automatically spin up a
 Neo4j instance, and load sample data into it. To do so, make sure you have Docker
 and Docker Compose installed.
 
-## Usage
+## Preparation
+
+Before executing the manipulation scripts, you'll need to set up a small sample
+of data to work with. The following steps will guide you through the process of
+downloading the data from the Semantic Scholar API, transforming it into a
+Neo4j-compatible format, and loading it into your Neo4j instance. After that,
+you'll have a small environment in which you'll be able to run the manipulation
+scripts.
 
 ### Using Docker
 
@@ -71,10 +78,26 @@ the sample data into it:
 docker-compose up -d
 ```
 
-This docker image contains the installation of the "Graph Data Science (GDS)" Library, so its highly advisable to use the image for simplicity
+> [!TIP]
+> You can set up the environment variables in a `.env` file in the same
+> directory and instead use the command `docker-compose --env-file .env up -d`.
 
-**Note:** You can set up the environment variables in a `.env` file in the same
-directory and instead use the command `docker-compose --env-file .env up -d`.
+
+> [!NOTE]
+> In order to avoid duplicate executions, the compose scripts create some flags
+> in the `neo4j/logs` directory. If you want to re-run the scripts, you
+> can remove the flags using the following command:
+>
+> ```sh
+> sudo rm neo4j/logs/*.flag 
+> ```
+>
+> Or add them back using the following command:
+> 
+> ```sh
+> touch neo4j/logs/neo4j-download.flag 
+> touch neo4j/logs/neo4j-import.flag
+> ```
 
 ### Manually executing the scripts
 
@@ -127,7 +150,19 @@ a Neo4j instance. You can use the Neo4j Desktop application or a remote instance
     Again, this will create a bunch of CSV files in the `neo4j/import`
     directory, which must be equal to your instance's import directory.
 
-4. Finally, run the following command to load the data into Neo4j:
+4. Then, some data must be synthetically generated. You can do so by executing
+    the following script:
+
+    ```sh
+    python3 src/generate.py --output neo4j/import reviews cities proceedings-cities
+    ```
+
+    This script will read some of the pre-generated `.csv` files in the output
+    directory provided, and generate new ones with synthetic data (specifically
+    `edges-reviews-1.csv`, `nodes-cities-1.csv` and
+    `edges-isheldin-1.csv`).
+
+5. Finally, run the following command to load the data into Neo4j:
 
     ```sh
     cypher-shell --address neo4j://<neo4j_hsot>:<neo4j_port> --username <your_user> \
@@ -137,16 +172,16 @@ a Neo4j instance. You can use the Neo4j Desktop application or a remote instance
 After that, you should be able to see the data in your Neo4j instance. You can
 use the Neo4j Browser to visualize the graph and run queries on it.
 
-### Execution Flags
+## Usage
 
-In order to avoid repeated execution after downloading all papers one can set up the following flags to avoid download/import by using: 
+Here's a breakdown of the manipulation scripts included in this repository:
+- `src/add_affiliations.py`: Retrieves the authors from the Neo4j database and
+  searches their affiliations using the Semantic Scholar API. It then adds the
+  affiliations to the Neo4j database.
+- `src/add_review_details.py`: Retrieves the review edges from the Neo4j 
+  database and synthetically generates the review details (acceptance, revision
+  counts and content), and adds them to the Neo4j database.
 
-```sh
-touch neo4j/logs/neo4j-download.flag 
-touch neo4j/logs/neo4j-import.flag
-# To remove the flags
-sudo rm neo4j/logs/*.flag 
-```
 
 ## TO-DO list
 Remaining tasks for the 1st delivery:
