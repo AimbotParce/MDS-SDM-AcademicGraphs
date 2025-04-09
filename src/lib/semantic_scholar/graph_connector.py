@@ -2,7 +2,7 @@ import argparse
 import json
 import os
 from pathlib import Path
-from typing import Generator, Iterable, List, Literal, Optional, Tuple, Union, overload
+from typing import Dict, Generator, Iterable, List, Literal, Optional, Tuple, Union, overload
 
 from loguru import logger
 from more_itertools import batched
@@ -16,7 +16,7 @@ from .api_connector import SemanticScholarAPI
 # ===-----------------------------------------------------------------------===#
 
 
-class S2AcademicAPI(SemanticScholarAPI):
+class S2GraphAPI(SemanticScholarAPI):
     MAX_BATCH_SIZE = 500
     MAX_DATA_RETRIEVAL = 10_000
 
@@ -141,34 +141,36 @@ class S2AcademicAPI(SemanticScholarAPI):
         if fieldsOfStudy:
             params["fieldsOfStudy"] = ",".join(fieldsOfStudy)
 
-        if not stream:
+        def _paginate() -> Generator[List[Dict], None, None]:
             data = self.get("paper/search/bulk", params=params)
-            result = data["data"]
-            while data.get("token"):
-                if limit is not None and len(result) >= limit:
-                    break
+            if limit is not None and len(data["data"]) >= limit:
+                # If the limit is reached, return only the first limit number of papers
+                yield data["data"][0:limit]
+                return
+            yield data["data"]
+            total_retrieved = len(data["data"])
+            while data.get("token") and (limit is None or total_retrieved < limit):
                 data = self.get("paper/search/bulk", params={**params, "token": data["token"]})
-                result.extend(data["data"])
-            return result[:limit] if limit else result
+                if limit is not None and total_retrieved + len(data["data"]) >= limit:
+                    yield data["data"][0 : limit - total_retrieved]
+                    break
+                yield data["data"]
+                total_retrieved += len(data["data"])
+
+        def _generator():
+            for data in _paginate():
+                yield from data
+
+        if stream:
+            return _generator()
         else:
-            data = self.get("paper/search/bulk", params=params)
-            total_yielded = 0
-            if limit is not None and len(data["data"]) > limit:
-                yield from data["data"][0:limit]
-                total_yielded += limit
-            else:
-                yield from data["data"]
-                total_yielded += len(data["data"])
-            while data.get("token"):
-                if limit is not None and total_yielded >= limit:
-                    break
-                data = self.get("paper/search/bulk", params={**params, "token": data["token"]})
-                if limit is not None and len(data["data"]) + total_yielded > limit:
-                    yield from data["data"][0 : limit - total_yielded]
-                    total_yielded += limit - total_yielded
-                else:
-                    yield from data["data"]
-                    total_yielded += len(data["data"])
+            all_data = []
+            for data in _paginate():
+                all_data.extend(data)
+
+            if limit is not None and len(all_data) > limit:
+                all_data = all_data[:limit]
+            return all_data
 
     @overload
     def bulk_retrieve_details(self, paper_ids: Iterable[str], fields: Iterable[str]) -> List[dict]: ...
@@ -199,12 +201,19 @@ class S2AcademicAPI(SemanticScholarAPI):
         def _download_chunk(chunk: list[str]) -> List[dict]:
             return self.post("paper/batch", params={"fields": ",".join(fields)}, json={"ids": chunk})
 
-        if stream or len(paper_ids) > self.MAX_BATCH_SIZE:
-            paper_chunks = batched(paper_ids, self.MAX_BATCH_SIZE)
-            for chunk in paper_chunks:
-                yield from _download_chunk(chunk)
+        def _generator():
+            for paper_chunk in batched(paper_ids, self.MAX_BATCH_SIZE):
+                papers: list[dict] = _download_chunk(paper_chunk)
+                yield from papers
+
+        if stream:
+            return _generator()
         else:
-            return _download_chunk(paper_ids)
+            all_papers: list[dict] = []
+            for paper_chunk in batched(paper_ids, self.MAX_BATCH_SIZE):
+                papers = _download_chunk(paper_chunk)
+                all_papers.extend(papers)
+            return all_papers
 
     @overload
     def retrieve_citations(self, paper_id: str, fields: list[str]) -> List[dict]: ...
@@ -232,33 +241,37 @@ class S2AcademicAPI(SemanticScholarAPI):
         """
         params = {"fields": ",".join(fields)}
 
-        data = self.get(f"paper/{paper_id}/citations", params=params)
-        if stream:
-            yield from data["data"]
-        else:
-            all_data = data["data"]
-
-        while data.get("next"):
-            if data.get("next") >= self.MAX_DATA_RETRIEVAL - 1:
-                # This seems to be a hard limit of the Semantic Scholar API
-                logger.warning(
-                    f"Citation count exceeds {self.MAX_DATA_RETRIEVAL}. "
-                    f"Only the first {self.MAX_DATA_RETRIEVAL} citations will be retrieved."
+        def _paginate() -> Generator[List[Dict], None, None]:
+            data = self.get(f"paper/{paper_id}/citations", params=params)
+            yield data["data"]
+            while data.get("next"):
+                if data.get("next") >= self.MAX_DATA_RETRIEVAL - 1:
+                    # This seems to be a hard limit of the Semantic Scholar API
+                    logger.warning(
+                        f"Citation count exceeds {self.MAX_DATA_RETRIEVAL}. "
+                        f"Only the first {self.MAX_DATA_RETRIEVAL} citations will be retrieved."
+                    )
+                    break
+                data = self.get(
+                    f"paper/{paper_id}/citations",
+                    params={
+                        **params,
+                        "offset": data["next"],
+                        "limit": min(self.MAX_BATCH_SIZE, self.MAX_DATA_RETRIEVAL - data["next"] - 1),
+                    },
                 )
-                break
-            data = self.get(
-                f"paper/{paper_id}/citations",
-                params={
-                    **params,
-                    "offset": data["next"],
-                    "limit": min(self.MAX_BATCH_SIZE, self.MAX_DATA_RETRIEVAL - data["next"] - 1),
-                },
-            )
-            if stream:
-                yield from data["data"]
-            else:
-                all_data.extend(data["data"])
-        if not stream:
+                yield data["data"]
+
+        def _generator():
+            for data in _paginate():
+                yield from data
+
+        if stream:
+            return _generator()
+        else:
+            all_data = []
+            for data in _paginate():
+                all_data.extend(data)
             return all_data
 
     @overload
@@ -287,33 +300,37 @@ class S2AcademicAPI(SemanticScholarAPI):
         """
         params = {"fields": ",".join(fields)}
 
-        data = self.get(f"paper/{paper_id}/references", params=params)
-        if stream:
-            yield from data["data"]
-        else:
-            all_data = data["data"]
-
-        while data.get("next"):
-            if data.get("next") >= self.MAX_DATA_RETRIEVAL - 1:
-                # This seems to be a hard limit of the Semantic Scholar API
-                logger.warning(
-                    f"Reference count exceeds {self.MAX_DATA_RETRIEVAL}. "
-                    f"Only the first {self.MAX_DATA_RETRIEVAL} references will be retrieved."
+        def _paginate() -> Generator[List[Dict], None, None]:
+            data = self.get(f"paper/{paper_id}/references", params=params)
+            yield data["data"]
+            while data.get("next"):
+                if data.get("next") >= self.MAX_DATA_RETRIEVAL - 1:
+                    # This seems to be a hard limit of the Semantic Scholar API
+                    logger.warning(
+                        f"Reference count exceeds {self.MAX_DATA_RETRIEVAL}. "
+                        f"Only the first {self.MAX_DATA_RETRIEVAL} references will be retrieved."
+                    )
+                    break
+                data = self.get(
+                    f"paper/{paper_id}/references",
+                    params={
+                        **params,
+                        "offset": data["next"],
+                        "limit": min(self.MAX_BATCH_SIZE, self.MAX_DATA_RETRIEVAL - data["next"] - 1),
+                    },
                 )
-                break
-            data = self.get(
-                f"paper/{paper_id}/references",
-                params={
-                    **params,
-                    "offset": data["next"],
-                    "limit": min(self.MAX_BATCH_SIZE, self.MAX_DATA_RETRIEVAL - data["next"] - 1),
-                },
-            )
-            if stream:
-                yield from data["data"]
-            else:
-                all_data.extend(data["data"])
-        if not stream:
+                yield data["data"]
+
+        def _generator():
+            for data in _paginate():
+                yield from data
+
+        if stream:
+            return _generator()
+        else:
+            all_data = []
+            for data in _paginate():
+                all_data.extend(data)
             return all_data
 
     @overload
@@ -344,25 +361,33 @@ class S2AcademicAPI(SemanticScholarAPI):
 
         def _download_citations(paper_id: str):
             citations = self.retrieve_citations(paper_id, fields, stream=stream)
-            all_citations = []
-            for citation in citations:
-                citation["citedPaper"] = {"paperId": paper_id}
-                if stream:
+
+            def _generator():
+                for citation in citations:
+                    citation["citedPaper"] = {"paperId": paper_id}
                     yield citation
-                else:
+
+            if stream:
+                return _generator()
+            else:
+                all_citations: list[dict] = []
+                for citation in citations:
+                    citation["citedPaper"] = {"paperId": paper_id}
                     all_citations.append(citation)
-            if not stream:
                 return all_citations
 
+        def _generator():
+            for paper_id in paper_ids:
+                yield from _download_citations(paper_id)
+
         if not stream:
-            all_citations = []
+            all_citations: list[dict] = []
             for paper_id in paper_ids:
                 citations = _download_citations(paper_id)
                 all_citations.extend(citations)
             return all_citations
         else:
-            for paper_id in paper_ids:
-                yield from _download_citations(paper_id)
+            return _generator()
 
     @overload
     def bulk_retrieve_references(
@@ -392,22 +417,88 @@ class S2AcademicAPI(SemanticScholarAPI):
 
         def _download_references(paper_id: str):
             references = self.retrieve_references(paper_id, fields, stream=stream)
-            all_references = []
-            for reference in references:
-                reference["citingPaper"] = {"paperId": paper_id}
-                if stream:
+
+            def _generator():
+                for reference in references:
+                    reference["citingPaper"] = {"paperId": paper_id}
                     yield reference
-                else:
+
+            if stream:
+                return _generator()
+            else:
+                all_references = []
+                for reference in references:
+                    reference["citingPaper"] = {"paperId": paper_id}
                     all_references.append(reference)
-            if not stream:
                 return all_references
 
+        def _generator():
+            for paper_id in paper_ids:
+                yield from _download_references(paper_id)
+
         if not stream:
-            all_references = []
+            all_references: list[dict] = []
             for paper_id in paper_ids:
                 references = _download_references(paper_id)
                 all_references.extend(references)
             return all_references
         else:
-            for paper_id in paper_ids:
-                yield from _download_references(paper_id)
+            return _generator()
+
+    def retrieve_author_details(self, author_id: str, fields: list[str]) -> dict:
+        """
+        Retrieve the details for an author.
+
+        Args:
+            author_id (str): The author ID to retrieve details for.
+            fields (list[str]): The fields to return in the response.
+
+        Returns:
+            details (dict): The author details.
+        """
+        params = {"fields": ",".join(fields)}
+        return self.get(f"author/{author_id}", params=params)
+
+    @overload
+    def bulk_retrieve_author_details(
+        self, author_ids: Iterable[str], fields: Iterable[str], stream: Literal[False]
+    ) -> List[dict]: ...
+
+    @overload
+    def bulk_retrieve_author_details(self, author_ids: Iterable[str], fields: Iterable[str]) -> List[dict]: ...
+
+    @overload
+    def bulk_retrieve_author_details(
+        self, author_ids: Iterable[str], fields: Iterable[str], stream: Literal[True]
+    ) -> Generator[dict, None, None]: ...
+
+    def bulk_retrieve_author_details(self, author_ids: list[str], fields: list[str], stream: bool = False):
+        """
+        Retrieve the details for a list of authors.
+
+        Args:
+            author_ids (list[str]): The list of author IDs to retrieve details for.
+            fields (list[str]): The fields to return in the response.
+            stream (bool): Whether to stream the results.
+
+        Returns:
+            details (Generator[dict, None, None] | List[dict]):
+            If the batch size is None, a list of author details. Otherwise, a generator of author details.
+        """
+
+        def _download_author_batch(ids: list[str]):
+            return self.post("author/batch", params={"fields": ",".join(fields)}, json={"ids": ids})
+
+        def _generator():
+            for author_batch in batched(author_ids, self.MAX_BATCH_SIZE):
+                authors: list[dict] = _download_author_batch(author_batch)
+                yield from authors
+
+        if stream:
+            return _generator()
+        else:
+            all_authors: list[dict] = []
+            for author_batch in batched(author_ids, self.MAX_BATCH_SIZE):
+                authors = _download_author_batch(author_batch)
+                all_authors.extend(authors)
+            return all_authors

@@ -46,8 +46,6 @@ load csv with headers from 'file:///nodes-authors-1.csv' as row
 merge (a:Author {authorID: row.authorID, url: row.url, name: row.name})
 set a.homepage=row.homepage, a.hIndex=toInteger(row.hIndex);
 
-load csv with headers from 'file:///nodes-organizations-1.csv' as row
-merge (o:Organization {name: row.name});
 
 // ------- Edges -------
 
@@ -71,15 +69,11 @@ match (p:Publication {paperID:row.paperID})
 match (a:Author {authorID:row.authorID})
 merge (p)-[:MainAuthor]->(a);
 
-load csv with headers from 'file:///edges-isaffiliatedwith-1.csv' as row
-match (a:Author {authorID:row.authorID})
-match (o:Organization {name:row.organization})
-merge (a)-[:IsAffiliatedWith]->(o);
 
 load csv with headers from 'file:///edges-reviewed-1.csv' as row
 match (a:Author {authorID:row.authorID})
 match (p:Publication {paperID:row.paperID})
-merge (a)-[r:Reviewed {accepted:toBoolean(row.accepted), minorRevisions:toInteger(row.minorRevisions), majorRevisions:toInteger(row.majorRevisions), reviewContent:row.reviewContent}]->(p);
+merge (a)-[:Reviewed]->(p);
 
 load csv with headers from 'file:///edges-ispublishedinjournal-1.csv' as row
 match (p:Publication {paperID:row.paperID})

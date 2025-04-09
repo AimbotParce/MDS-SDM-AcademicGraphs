@@ -32,6 +32,7 @@ services:
       - ./neo4j/logs:/app/logs
       - ./neo4j/import:/app/import
       - ./src:/app/src
+      - ./neo4j/raw:/app/raw
     working_dir: /app
     entrypoint: /bin/bash
     environment:
@@ -40,10 +41,13 @@ services:
       - S2_MIN_CITATIONS=${S2_MIN_CITATIONS:-1}
       - S2_PUBLICATION_YEAR=${S2_PUBLICATION_YEAR:-1900-9999}
       - S2_LIMIT=${S2_LIMIT:-100}
+      - S2_MAX_RETRIES=${MAX_RETRIES:-3}
     user: root
     command:
       - -c
       - |
+        set -euo pipefail
+        # Exit on error, unset variable, or pipe failure
         # Check if the data was already downloaded by accessing the logs
         if [ -f /app/logs/neo4j-download.flag ]; then
           echo "Neo4j data already downloaded."
@@ -51,18 +55,24 @@ services:
           # Execute the download script
           echo "Downloading Neo4j data..."
           mkdir -p /app/raw
-          python3 src/download_academic.py "$${S2_QUERY}" --output /app/raw \
+          python3 src/download_graph.py "$${S2_QUERY}" --output /app/raw \
             --min-citations $${S2_MIN_CITATIONS} \
             --year $${S2_PUBLICATION_YEAR} \
-            --limit $${S2_LIMIT}
+            --limit $${S2_LIMIT} \
+            --max-retries $${S2_MAX_RETRIES} \
+            --batch-size 1000
 
           # Execute the preparation script for papers
           echo "Preparing Neo4j papers data..."
-          python3 src/prepare.py /app/raw/raw-papers-1.jsonl --output /app/import --type papers
+          python3 src/prepare.py /app/raw/raw-papers-*.jsonl --output /app/import --type papers
 
           # Execute the preparation script for citations
           echo "Preparing Neo4j citations data..."
-          python3 src/prepare.py /app/raw/raw-references-1.jsonl --output /app/import --type references
+          python3 src/prepare.py /app/raw/raw-references-*.jsonl --output /app/import --type references
+
+          # Execute the generation script (cities, reviews and proceedings' cities)
+          echo "Generating additional data..."
+          python3 src/generate.py --output /app/import cities reviews proceedings-cities
 
           # Finalize the preparation by creating a flag file
           touch /app/logs/neo4j-download.flag
@@ -93,6 +103,8 @@ services:
     command:
       - -c
       - |
+        set -euo pipefail
+        # Exit on error, unset variable, or pipe failure
         # Check if the data was already imported by accessing the logs
         if [ -f /app/logs/neo4j-import.flag ]; then
           echo "Neo4j data already imported."

@@ -61,6 +61,8 @@ You can also set the following optional environment variables:
   the graph. It can be a single year or a range of years (default: 1900-9999).
 - `S2_LIMIT`: The maximum number of papers to be included in the graph 
   (default: 100).
+- `S2_MAX_RETRIES`: The maximum number of retries for the API requests (default:
+   3).
 
 Then, you can run the following command to start the Neo4j instance and load
 the sample data into it:

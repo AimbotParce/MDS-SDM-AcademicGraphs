@@ -6,11 +6,11 @@ from pathlib import Path
 from loguru import logger
 
 from lib.io import BatchedWriter
-from lib.semantic_scholar import S2AcademicAPI
+from lib.semantic_scholar import S2GraphAPI
 
 
 def main(args):
-    connector = S2AcademicAPI(api_key=os.getenv("S2_API_KEY"), default_max_retries=args.max_retries)
+    connector = S2GraphAPI(api_key=os.getenv("S2_API_KEY"), default_max_retries=args.max_retries)
 
     if args.dry_run:
         logger.info("Running in DRY RUN mode. No data will be saved.")
