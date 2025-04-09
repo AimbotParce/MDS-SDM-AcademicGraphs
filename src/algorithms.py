@@ -6,9 +6,6 @@ from loguru import logger
 
 from neo4j import Driver, GraphDatabase
 
-######
-###### Reviewer recommendation (Cypher)
-######
 PUBLICATION_PAGERANK_CREATE_PROJECTION = (
     "MATCH (dest:Publication) "
     "OPTIONAL MATCH (source:Publication)-[e:Cites]->(dest) "
