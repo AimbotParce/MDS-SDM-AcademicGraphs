@@ -71,6 +71,8 @@ the sample data into it:
 docker-compose up -d
 ```
 
+This docker image contains the installation of the "Graph Data Science (GDS)" Library, so its highly advisable to use the image for simplicity
+
 **Note:** You can set up the environment variables in a `.env` file in the same
 directory and instead use the command `docker-compose --env-file .env up -d`.
 
