@@ -14,8 +14,6 @@ INSERT_QUERY = (
 
 
 def main(args):
-    author_ids = ["2037772368"]
-
     neo4j = GraphDatabase.driver(
         os.getenv("NEO4J_URL", "neo4j://localhost:7687"),
         auth=(os.getenv("NEO4J_USER"), os.getenv("NEO4J_PASSWORD")),

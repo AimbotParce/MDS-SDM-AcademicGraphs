@@ -44,7 +44,7 @@ class Reviewed(BaseModel):
     accepted: bool
     minorRevisions: int
     majorRevisions: int
-    reviewContent: str
+    reviewContent: Optional[str]
 
 
 class IsPublishedIn(BaseModel):
