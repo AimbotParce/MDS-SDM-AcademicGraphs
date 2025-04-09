@@ -16,6 +16,9 @@ set p.openAccessPDFUrl=row.openAccessPDFUrl, p.embedding=row.embedding, p.tldr=r
 load csv with headers from 'file:///nodes-fieldsofstudy-1.csv' as row
 merge (f:FieldOfStudy {name:row.name});
 
+load csv with headers from 'file:///nodes-keywords-1.csv' as row
+merge (k:KeyWord {name: row.name});
+
 load csv with headers from 'file:///nodes-proceedings-1.csv' as row
 merge (p:Proceedings {proceedingsID:row.proceedingsID, year:toInteger(row.year)});
 
@@ -58,6 +61,11 @@ load csv with headers from 'file:///edges-hasfieldofstudy-1.csv' as row
 match (p:Publication {paperID:row.paperID})
 match (f:FieldOfStudy {name:row.fieldOfStudy})
 merge (p)-[:HasFieldOfStudy]->(f);
+
+load csv with headers from 'file:///edges-haskeyword-1.csv' as row
+match (p:Publication {paperID:row.paperID})
+match (k:KeyWord {name:row.keyword})
+merge (p)-[e:HasKeyWord]->(k);
 
 load csv with headers from 'file:///edges-wrote-1.csv' as row
 match (p:Publication {paperID:row.paperID})
