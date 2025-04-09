@@ -65,10 +65,10 @@ def insert_keywords(tx, paper_id: str, keywords: list[str]):
     for kw in keywords:
         tx.run(
             """
-            MERGE (k:Keyword {name: $keyword})
+            MERGE (k:KeyWord {name: $keyword})
             WITH k  // Use WITH to pass `k` to the next part of the query
             MATCH (p:Publication {paperID: $paper_id})
-            MERGE (p)-[:HasKeyword]->(k)
+            MERGE (p)-[:HasKeyWord]->(k)
         """,
             keyword=kw,
             paper_id=paper_id,
@@ -91,7 +91,7 @@ def preprocess_keywords_and_update_graph(
         # Insert extracted keywords into Neo4j
         for paper_id, keywords in paper_keywords.items():
             if keywords:  # Ensure there are keywords to insert
-                session.write_transaction(insert_keywords, paper_id, keywords)
+                session.execute_write(insert_keywords, paper_id, keywords)
 
 
 # Function to fetch papers from Neo4j
@@ -168,8 +168,8 @@ def step1_recsys_define_community(tx,
     MERGE (c:Community {{name: "{community}"}})
     WITH c, {keywords_cypher} AS keywords
     UNWIND keywords as kw
-    MERGE (k: Keyword {{name: kw}})
-    MERGE (c)-[:HasKeyword]->(k)
+    MERGE (k: KeyWord {{name: kw}})
+    MERGE (c)-[:HasKeyWord]->(k)
     """
     run_query(tx, query)
 
@@ -179,15 +179,15 @@ def step1_recsys_define_community(tx,
 # and labels that venue as a community-venue
 def step2_recsys_label_venues(tx,
     community: str = "Database",
-    percentage: float = 0.9):
+    percentage: float = 0.001):
     
     query = f"""
-    MATCH (c:Community {{name: "{community}}})-[:HasKeyword]->(k:Keyword)       // Get community and its keywords
-    MATCH (v)<-[:PublishedIn]-(p:Publication)-[:HasKeyword]->(k)                // Get venues and keywords of a paper
+    MATCH (c:Community {{name: "{community}"}})-[:HasKeyWord]->(k:KeyWord)       // Get community and its keywords
+    MATCH (v)<-[:IsPublishedIn]-(p:Publication)-[:HasKeyWord]->(k)                // Get venues and keywords of a paper
     WHERE v:Proceedings OR v:JournalVolume OR v.OtherPublicationVenue
     WITH v, COUNT(DISTINCT p) as related_papers
-    MATCH (v)<-[:PublishedIn]-(all:Publication) // Get all papers of venue v 
-    WITH v, related_papers, COUNT(all) as total_papers
+    MATCH (v)<-[:IsPublishedIn]-(all:Publication) // Get all papers of venue v 
+    WITH v, related_papers, COUNT(DISTINCT all) as total_papers
     WHERE total_papers > 0 AND (related_papers * 1.0 / total_papers) >= {percentage}
     SET v:{get_community_venue_label(community)}                                // Tag this venue for this community        
     """
@@ -201,16 +201,15 @@ def step3_recsys_rank_top100_papers(tx,
     top_n: int = 100):
     
     query = f"""
-    MATCH (p:Publication)-[:PublishedIn]->(v)
-    WHERE v:{get_community_venue_label(community)}
+    MATCH (k:KeyWord)<-[:HasKeyWord]-(p:Publication)-[:IsPublishedIn]->(v:{get_community_venue_label(community)})
     MATCH (citing:Publication)-[:Cites]->(p) // Get citations with keywords related to the community
-    MATCH (citing)-[:HasKeyword]->(k)        
-    MATCH (k)<-[:HasKeyword]-(c:Community {{name: "{community}"}})
+    MATCH (k)<-[:HasKeyWord]-(c:Community {{name: "{community}"}})
     WITH p, COUNT(DISTINCT citing) AS citations
     ORDER BY citations DESC
     LIMIT {top_n}
     SET p:{get_community_toppaper_label(community)}
     """
+    
     run_query(tx, query)
 
 # Label the potential reviewers out of the top papers by 
@@ -220,7 +219,7 @@ def step4_recsys_label_reviewers_and_gurus(tx,
         
     query = f"""
     MATCH (a:Author)-[:Wrote]->(p:{get_community_toppaper_label(community)})
-    WITH a, COUNT(p), AS top_papers
+    WITH a, COUNT(p) AS top_papers
     SET a: {get_community_reviewer_label(community)} // Recommend community reviewer
     WITH a, top_papers
     WHERE top_papers >= {min_guru_top_papers}
@@ -229,13 +228,13 @@ def step4_recsys_label_reviewers_and_gurus(tx,
     """
     run_query(tx, query)
 
-def undo_recsys_modifications(tx, steps: List[int] = [0,1,2,3,4]):
+def undo_recsys_modifications(tx, steps: List[int] = [0,1,2,3,4], community: str = "Database"):
     undo_queries = {
-        0: "MATCH (c:Community {name: 'Database'})-[r:HasKeyword]->() DELETE r",
-        1: "MATCH (v:DatabaseVenue) REMOVE v:DatabaseVenue",
-        2: "MATCH (p:TopDatabasePaper) REMOVE p:TopDatabasePaper",
-        3: "MATCH (a:Reviewer) REMOVE a:Reviewer",
-        4: "MATCH (a:Guru) REMOVE a:Guru",
+        0: f"MATCH (c:Community {{name: '{community}'}})-[r:HasKeyWord]->() DELETE r, c",
+        1: f"MATCH (v:{get_community_venue_label(community)}) REMOVE v",
+        2: f"MATCH (p:{get_community_toppaper_label(community)}) REMOVE p",
+        3: f"MATCH (a:{get_community_reviewer_label(community)}) REMOVE a",
+        4: f"MATCH (a:{get_community_guru_label(community)}) REMOVE a:{get_community_guru_label(community)}",
     }
 
     for step in steps:
@@ -246,10 +245,14 @@ def undo_recsys_modifications(tx, steps: List[int] = [0,1,2,3,4]):
 def execute_recommendation_algorithm(driver: GraphDatabase.driver = driver):
     with driver.session() as session:
         # All these operations are effectiely upserts
-        session.execute_write(step1_recsys_define_community)
-        # session.execute_write(step2_recsys_label_venues)
-        # session.execute_write(step3_recsys_rank_top100_papers)
-        # session.execute_write(step4_recsys_label_reviewers_and_gurus)
+        if not args.rm:
+            session.execute_write(step1_recsys_define_community)
+            session.execute_write(step2_recsys_label_venues)
+            session.execute_write(step3_recsys_rank_top100_papers)
+            session.execute_write(step4_recsys_label_reviewers_and_gurus)
+        else:
+            session.execute_write(undo_recsys_modifications)
+        
         
 
 
@@ -265,10 +268,12 @@ def parse_args():
         action="store_true", 
         help="Flag to indicate whether to run the recommendation algorithm (default is not to recommend)"
     )
+    parser.add_argument(
+        "--rm", 
+        action="store_true", 
+        help="Flag to indicate whether to first undo the recommendations of previous runs"
+    )    
     return parser.parse_args()
-
-    
-
 
 
 if __name__ == "__main__":
