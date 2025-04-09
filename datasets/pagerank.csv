@@ -1,527 +1,254 @@
 title,score
-The STRING database in 2023: protein–protein association networks and functional enrichment analyses for any sequenced genome of interest,2.5713974367333434
-Data Mining: Concepts and Techniques,2.3717735111733678
-GTDB-Tk: a toolkit to classify genomes with the Genome Taxonomy Database,2.3430955031352805
-Metascape provides a biologist-oriented resource for the analysis of systems-level datasets,2.0967854111808633
-A standardized bacterial taxonomy based on genome phylogeny substantially revises the tree of life,1.955624537565021
-MetaboAnalyst 4.0: towards more transparent and integrative metabolomics analysis,1.4571337433125506
-Using MetaboAnalyst 4.0 for Comprehensive and Integrative Metabolomics Data Analysis,1.4027303484823348
-Database resources of the National Center for Biotechnology Information,1.2672433835178576
-HMDB 4.0: the human metabolome database for 2018,1.2344346720063775
-CARD 2020: antibiotic resistome surveillance with the comprehensive antibiotic resistance database,1.1830638716655248
-"Federated database systems for managing distributed, heterogeneous, and autonomous databases",1.160026418089843
-"STRING v11: protein–protein association networks with increased coverage, supporting functional discovery in genome-wide experimental datasets",1.137777207823783
-"agriGO v2.0: a GO analysis toolkit for the agricultural community, 2017 update",1.1362177272112297
-Ontology Matching,1.1038892631591803
-"eggNOG 5.0: a hierarchical, functionally and phylogenetically annotated orthology resource based on 5090 organisms and 2502 viruses",1.0979351820954855
-DrugBank 4.0: shedding new light on drug metabolism,1.0068197264739833
-Inference and analysis of cell-cell communication using CellChat,0.9725154823322656
-Introducing EzBioCloud: a taxonomically united database of 16S rRNA gene sequences and whole-genome assemblies,0.9553047937829743
-"eggNOG-mapper v2: Functional Annotation, Orthology Assignments, and Domain Prediction at the Metagenomic Scale",0.8913831004166237
-Principles of Distributed Database Systems,0.888267532569337
-GEPIA2: an enhanced web server for large-scale expression profiling and interactive analysis,0.8531850233524465
-The UCSC Genome Browser database: update 2011,0.8387077901295887
-SIFT Flow: Dense Correspondence across Scenes and Its Applications,0.8092191199560806
-Places: A 10 Million Image Database for Scene Recognition,0.8031306720706899
-ArcFace: Additive Angular Margin Loss for Deep Face Recognition,0.7879198071155091
-"The STRING database in 2017: quality-controlled protein–protein association networks, made broadly accessible",0.7528593515314439
-A pathology atlas of the human cancer transcriptome,0.7522765835949399
-Comparative Protein Structure Modeling Using MODELLER,0.7475337700395728
-Multi-omics of the gut microbial ecosystem in inflammatory bowel diseases,0.7382306667711042
-Enrichr: interactive and collaborative HTML5 gene list enrichment analysis tool,0.7296235161744283
-"The STRING database in 2021: customizable protein–protein networks, and functional characterization of user-uploaded gene/measurement sets",0.7220653832667475
-ShinyGO: a graphical gene-set enrichment tool for animals and plants,0.7186778066366273
-ANNOVAR: functional annotation of genetic variants from high-throughput sequencing data,0.7020111507307805
-Database resources of the National Center for Biotechnology Information: update,0.6949064083989752
-TYGS is an automated high-throughput platform for state-of-the-art genome-based taxonomy,0.694250129726069
-"STRING v9.1: protein-protein interaction networks, with increased coverage and integration",0.6888246552146617
-The PRISMA Statement for Reporting Systematic Reviews and Meta-Analyses of Studies That Evaluate Health Care Interventions: Explanation and Elaboration,0.6871675347222223
-PubChem Substance and Compound databases,0.6736662802662546
-FIMO: scanning for occurrences of a given motif,0.6614487834817981
-Annotation of functional variation in personal genomes using RegulomeDB,0.651484868456915
-"The STRING database in 2011: functional interaction networks of proteins, globally integrated and scored",0.6378277475038714
-UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild,0.6339327407289255
-miRDB: an online database for prediction of functional microRNA targets,0.621106510055689
-SWISS-MODEL: modelling protein tertiary and quaternary structure using evolutionary information,0.6175650572394785
-Global effects of land use on local terrestrial biodiversity,0.60549375
-MEME Suite: tools for motif discovery and searching,0.6017044511550564
-"STRING v10: protein–protein interaction networks, integrated over the tree of life",0.600877441310917
-Data Mining: An Overview from a Database Perspective,0.5974350261387683
-DrugBank 5.0: a major update to the DrugBank database for 2018,0.5899028079814093
-ImageNet: A large-scale hierarchical image database,0.5887774687183317
-The PRIDE database resources in 2022: a hub for mass spectrometry-based proteomics evidences,0.5742857683779449
-"Mercury 4.0: from visualization to analysis, design and prediction",0.57234375
-High throughput ANI analysis of 90K prokaryotic genomes reveals clear species boundaries,0.5644626442109894
-Discovering Knowledge in Data: An Introduction to Data Mining,0.5603493305121486
-Answering queries using views: A survey,0.5595937500000001
-MAKER2: an annotation pipeline and genome-database management tool for second-generation genome projects,0.553004870859309
-Local Features and Kernels for Classification of Texture and Object Categories: A Comprehensive Study,0.5467118505859375
-Ensembl 2018,0.5466118822328253
-A Database and Evaluation Methodology for Optical Flow,0.5441702326535999
-"Fast, scalable generation of high-quality protein multiple sequence alignments using Clustal Omega",0.541474038029885
-Introduction to Data Mining,0.5405075365061492
-Analysis Tool Web Services from the EMBL-EBI,0.5363061752622792
-Uniting the classification of cultured and uncultured bacteria and archaea using 16S rRNA gene sequences,0.5322213590579384
-CDD/SPARCLE: the conserved domain database in 2020,0.5160757826230137
-Mining Frequent Patterns without Candidate Generation: A Frequent-Pattern Tree Approach,0.5158304883998501
-Coauthorship networks and patterns of scientific collaboration,0.513375
-The Algorithmic Foundations of Differential Privacy,0.5020534411693287
-The SILVA ribosomal RNA gene database project: improved data processing and web-based tools,0.5008251587528479
-In Silico Detection and Typing of Plasmids using PlasmidFinder and Plasmid Multilocus Sequence Typing,0.49605487046185537
-The HITRAN2012 molecular spectroscopic database,0.49568437500000007
-HMDB: A large video database for human motion recognition,0.4943327157655928
-Tissue-based map of the human proteome,0.4934025623185972
-"A comparison of direct vs. self‐report measures for assessing height, weight and body mass index: a systematic review",0.48983472222222224
-Learning Face Representation from Scratch,0.4829884564858168
-A survey of approaches to automatic schema matching,0.4786737825693373
-Ribosomal Database Project: data and tools for high throughput rRNA analysis,0.4754515263711654
-The PRIDE database and related tools and resources in 2019: improving support for quantification data,0.4691597907242581
-Completion of the 2011 National Land Cover Database for the Conterminous United States – Representing a Decade of Land Cover Change Information,0.4591875
-Saliency Detection via Graph-Based Manifold Ranking,0.4576291154785157
-KEGG for taxonomy-based analysis of pathways and genomes,0.45650265167447546
-A subcellular map of the human proteome,0.44924764283231305
-ZINC: A Free Tool to Discover Chemistry for Biology,0.4479642016656596
-Two-dimensional PCA: a new approach to appearance-based face representation and recognition,0.44751829224787487
-2016 update of the PRIDE database and its related tools,0.44491557508082574
-miRBase: from microRNA sequences to function,0.43858167837086487
-DrugBank 3.0: a comprehensive resource for ‘Omics’ research on drugs,0.4382778770711463
-"KEGG: new perspectives on genomes, pathways, diseases and drugs",0.4367659418949474
-"An RNA-Sequencing Transcriptome and Splicing Database of Glia, Neurons, and Vascular Cells of the Cerebral Cortex",0.43336745849963804
-Deficits in communication and information transfer between hospital-based and primary care physicians: implications for patient safety and continuity of care.,0.43193437500000004
-Evaluating 2-DNF Formulas on Ciphertexts,0.42837500000000006
-An improved Greengenes taxonomy with explicit ranks for ecological and evolutionary analyses of bacteria and archaea,0.42338147892464495
-"Open-access bacterial population genomics: BIGSdb software, the PubMLST.org website and their applications",0.41807358291404084
-An efficient algorithm for large-scale detection of protein families.,0.41499689004629636
-"Oncomine 3.0: genes, pathways, and networks in a collection of 18,000 cancer gene expression profiles.",0.414919348618777
-The UNITE database for molecular identification of fungi: handling dark taxa and parallel taxonomic classifications,0.41484325978623193
-The UCSC Genome Browser Database: update 2006,0.41052020961757874
-Pfam: The protein families database in 2021,0.4104186820033211
-Learning Deep Features for Scene Recognition using Places Database,0.4095723593202802
-"Secondary building units, nets and bonding in the chemistry of metal-organic frameworks.",0.40890468750000003
-"PHASTER: a better, faster version of the PHAST phage search tool",0.4059145337244105
-"Survey on speech emotion recognition: Features, classification schemes, and databases",0.405
-Survey of graph database models,0.405
-A new taxonomy for describing and defining adherence to medications.,0.405
-HHblits: lightning-fast iterative protein sequence searching by HMM-HMM alignment,0.4034508004516756
-InterPro: the integrative protein signature database,0.4012084409974419
-"Learning a similarity metric discriminatively, with application to face verification",0.4010669791666667
-Evaluating non-randomised intervention studies.,0.3998055555555556
-BIGSdb: Scalable analysis of bacterial genome variation at the population level,0.39356466373491833
-ClinVar: public archive of interpretations of clinically relevant variants,0.392790068574562
-Fast and sensitive protein alignment using DIAMOND,0.39093135918508537
-The Pfam protein families database,0.3870057789316022
-Accuracy of physician self-assessment compared with observed measures of competence: a systematic review.,0.385875
-2017 Guidelines of the American Thyroid Association for the Diagnosis and Management of Thyroid Disease During Pregnancy and the Postpartum.,0.385875
-The SILVA and “All-species Living Tree Project (LTP)” taxonomic frameworks,0.38508965730600603
-"PANTHER version 11: expanded annotation data from Gene Ontology and Reactome pathways, and data analysis tool enhancements",0.384663776566404
-DeepFace: Closing the Gap to Human-Level Performance in Face Verification,0.3844442916311675
-HMDB 3.0—The Human Metabolome Database in 2013,0.38155604780189467
-MEROPS: the peptidase database,0.37862734710921897
-E-Commerce Recommendation Applications,0.37744140625
-SIMPLIcity: Semantics-Sensitive Integrated Matching for Picture LIbraries,0.36743192578125
-PICRUSt2 for prediction of metagenome functions,0.36591023472334017
-ClinVar: public archive of relationships among sequence variation and human phenotype,0.3654313591850853
-STRING 8—a global view on proteins and their functional interactions in 630 organisms,0.36297445249903126
-SeaView version 4: A multiplatform graphical user interface for sequence alignment and phylogenetic tree building.,0.3598968901668596
-"miRBase: microRNA sequences, targets and gene nomenclature",0.35898705822016336
-Classical negation in logic programs and disjunctive databases,0.3561250000000001
-Single image super-resolution from transformed self-exemplars,0.35187500000000005
-Global landscape of protein complexes in the yeast Saccharomyces cerevisiae,0.34731871952445476
-DAVID Bioinformatics Resources: expanded annotation database and novel algorithms to better extract biology from large gene lists,0.34715353331098997
-"Reference sequence (RefSeq) database at NCBI: current status, taxonomic expansion, and functional annotation",0.34698382390748417
-Target-decoy search strategy for increased confidence in large-scale protein identifications by mass spectrometry,0.34550000000000003
-The Pfam protein families database in 2019,0.34500251697976314
-Integrating Classification and Association Rule Mining,0.34469612395968974
-Shape distributions,0.34290704760742197
+The STRING database in 2023: protein–protein association networks and functional enrichment analyses for any sequenced genome of interest,2.2991699931156306
+Database resources of the National Center for Biotechnology Information,1.734536874204962
+Introducing EzBioCloud: a taxonomically united database of 16S rRNA gene sequences and whole-genome assemblies,1.4684574964291723
+Data Mining: Concepts and Techniques,1.4221203823575086
+MetaboAnalyst 4.0: towards more transparent and integrative metabolomics analysis,1.253408022683976
+Places: A 10 Million Image Database for Scene Recognition,1.108705294024736
+"Federated database systems for managing distributed, heterogeneous, and autonomous databases",0.9733259642111975
+HMDB 4.0: the human metabolome database for 2018,0.9679395937686741
+"eggNOG 5.0: a hierarchical, functionally and phylogenetically annotated orthology resource based on 5090 organisms and 2502 viruses",0.9032322272324481
+GTDB-Tk: a toolkit to classify genomes with the Genome Taxonomy Database,0.8270467693578037
+Principles of Distributed Database Systems,0.8186521794583865
+UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild,0.7985739463093744
+"STRING v11: protein–protein association networks with increased coverage, supporting functional discovery in genome-wide experimental datasets",0.7903482968051855
+Metascape provides a biologist-oriented resource for the analysis of systems-level datasets,0.7682212017157038
+ImageNet: A large-scale hierarchical image database,0.7304859147306891
+High throughput ANI analysis of 90K prokaryotic genomes reveals clear species boundaries,0.7256773988292168
+PubChem Substance and Compound databases,0.7164605573514785
+HMDB: A large video database for human motion recognition,0.6880283008403619
+ShinyGO: a graphical gene-set enrichment tool for animals and plants,0.6754075903430803
+Fast and sensitive protein alignment using DIAMOND,0.6733246741083738
+ClinVar: public archive of relationships among sequence variation and human phenotype,0.6414496741083738
+Inference and analysis of cell-cell communication using CellChat,0.6264432948724584
+"The STRING database in 2021: customizable protein–protein networks, and functional characterization of user-uploaded gene/measurement sets",0.617705457138329
+ColabFold: making protein folding accessible to all,0.5935049154385906
+ArcFace: Additive Angular Margin Loss for Deep Face Recognition,0.5756504598383827
+Comparative Protein Structure Modeling Using MODELLER,0.5696294782103885
+The SILVA ribosomal RNA gene database project: improved data processing and web-based tools,0.5667481356385731
+A survey of approaches to automatic schema matching,0.5636521794583864
+GEPIA2: an enhanced web server for large-scale expression profiling and interactive analysis,0.5517664459604488
+Learning Deep Features for Scene Recognition using Places Database,0.5501954883403619
+"Fast, scalable generation of high-quality protein multiple sequence alignments using Clustal Omega",0.545335684001887
+Ribosomal Database Project: data and tools for high throughput rRNA analysis,0.5432834156984477
+Database resources of the National Center for Biotechnology Information: update,0.5230478824486494
+SWISS-MODEL: modelling protein tertiary and quaternary structure using evolutionary information,0.5143971992112929
+DrugBank 5.0: a major update to the DrugBank database for 2018,0.501578956926608
+SUN database: Large-scale scene recognition from abbey to zoo,0.46821875
+"KEGG: new perspectives on genomes, pathways, diseases and drugs",0.4646065887386953
+KEGG for taxonomy-based analysis of pathways and genomes,0.459584495848947
+Introduction to Data Mining,0.45748055530098697
+Pfam: The protein families database in 2021,0.4509149244351961
+The PRISMA Statement for Reporting Systematic Reviews and Meta-Analyses of Studies That Evaluate Health Care Interventions: Explanation and Elaboration,0.45012968750000004
+"The STRING database in 2017: quality-controlled protein–protein association networks, made broadly accessible",0.43962953697755924
+The SILVA and “All-species Living Tree Project (LTP)” taxonomic frameworks,0.4355850891338931
+The PRIDE database resources in 2022: a hub for mass spectrometry-based proteomics evidences,0.4149954650043469
+PICRUSt2 for prediction of metagenome functions,0.41053416162556067
+The Cambridge Structural Database,0.405
+Mining Frequent Patterns without Candidate Generation: A Frequent-Pattern Tree Approach,0.40413329385339675
+KOBAS 2.0: a web server for annotation and identification of enriched pathways and diseases,0.40268906250000003
+Predictive functional profiling of microbial communities using 16S rRNA marker gene sequences,0.3992903459347417
+DeepFace: Closing the Gap to Human-Level Performance in Face Verification,0.39805196778201124
+A pathology atlas of the human cancer transcriptome,0.39766650489673405
+Andromeda: a peptide search engine integrated into the MaxQuant environment.,0.38800000000000007
+Data Mining: An Overview from a Database Perspective,0.38598369100746877
+"Learning a similarity metric discriminatively, with application to face verification",0.37822500000000003
+An improved Greengenes taxonomy with explicit ranks for ecological and evolutionary analyses of bacteria and archaea,0.372834230055125
+The Pfam protein families database in 2019,0.3710036954363584
+SeaView version 4: A multiplatform graphical user interface for sequence alignment and phylogenetic tree building.,0.3689497944078948
+Cytoscape: a software environment for integrated models of biomolecular interaction networks.,0.35738824905009436
+"STRING v9.1: protein-protein interaction networks, with increased coverage and integration",0.35539013897567157
+Database resources of the National Center for Biotechnology Information,0.3529955340763282
+Target-decoy search strategy for increased confidence in large-scale protein identifications by mass spectrometry,0.35187500000000005
+"The STRING database in 2011: functional interaction networks of proteins, globally integrated and scored",0.34990645734463954
+TCMSP: a database of systems pharmacology for drug discovery from herbal medicines,0.34982718599023804
+"STRING v10: protein–protein interaction networks, integrated over the tree of life",0.34770020602202156
+Enrichr: interactive and collaborative HTML5 gene list enrichment analysis tool,0.34441605299674877
+Global diversity and geography of soil fungi,0.34416022507445376
+Annotation of functional variation in personal genomes using RegulomeDB,0.34125000000000005
 Universality in Oxygen Evolution Electrocatalysis on Oxide Surfaces,0.34125000000000005
-Predictive functional profiling of microbial communities using 16S rRNA marker gene sequences,0.34096021698929374
-Database resources of the National Center for Biotechnology Information,0.3408721127421056
-I-TASSER server: new development for protein structure and function predictions,0.33963604800917835
-The SWISS-MODEL workspace: a web-based environment for protein structure homology modelling,0.33870393704874474
-The microRNA.org resource: targets and expression,0.33482147043075255
-NUS-WIDE: a real-world web image database from National University of Singapore,0.3327044287109376
-miRBase: annotating high confidence microRNAs using deep sequencing data,0.3325161110557526
-Entrez Gene: gene-centered information at NCBI,0.33228887974157084
-"Systematic Review: Impact of Health Information Technology on Quality, Efficiency, and Costs of Medical Care",0.3316875
-Prognostic role of neutrophil-to-lymphocyte ratio in solid tumors: a systematic review and meta-analysis.,0.3316875
-Efficient influence maximization in social networks,0.3316875
-Global carbon dioxide emissions from inland waters,0.3316875
-Sharing and community curation of mass spectrometry data with Global Natural Products Social Molecular Networking,0.33030870402927665
-SUN database: Large-scale scene recognition from abbey to zoo,0.3301796907552084
-ExPASy: SIB bioinformatics resource portal,0.3299298632083649
-The FERET evaluation methodology for face-recognition algorithms,0.3282115454449625
-The SWISS-MODEL Repository and associated resources,0.32655656597373484
-Genevestigator V3: A Reference Expression Database for the Meta-Analysis of Transcriptomes,0.32626875
-The Princeton Shape Benchmark,0.3246174428768398
-The GeneMANIA prediction server: biological network integration for gene prioritization and predicting gene function,0.3237043000734772
-Multi-PIE,0.3218563649536897
-Obesity alters gut microbial ecology.,0.3207506000278713
-Adapting Visual Category Models to New Domains,0.32045346614583337
-Cytoscape: a software environment for integrated models of biomolecular interaction networks.,0.3203360127294724
-Data streams: algorithms and applications,0.32000000000000006
-Phytozome: a comparative platform for green plant genomics,0.3196559967723153
-The Reactome Pathway Knowledgebase,0.31823816075701766
-"Repbase Update, a database of repetitive elements in eukaryotic genomes",0.3182278192314675
-Towards a unified paradigm for sequence‐based identification of fungi,0.3174385478131675
-ColabFold: making protein folding accessible to all,0.3173067816271991
-A Kernel Two-Sample Test,0.31681250000000005
-"HaploReg: a resource for exploring chromatin states, conservation, and regulatory motif alterations within sets of genetically linked variants",0.31560496034568253
-Mining frequent patterns without candidate generation,0.31403497496414967
-The Montreal Definition and Classification of Gastroesophageal Reflux Disease: A Global Evidence-Based Consensus,0.31362500000000004
-Mapping identifiers for the integration of genomic datasets with the R/Bioconductor package biomaRt,0.3108014113542766
-The Cambridge Structural Database,0.30937500000000007
-Gapped BLAST and PSI-BLAST: a new generation of protein database search programs.,0.3083125
-HMMER web server: interactive sequence similarity searching,0.3079846003452849
-"The Reticular Chemistry Structure Resource (RCSR) database of, and symbols for, crystal nets.",0.30459375
-Mortality in randomized trials of antioxidant supplements for primary and secondary prevention: systematic review and meta-analysis.,0.303295138888889
-Labeled Faces in the Wild: A Database forStudying Face Recognition in Unconstrained Environments,0.3011333704588754
-Minimap2: pairwise alignment for nucleotide sequences,0.30046334181495954
-Accelerated Profile HMM Searches,0.3001265925414134
-Andromeda: a peptide search engine integrated into the MaxQuant environment.,0.29981250000000004
-CDD/SPARCLE: functional classification of proteins via subfamily domain architectures,0.2970038515790815
-"PrefixSpan,: mining sequential patterns efficiently by prefix-projected pattern growth",0.2963893333162474
-CARD 2017: expansion and model-centric curation of the comprehensive antibiotic resistance database,0.2957012843356662
-Differential Privacy: A Survey of Results,0.29435078234287865
-Multilocus Sequence Typing of Total-Genome-Sequenced Bacteria,0.2933849704659936
-The HHpred interactive server for protein homology detection and structure prediction,0.29240493180789795
-TCMSP: a database of systems pharmacology for drug discovery from herbal medicines,0.29210097742298885
-"PANTHER in 2013: modeling the evolution of gene function, and other gene attributes, in the context of phylogenetic trees",0.29149562459470757
-LabelMe: A Database and Web-Based Tool for Image Annotation,0.29137226562500007
-Minor revision to V4 region SSU rRNA 806R gene primer greatly increases detection of SAR11 bacterioplankton,0.29055934137535794
-UniProt: the universal protein knowledgebase,0.290226079606234
-Self-management education for adults with type 2 diabetes: a meta-analysis of the effect on glycemic control.,0.2895416666666667
-Introducing EzTaxon-e: a prokaryotic 16S rRNA gene sequence database with phylotypes that represent uncultured species.,0.2887031859648277
-Global diversity and geography of soil fungi,0.2849113828205961
-OPTICS: ordering points to identify the clustering structure,0.2837895217520255
-Integrated genomic and proteomic analyses of a systematically perturbed metabolic network.,0.28321120467938304
-The MR-Base platform supports systematic causal inference across the human phenome,0.2820905742303803
-A high-density microsatellite consensus map for bread wheat (Triticum aestivum L.),0.2816251070601852
-ChEMBL: a large-scale bioactivity database for drug discovery,0.27796038447204635
+The Pfam protein families database,0.33946473469639094
+"DrugBank: a knowledgebase for drugs, drug actions and drug targets",0.33944648584084336
+The SWISS-MODEL workspace: a web-based environment for protein structure homology modelling,0.33864689781630003
+FIMO: scanning for occurrences of a given motif,0.3316875
+HMDB: the Human Metabolome Database,0.3314323861475364
+The FERET evaluation methodology for face-recognition algorithms,0.330141760685197
+Two-dimensional PCA: a new approach to appearance-based face representation and recognition,0.325738751236519
+An improved general amino acid replacement matrix.,0.3241432350516661
+The microRNA.org resource: targets and expression,0.32000000000000006
+LabelMe: A Database and Web-Based Tool for Image Annotation,0.31681250000000005
+"Reference sequence (RefSeq) database at NCBI: current status, taxonomic expansion, and functional annotation",0.3141879815175047
+KEGG as a reference resource for gene and protein annotation,0.3134735900043468
+The HHpred interactive server for protein homology detection and structure prediction,0.3108635485197369
+Adapting Visual Category Models to New Domains,0.310745625
+Labeled Faces in the Wild: A Database forStudying Face Recognition in Unconstrained Environments,0.3081401655274725
+OPTICS: ordering points to identify the clustering structure,0.30459375
+Translating Embeddings for Modeling Multi-relational Data,0.30459375
+"An RNA-Sequencing Transcriptome and Splicing Database of Glia, Neurons, and Vascular Cells of the Cerebral Cortex",0.302690693032575
+Sharing and community curation of mass spectrometry data with Global Natural Products Social Molecular Networking,0.30260615093828536
+Obesity alters gut microbial ecology.,0.30258059210526317
+Mining frequent patterns without candidate generation,0.302490243420797
+Minimap2: pairwise alignment for nucleotide sequences,0.30217376644736843
+SINA: Accurate high-throughput multiple sequence alignment of ribosomal RNA genes,0.30054189368409306
+CDD: a Conserved Domain Database for the functional annotation of proteins,0.29586845417226093
+miRBase: from microRNA sequences to function,0.29052359375000003
+Accelerated Profile HMM Searches,0.2834224788209658
+The SEED and the Rapid Annotation of microbial genomes using Subsystems Technology (RAST),0.28292238159281585
+PANTHER: a library of protein families and subfamilies indexed by function.,0.28228125000000004
+Global landscape of protein complexes in the yeast Saccharomyces cerevisiae,0.280991313513008
+Prognostic role of neutrophil-to-lymphocyte ratio in solid tumors: a systematic review and meta-analysis.,0.2775
 Development and testing of a general amber force field,0.2775
 2015 American Thyroid Association Management Guidelines for Adult Patients with Thyroid Nodules and Differentiated Thyroid Cancer: The American Thyroid Association Guidelines Task Force on Thyroid Nodules and Differentiated Thyroid Cancer.,0.2775
 "Genome-wide association study of 14,000 cases of seven common diseases and 3,000 shared controls",0.2775
-The HITRAN 2008 molecular spectroscopic database,0.2775
-Fluorine in Pharmaceuticals: Looking Beyond Intuition,0.2775
-"Protein and ligand preparation: parameters, protocols, and influence on virtual screening enrichments",0.2775
-Final version of 2009 AJCC melanoma staging and classification.,0.2775
+The behaviour change wheel: A new method for characterising and designing behaviour change interventions,0.2775
+The Human Connectome: A Structural Description of the Human Brain,0.2775
+The HITRAN2012 molecular spectroscopic database,0.2775
 Cancer statistics for the year 2020: An overview,0.2775
+Mining the network value of customers,0.2775
+Markov logic networks,0.2775
+"Protein and ligand preparation: parameters, protocols, and influence on virtual screening enrichments",0.2775
+"PlantCARE, a database of plant cis-acting regulatory elements and a portal to tools for in silico analysis of promoter sequences",0.2775
+Fluorine in Pharmaceuticals: Looking Beyond Intuition,0.2775
 The IASLC Lung Cancer Staging Project: Proposals for the Revision of the TNM Stage Groupings in the Forthcoming (Seventh) Edition of the TNM Classification of Malignant Tumours,0.2775
+BioGRID: a general repository for interaction datasets,0.2775
 Defining and assessing professional competence.,0.2775
-Towards a worldwide wood economics spectrum.,0.2775
-Private information retrieval,0.2775
-A standard procedure for creating a frailty index,0.2775
-Bank Regulation and Supervision: What Works Best?,0.2775
+The Extended Cohn-Kanade Dataset (CK+): A complete dataset for action unit and emotion-specified expression,0.2775
+"Fab: content-based, collaborative recommendation",0.2775
+"Systematic Review: Impact of Health Information Technology on Quality, Efficiency, and Costs of Medical Care",0.2775
+Global effects of land use on local terrestrial biodiversity,0.2775
 TALOS+: a hybrid method for predicting protein backbone torsion angles from NMR chemical shifts,0.2775
-How Many Species Are There on Earth and in the Ocean?,0.2775
-"Scientific collaboration networks. II. Shortest paths, weighted networks, and centrality.",0.2775
-Data Resource Profile: Clinical Practice Research Datalink (CPRD),0.2775
-EuroSCORE II.,0.2775
-LSST: From Science Drivers to Reference Design and Anticipated Data Products,0.2775
-Protein secondary structure analyses from circular dichroism spectroscopy: methods and reference databases.,0.2775
-What is the impact of mental health-related stigma on help-seeking? A systematic review of quantitative and qualitative studies,0.2775
-The aurora experimental framework for the performance evaluation of speech recognition systems under noisy conditions,0.2775
-The 5th edition of the World Health Organization Classification of Haematolymphoid Tumours: Myeloid and Histiocytic/Dendritic Neoplasms,0.2775
-Brain Tumor Segmentation Using Convolutional Neural Networks in MRI Images,0.2775
-IL-17 family cytokines and the expanding diversity of effector T cell lineages.,0.2775
-Clinically applicable deep learning for diagnosis and referral in retinal disease,0.2775
-Corporate Responsibility and Financial Performance: The Role of Intangible Resources,0.2775
-A uniform system for microRNA annotation.,0.2775
-Psychometric properties of the PTSD Checklist for Diagnostic and Statistical Manual of Mental Disorders-Fifth Edition (PCL-5) in veterans.,0.2775
-Mining time-changing data streams,0.2775
-A Novel Connectionist System for Unconstrained Handwriting Recognition,0.2775
-A systematic review of the psychological and social benefits of participation in sport for children and adolescents: informing development of a conceptual model of health through sport,0.2775
-Detection of ECG characteristic points using wavelet transforms,0.2775
-Global Burden of Cancer,0.2775
-"Mutual Fund Performance: An Empirical Decomposition into Stock-Picking Talent, Style, Transactions Costs, and Expenses",0.2775
-The Open Quantum Materials Database (OQMD): assessing the accuracy of DFT formation energies,0.2775
-Meta-Analysis: Glycosylated Hemoglobin and Cardiovascular Disease in Diabetes Mellitus,0.2775
-Tropical forests were the primary sources of new agricultural land in the 1980s and 1990s,0.2775
-"Book Review: Natural Language Processing with Python by Steven Bird, Ewan Klein, and Edward Loper",0.2775
-ChestX-Ray8: Hospital-Scale Chest X-Ray Database and Benchmarks on Weakly-Supervised Classification and Localization of Common Thorax Diseases,0.2751151969396378
+How iris recognition works,0.2762651655274725
+In Silico Detection and Typing of Plasmids using PlasmidFinder and Plasmid Multilocus Sequence Typing,0.2757440476371234
 "The M06 suite of density functionals for main group thermochemistry, thermochemical kinetics, noncovalent interactions, excited states, and transition elements: two new functionals and systematic testing of four M06-class functionals and 12 other functionals",0.2743125
 Density functionals with broad applicability in chemistry.,0.2743125
-The Ribosomal Database Project: improved alignments and new tools for rRNA analysis,0.27253091951195996
-Scalable Algorithms for Association Mining,0.27155597725038305
-The IPD and IMGT/HLA database: allele variant databases,0.2693184528573456
-STRING: a database of predicted functional associations between proteins,0.2681294614635943
-"The biodiversity of species and their rates of extinction, distribution, and protection",0.26793750000000005
-The microRNA Registry,0.26793750000000005
-TRY – a global database of plant traits,0.26793750000000005
-Improved allometric models to estimate the aboveground biomass of tropical trees,0.26793750000000005
-"HITEMP, the high-temperature molecular spectroscopic database",0.26793750000000005
-The UCSC Genome Browser Database,0.2676481869391662
-AlphaFold Protein Structure Database: massively expanding the structural coverage of protein-sequence space with high-accuracy models,0.2662852703267579
-Molecular signatures database (MSigDB) 3.0,0.2660719779206606
-HMDB: a knowledgebase for the human metabolome,0.26379864782934165
-SINA: Accurate high-throughput multiple sequence alignment of ribosomal RNA genes,0.2635695265114383
-Human protein reference database—2006 update,0.26352624084767756
-KOBAS 2.0: a web server for annotation and identification of enriched pathways and diseases,0.2622510160685506
-Strengthening the Reporting of Observational Studies in Epidemiology (STROBE): Explanation and Elaboration,0.2602638888888889
-Fast subsequence matching in time-series databases,0.2596228841145834
-A new bioinformatics analysis tools framework at EMBL–EBI,0.2593207662220866
-Translating Embeddings for Modeling Multi-relational Data,0.25917187500000005
-Multidimensional access methods,0.2590571397569445
-CDD: a Conserved Domain Database for the functional annotation of proteins,0.25848540113559565
-"DrugBank: a knowledgebase for drugs, drug actions and drug targets",0.25831923993345335
-HMDB: the Human Metabolome Database,0.2568404316333917
-Efficient algorithms for mining outliers from large data sets,0.25573512049334496
-Calibrating Noise to Sensitivity in Private Data Analysis,0.2515818749154315
-tRNAscan-SE On-line: integrating search and context for analysis of transfer RNA genes,0.2515612145866775
-MEME: discovering and analyzing DNA and protein sequence motifs,0.25070850067944495
-Quantifying similarity between motifs,0.25070850067944495
-When Is ''Nearest Neighbor'' Meaningful?,0.2499152034505209
-SortMeRNA: fast and accurate filtering of ribosomal RNAs in metatranscriptomic data,0.2494725581270321
-KEGG as a reference resource for gene and protein annotation,0.2492631144572206
-Genomic Analysis of Reactive Astrogliosis,0.24803649635594205
-The SEED and the Rapid Annotation of microbial genomes using Subsystems Technology (RAST),0.24698003435285293
-PHAST: A Fast Phage Search Tool,0.24665746838831024
-Blast2GO: A Comprehensive Suite for Functional Analysis in Plant Genomics,0.2458915567329765
-MassBank: a public repository for sharing mass spectral data for life sciences.,0.24565992640650358
-Robust De-anonymization of Large Sparse Datasets,0.24435614723030022
-An effective hash-based algorithm for mining association rules,0.2437787020906966
-Face recognition: a convolutional neural-network approach,0.24344687500000003
-An improved general amino acid replacement matrix.,0.24342547816855298
-PANTHER: a library of protein families and subfamilies indexed by function.,0.24325191234016758
-KEGG for integration and interpretation of large-scale molecular data sets,0.24319674132147914
-Differential Privacy,0.2427635425400255
-Web mining research: a survey,0.24084375000000002
-"NCBI Reference Sequence (RefSeq): a curated non-redundant sequence database of genomes, transcripts and proteins",0.24056798061700438
-The Molecular Signatures Database Hallmark Gene Set Collection,0.23955372707752054
-The Molecular Signatures Database (MSigDB) hallmark gene set collection.,0.23955372707752054
-Cochrane Database of Systematic Reviews,0.23954513888888893
-Infernal 1.1: 100-fold faster RNA homology searches,0.23896761865652316
-Face Recognition Based on Fitting a 3D Morphable Model,0.23856969646139953
-Face detection in color images,0.23718863408974547
-"The CMU Pose, Illumination, and Expression Database",0.23697170196658518
-"Our Data, Ourselves: Privacy Via Distributed Noise Generation",0.2352689074274471
-Efficacy of the Theory of Planned Behaviour: a meta-analytic review.,0.23500000000000004
-Psychological correlates of university students' academic performance: a systematic review and meta-analysis.,0.23500000000000004
-Predicting the functional impact of protein mutations: application to cancer genomics,0.23500000000000004
-Content-Based Image Retrieval at the End of the Early Years,0.23459493847656251
-The Pfam protein families database: towards a more sustainable future,0.23401525417922656
-"miRWalk - Database: Prediction of possible miRNA binding sites by ""walking"" the genes of three genomes",0.233108484375
-Human Detection Using Oriented Histograms of Flow and Appearance,0.23259238606770835
-Current two‐dimensional electrophoresis technology for proteomics,0.23181250000000003
-"A meta-analysis of depression during pregnancy and the risk of preterm birth, low birth weight, and intrauterine growth restriction.",0.23032057291666672
-TRANSFAC® and its module TRANSCompel®: transcriptional gene regulation in eukaryotes,0.22875678078928371
-SPADE: An Efficient Algorithm for Mining Frequent Sequences,0.22664648739611254
+The PRIDE database and related tools and resources in 2019: improving support for quantification data,0.27425940924499154
+KEGG for integration and interpretation of large-scale molecular data sets,0.2695283861830077
+Differential Privacy: A Survey of Results,0.26860461941790476
+The Algorithmic Foundations of Differential Privacy,0.26860461941790476
+Discovering Knowledge in Data: An Introduction to Data Mining,0.26758055043259976
+The GeneCards Suite: From Gene Data Mining to Disease Genome Sequence Analyses,0.2675108832431049
+HMDB 3.0—The Human Metabolome Database in 2013,0.26361828770897033
+Face recognition by elastic bunch graph matching,0.26150300944867794
+The Ribosomal Database Project: improved alignments and new tools for rRNA analysis,0.25670491776315796
+"PHASTER: a better, faster version of the PHAST phage search tool",0.2562842516447369
+Similarity Search in High Dimensions via Hashing,0.25625000000000003
+Integrating Classification and Association Rule Mining,0.25219305245535717
+HMMER web server: interactive sequence similarity searching,0.24943056354726098
+Mining Sequential Patterns: Generalizations and Performance Improvements,0.2460026363199687
+Psychological correlates of university students' academic performance: a systematic review and meta-analysis.,0.24562500000000004
+Efficacy of the Theory of Planned Behaviour: a meta-analytic review.,0.24562500000000004
+NUS-WIDE: a real-world web image database from National University of Singapore,0.24562500000000004
+Infernal 1.1: 100-fold faster RNA homology searches,0.2447538415036534
+From genomics to chemical genomics: new developments in KEGG,0.24406260205321906
+The FERET database and evaluation procedure for face-recognition algorithms,0.24354016552747249
+Introducing EzTaxon-e: a prokaryotic 16S rRNA gene sequence database with phylotypes that represent uncultured species.,0.24144979440789477
+UniProt: the universal protein knowledgebase,0.23970535714285715
+Mining sequential patterns,0.23836260710082832
+"Greengenes, a Chimera-Checked 16S rRNA Gene Database and Workbench Compatible with ARB",0.23690131578947374
+ExPASy: the proteomics server for in-depth protein knowledge and analysis,0.2349313630420968
+The MR-Base platform supports systematic causal inference across the human phenome,0.23412876383352066
+The Molecular Signatures Database Hallmark Gene Set Collection,0.23241458333333337
+The Molecular Signatures Database (MSigDB) hallmark gene set collection.,0.23241458333333337
+miRBase: annotating high confidence microRNAs using deep sequencing data,0.23064375000000004
+The SWISS-PROT protein knowledgebase and its supplement TrEMBL in 2003,0.22985947153849615
+InterProScan: protein domains identifier,0.22931441761363636
+Towards a unified paradigm for sequence‐based identification of fungi,0.22842379420523967
+"Overweight, obesity, and depression: a systematic review and meta-analysis of longitudinal studies.",0.227296875
+SILVA: a comprehensive online resource for quality checked and aligned ribosomal RNA sequence data compatible with ARB,0.2261796865006306
+"NCBI Reference Sequence (RefSeq): a curated non-redundant sequence database of genomes, transcripts and proteins",0.22564759952892677
 Making a “Completely Blind” Image Quality Analyzer,0.22437500000000005
-KEGG for representation and analysis of molecular networks involving diseases and drugs,0.22403816933492274
-The GeneCards Suite: From Gene Data Mining to Disease Genome Sequence Analyses,0.22388573868856704
-"TRANSFAC®: transcriptional regulation, from patterns to profiles",0.2220335211985718
-"The CMU Pose, Illumination, and Expression (PIE) database",0.22172925908974547
-CURE: an efficient clustering algorithm for large databases,0.2211346922743056
-The UCSC Table Browser data retrieval tool,0.22100018322016343
-Distinctive Image Features from Scale-Invariant Keypoints,0.22052343750000003
-Distinctive Image Features from Scale-Invariant Keypoints,0.22052343750000003
-Naïve Bayesian Classifier for Rapid Assignment of rRNA Sequences into the New Bacterial Taxonomy,0.21977083333333336
-Biopython: freely available Python tools for computational molecular biology and bioinformatics,0.21954433311156688
-From genomics to chemical genomics: new developments in KEGG,0.21890268017717826
-Protein homology detection by HMM?CHMM comparison,0.21873701099537043
-Risk Factors Associated with Acute Pyelonephritis in Healthy Women,0.21869210069444447
-The carbohydrate-active enzymes database (CAZy) in 2013,0.21847132667824076
-The COG database: an updated version includes eukaryotes,0.21459998852237658
-Mass-spectrometry-based draft of the human proteome,0.21400238817850237
+Single image super-resolution from transformed self-exemplars,0.22437500000000005
+NCBI GEO: archive for functional genomics data sets—update,0.22437500000000005
+GENEVESTIGATOR. Arabidopsis Microarray Database and Analysis Toolbox1[w],0.22437500000000005
+DrugBank: a comprehensive resource for in silico drug discovery and exploration,0.22252764383163165
+The carbohydrate-active enzymes database (CAZy) in 2013,0.22131713516746415
+An efficient algorithm for large-scale detection of protein families.,0.21886779306220097
+The COG database: an updated version includes eukaryotes,0.21853125
+Phytozome: a comparative platform for green plant genomics,0.2184079640183342
+The Universal Protein Resource (UniProt),0.21753657286808614
+Molecular signatures database (MSigDB) 3.0,0.21587500000000004
+MEGA4: Molecular Evolutionary Genetics Analysis (MEGA) software version 4.0.,0.2151759868421053
+Robust Face Recognition via Sparse Representation,0.21460000000000004
+CURE: an efficient clustering algorithm for large databases,0.21375000000000002
 WordNet: A Lexical Database for English,0.21375000000000002
-Cochrane handbook for systematic reviews of interventions. Version 5.1.0 [updated March 2011]. The Cochrane Collaboration,0.21375000000000002
 Book Reviews: WordNet: An Electronic Lexical Database,0.21375000000000002
-R-trees: a dynamic index structure for spatial searching,0.21375000000000002
-Heart Disease and Stroke Statistics—2015 Update: A Report From the American Heart Association,0.21375000000000002
+MutationTaster evaluates disease-causing potential of sequence alterations,0.21375000000000002
+Beyond Bags of Features: Spatial Pyramid Matching for Recognizing Natural Scene Categories,0.21375000000000002
+MEME Suite: tools for motif discovery and searching,0.21375000000000002
 Trends in the exchange current for hydrogen evolution,0.21375000000000002
-"Climate change 2007: Impacts, Adaptation and Vulnerability. Contribution of Working Group II to the Fourth Assessment Report of the Intergovernmental Panel on Climate Change. Summary for Policymakers.",0.21375000000000002
-Guidelines for snowballing in systematic literature studies and a replication in software engineering,0.21375000000000002
-"Fab: content-based, collaborative recommendation",0.21375000000000002
-"The NHGRI-EBI GWAS Catalog of published genome-wide association studies, targeted arrays and summary statistics 2019",0.21375000000000002
-The Human Connectome: A Structural Description of the Human Brain,0.21375000000000002
 Distant supervision for relation extraction without labeled data,0.21375000000000002
-Effects of computerized clinical decision support systems on practitioner performance and patient outcomes: a systematic review.,0.21375000000000002
-Mining the network value of customers,0.21375000000000002
 "Global fire emissions and the contribution of deforestation, savanna, forest, agricultural, and peat fires (1997-2009)",0.21375000000000002
-Nextflow enables reproducible computational workflows,0.21375000000000002
-Access path selection in a relational database management system,0.21375000000000002
-Soil organic carbon pools in the northern circumpolar permafrost region,0.21375000000000002
-GeSeq – versatile and accurate annotation of organelle genomes,0.21375000000000002
-Soil carbon stocks and land use change: a meta analysis,0.21375000000000002
-"Development and validation of a global database of lakes, reservoirs and wetlands",0.21375000000000002
-Pig latin: a not-so-foreign language for data processing,0.21375000000000002
-Economic Costs of Diabetes in the U.S. in 2017,0.21375000000000002
-A probabilistic atlas and reference system for the human brain: International Consortium for Brain Mapping (ICBM).,0.21375000000000002
-BindingDB: a web-accessible database of experimentally determined protein–ligand binding affinities,0.21375000000000002
-Development of a 2001 National land-cover database for the United States,0.21375000000000002
-An automated method for finding molecular complexes in large protein interaction networks,0.21344504125477884
-Face recognition by elastic bunch graph matching,0.21328662858455985
-Galaxy: a platform for interactive large-scale genome analysis.,0.2130700228834516
-admetSAR: A Comprehensive Source and Free Tool for Assessment of Chemical ADMET Properties,0.21208936327347458
-Learning to predict where humans look,0.21191660644531254
-ExPASy: the proteomics server for in-depth protein knowledge and analysis,0.21168221861994183
-Efficient Similarity Search In Sequence Databases,0.21062890625000003
-Fast Algorithms for Mining Association Rules in Large Databases,0.21018675130208336
-"Greengenes, a Chimera-Checked 16S rRNA Gene Database and Workbench Compatible with ARB",0.20935556722608029
-Mining Sequential Patterns: Generalizations and Performance Improvements,0.20912809352000436
-The ChEMBL database in 2017,0.20906657289473546
-How iris recognition works,0.20849139450641213
-SILVA: a comprehensive online resource for quality checked and aligned ribosomal RNA sequence data compatible with ARB,0.20786624804843695
-NCBI GEO: archive for functional genomics data sets—update,0.20737500000000003
-GENEVESTIGATOR. Arabidopsis Microarray Database and Analysis Toolbox1[w],0.20737500000000003
-Robust Face Recognition via Sparse Representation,0.20688713541666667
-Mining sequential patterns,0.20658999690345192
-"antiSMASH: rapid identification, annotation and analysis of secondary metabolite biosynthesis gene clusters in bacterial and fungal genome sequences",0.20581809909425638
-The SWISS-PROT protein knowledgebase and its supplement TrEMBL in 2003,0.20550484787681256
-BioGRID: a general repository for interaction datasets,0.20525000000000004
-Genomics of Drug Sensitivity in Cancer (GDSC): a resource for therapeutic biomarker discovery in cancer cells,0.2045416666666667
-The Proteomics Identifications (PRIDE) database and associated tools: status in 2013,0.2045416666666667
-CellPhoneDB: inferring cell–cell communication from combined expression of multi-subunit ligand–receptor complexes,0.20367004125477886
-Similarity Search in High Dimensions via Hashing,0.20271993847656253
-The FERET database and evaluation procedure for face-recognition algorithms,0.20260425908974547
-Mining Association Rules between Sets of Items in Large Databases,0.20159765625000003
-VisualSEEk: a fully automated content-based image query system,0.19943613281250003
-EzTaxon: a web-based tool for the identification of prokaryotes based on 16S ribosomal RNA gene sequences.,0.19872810281635805
-"AAA+: A class of chaperone-like ATPases associated with the assembly, operation, and disassembly of protein complexes.",0.19872810281635805
-Fast Algorithms for Mining Association Rules,0.1982135301106771
-WebGestalt 2019: gene set analysis toolkit with revamped UIs and APIs,0.19791675739653652
-Eigenfaces vs. Fisherfaces: Recognition Using Class Specific Linear Projection,0.19733437500000003
-KEGG: integrating viruses and cellular organisms,0.19578409090909094
-Argonaute—a database for gene regulation by mammalian microRNAs,0.19554937500000003
-"Repbase Update, a database of eukaryotic repetitive elements",0.1955001832201634
-Formal Ontology and Information Systems,0.19542187500000002
-MEGA4: Molecular Evolutionary Genetics Analysis (MEGA) software version 4.0.,0.19387503568672843
-InterProScan: protein domains identifier,0.19348395249204287
-ONCOMINE: a cancer microarray database and integrated data-mining platform.,0.1934659090909091
-A metric for distributions with applications to image databases,0.19311849121093755
-A method and server for predicting damaging missense mutations,0.19250000000000003
-The behaviour change wheel: A new method for characterising and designing behaviour change interventions,0.19250000000000003
-Beyond Bags of Features: Spatial Pyramid Matching for Recognizing Natural Scene Categories,0.19250000000000003
-Gene Selection for Cancer Classification using Support Vector Machines,0.19250000000000003
-"PlantCARE, a database of plant cis-acting regulatory elements and a portal to tools for in silico analysis of promoter sequences",0.19250000000000003
+"Climate change 2007: Impacts, Adaptation and Vulnerability. Contribution of Working Group II to the Fourth Assessment Report of the Intergovernmental Panel on Climate Change. Summary for Policymakers.",0.21375000000000002
+KEGG for linking genomes to life and the environment,0.21151116466672018
+Calibrating Noise to Sensitivity in Private Data Analysis,0.2093023097089524
+Differential Privacy,0.2093023097089524
+Strengthening the Reporting of Observational Studies in Epidemiology (STROBE): Explanation and Elaboration,0.20153125000000002
+Evaluating non-randomised intervention studies.,0.20153125000000002
+ANNOVAR: functional annotation of genetic variants from high-throughput sequencing data,0.19795010205321903
+Mapping identifiers for the integration of genomic datasets with the R/Bioconductor package biomaRt,0.19795010205321903
+UniProt: the Universal Protein knowledgebase,0.19664323505166617
+The Pfam protein families database,0.19585526315789475
+CDD: NCBI's conserved domain database,0.19553963662903667
+ONCOMINE: a cancer microarray database and integrated data-mining platform.,0.19462500000000002
+Functional cartography of complex metabolic networks,0.19462500000000002
+A Kernel Two-Sample Test,0.19250000000000003
+An Introduction to Variational Methods for Graphical Models,0.19250000000000003
+Eigenfaces vs. Fisherfaces: Recognition Using Class Specific Linear Projection,0.19250000000000003
 Large-scale analysis of the yeast proteome by multidimensional protein identification technology,0.19250000000000003
+SIMPLIcity: Semantics-Sensitive Integrated Matching for Picture LIbraries,0.19250000000000003
 "A new local density functional for main-group thermochemistry, transition metal bonding, thermochemical kinetics, and noncovalent interactions.",0.19250000000000003
-The prevalence of comorbid depression in adults with diabetes: a meta-analysis.,0.19250000000000003
-Markov logic networks,0.19250000000000003
-Clinical practice guidelines we can trust,0.19250000000000003
-COSMIC: mining complete cancer genomes in the Catalogue of Somatic Mutations in Cancer,0.19250000000000003
-The well-founded semantics for general logic programs,0.19250000000000003
-The Database of Interacting Proteins: 2004 update,0.19250000000000003
-Association of health literacy with diabetes outcomes.,0.19250000000000003
-"TP53 mutations in human cancers: origins, consequences, and clinical use.",0.19250000000000003
-Association of Depression and Diabetes Complications: A Meta-Analysis,0.19250000000000003
-Is Volume Related to Outcome in Health Care? A Systematic Review and Methodologic Critique of the Literature,0.19250000000000003
-"Overview of the SEER-Medicare Data: Content, Research Applications, and Generalizability to the United States Elderly Population",0.19250000000000003
-The effectiveness of M-health technologies for improving health and health services: a systematic review protocol,0.19250000000000003
-"Updated Guidelines 2008 for the Diagnosis, Surveillance and Therapy of Barrett's Esophagus",0.19250000000000003
-"The Comparative RNA Web (CRW) Site: an online database of comparative sequence and structure information for ribosomal, intron, and other RNAs",0.19250000000000003
-The MIntAct project—IntAct as a common curation platform for 11 molecular interaction databases,0.19250000000000003
-The Universal Protein Resource (UniProt),0.19240248932060994
-KEGG for linking genomes to life and the environment,0.1919241363289141
-CDD: NCBI's conserved domain database,0.1915382536390381
-Face recognition by independent component analysis,0.19145225358455983
-MutationTaster evaluates disease-causing potential of sequence alterations,0.19090625
-Human Gene Mutation Database (HGMD®): 2003 update,0.1908916514903122
-DrugBank: a comprehensive resource for in silico drug discovery and exploration,0.1900506143734921
-The Pfam protein families database,0.18885306712962965
-One-shot learning of object categories,0.18864843750000002
-UCHIME improves sensitivity and speed of chimera detection,0.18794610735608192
-Functional cartography of complex metabolic networks,0.1870909090909091
-The COG database: new developments in phylogenetic classification of proteins from complete genomes,0.18672806712962967
-"Generation and initial analysis of more than 15,000 full-length human and mouse cDNA sequences",0.18438658832820146
-The Bioperl toolkit: Perl modules for the life sciences.,0.18438658832820146
-The Arabidopsis Information Resource (TAIR): improved gene annotation and new tools,0.18390955868417247
-ARB: a software environment for sequence data.,0.18212390046296298
-FSIM: A Feature Similarity Index for Image Quality Assessment,0.181875
-The Extended Cohn-Kanade Dataset (CK+): A complete dataset for action unit and emotion-specified expression,0.181875
+Face recognition: a convolutional neural-network approach,0.19250000000000003
+A Database and Evaluation Methodology for Optical Flow,0.19250000000000003
+ChEMBL: a large-scale bioactivity database for drug discovery,0.19041733637103203
+An automated method for finding molecular complexes in large protein interaction networks,0.18797250146157254
+Fast Algorithms for Mining Association Rules,0.1860870535714286
+UCHIME improves sensitivity and speed of chimera detection,0.18452657460056393
+Biopython: freely available Python tools for computational molecular biology and bioinformatics,0.18398227899909575
+Scalable Recognition with a Vocabulary Tree,0.181875
+Histograms of oriented gradients for human detection,0.181875
 Image Quality Metrics: PSNR vs. SSIM,0.181875
-Recognizing Action Units for Facial Expression Analysis,0.181875
-eBURST: Inferring Patterns of Evolutionary Descent among Clusters of Related Bacterial Genotypes from Multilocus Sequence Typing Data,0.181875
-Reticular chemistry: occurrence and taxonomy of nets and grammar for the design of frameworks.,0.181875
-An Affine Invariant Interest Point Detector,0.181875
-Scansite 2.0: proteome-wide prediction of cell signaling interactions using short sequence motifs,0.18163799334490743
-Histograms of oriented gradients for human detection,0.1812408203125
-Scalable Recognition with a Vocabulary Tree,0.1812408203125
-Fisher Kernels on Visual Vocabularies for Image Categorization,0.1812408203125
-Towards a knowledge-based Human Protein Atlas,0.18118776137015755
-"QBIC project: querying images by content, using color, texture, and shape",0.18028125
-UniProt: the Universal Protein knowledgebase,0.17967547816855295
-METLIN: A Metabolite Mass Spectral Database,0.1795335211985718
-Evolving gene/transcript definitions significantly alter the interpretation of GeneChip data,0.1795335211985718
-An Efficient Algorithm for Mining Association Rules in Large Databases,0.17696353011067711
-The gut microbiota as an environmental factor that regulates fat storage.,0.17696120467938295
-JASPAR: an open-access database for eukaryotic transcription factor binding profiles,0.17696120467938295
-Profile hidden Markov models,0.17610306712962964
-Major Facilitator Superfamily,0.17550000000000002
-RNAmmer: consistent and rapid annotation of ribosomal RNA genes,0.1713839438657408
-bold: The Barcode of Life Data System (http://www.barcodinglife.org),0.1713839438657408
-BLAST+: architecture and applications,0.1713062055121528
-Fast and accurate long-read alignment with Burrows–Wheeler transform,0.1713062055121528
-Primer-BLAST: A tool to design target-specific primers for polymerase chain reaction,0.1713062055121528
-BLAST: at the core of a powerful and diverse set of sequence analysis tools,0.1713062055121528
-Mining association rules between sets of items in large databases,0.17125
-An Introduction to Variational Methods for Graphical Models,0.17125
-The earth is round (p < .05),0.17125
-"Associations of Depression With C-Reactive Protein, IL-1, and IL-6: A Meta-Analysis",0.17125
-Sex differences in aggression between heterosexual partners: a meta-analytic review.,0.17125
-A Kernel Method for the Two-Sample-Problem,0.17125
-"Genome analysis of multiple pathogenic isolates of Streptococcus agalactiae: implications for the microbial ""pan-genome"".",0.17125
-Correlation-based Feature Selection for Discrete and Numeric Class Machine Learning,0.17125
-Sequence analysis of the genome of the unicellular cyanobacterium Synechocystis sp. strain PCC6803. II. Sequence determination of the entire genome and assignment of potential protein-coding regions (supplement).,0.17125
-Scaling Up the Accuracy of Naive-Bayes Classifiers: A Decision-Tree Hybrid,0.17125
-Improved splice site detection in Genie,0.17125
-Predisplacement and postdisplacement factors associated with mental health of refugees and internally displaced persons: a meta-analysis.,0.17125
-Mash: fast genome and metagenome distance estimation using MinHash,0.17094504125477883
-"A Transcriptome Database for Astrocytes, Neurons, and Oligodendrocytes: A New Resource for Understanding Brain Development and Function",0.1706741363289141
-Query by Image and Video Content: The QBIC System,0.16915488281250002
-Texture Features for Browsing and Retrieval of Image Data,0.16915488281250002
-Optimal aggregation algorithms for middleware,0.16915488281250002
-Mass spectrometry-based metabolomics.,0.16907542909446005
-MAKER: an easy-to-use annotation pipeline designed for emerging model organism genomes.,0.16888799334490742
-Individual recognition using gait energy image,0.16863713541666667
-Neighborhood preserving embedding,0.16863713541666667
-JSpeciesWS: a web server for prokaryotic species circumscription based on pairwise genome comparison,0.16820128433566625
-Twilight zone of protein sequence alignments.,0.16760306712962963
-"Pfam: clans, web tools and services",0.1673014865062783
-"Generation and analysis of a 29,745 unique Expressed Sequence Tags from the Pacific oyster (Crassostrea gigas) assembled into a publicly accessible database: the GigasDatabase",0.16645313838252315
-TIGR Gene Indices clustering tools (TGICL): a software system for fast clustering of large EST datasets,0.16645313838252315
-A Density-Based Algorithm for Discovering Clusters in Large Spatial Databases with Noise,0.16502588975694446
-BIRCH: an efficient data clustering method for very large databases,0.16502588975694446
-"Bias in meta-analysis detected by a simple, graphical test",0.16416666666666668
-Aspirin for the Primary Prevention of Cardiovascular Events in Women and Men: A Sex-Specific Meta-Analysis of Randomized Controlled Trials,0.16416666666666668
-Reliability of the PEDro scale for rating quality of randomized controlled trials.,0.16416666666666668
-The Revised CONSORT Statement for Reporting Randomized Trials: Explanation and Elaboration,0.16416666666666668
-Effectiveness of self-management training in type 2 diabetes: a systematic review of randomized controlled trials.,0.16416666666666668
-Motivational interviewing: a systematic review and meta-analysis.,0.16416666666666668
-Empirical evidence of design-related bias in studies of diagnostic tests.,0.16416666666666668
-"On the frequency of protein glycosylation, as deduced from analysis of the SWISS-PROT database.",0.16416666666666668
-Protein identification and analysis tools in the ExPASy server.,0.16275000000000003
-Human and machine recognition of faces: a survey,0.16275000000000003
-Using Discriminant Eigenfeatures for Image Retrieval,0.16275000000000003
-Cd-hit: a fast program for clustering and comparing large sets of protein or nucleotide sequences,0.16272701115205707
-"Overweight, obesity, and depression: a systematic review and meta-analysis of longitudinal studies.",0.16162847222222224
-Cognitive and behavioral outcomes of school-aged children who were born preterm: a meta-analysis.,0.16162847222222224
-The global prevalence of common mental disorders: a systematic review and meta-analysis 1980-2013.,0.16162847222222224
-"Sedentary Time and Its Association With Risk for Disease Incidence, Mortality, and Hospitalization in Adults",0.16162847222222224
-Mortality prediction with a single general self-rated health question,0.16162847222222224
-Comparison of mortality associated with methicillin-resistant and methicillin-susceptible Staphylococcus aureus bacteremia: a meta-analysis.,0.16162847222222224
-Systematic meta-analyses of Alzheimer disease genetic association studies: the AlzGene database,0.16162847222222224
-"Delirium in elderly patients and the risk of postdischarge mortality, institutionalization, and dementia: a meta-analysis.",0.16162847222222224
-"DAVID: Database for Annotation, Visualization, and Integrated Discovery",0.16159090909090912
-The KEGG resource for deciphering the genome,0.16159090909090912
-Toward understanding the origin and evolution of cellular organisms,0.16159090909090912
-MAFFT version 5: improvement in accuracy of multiple sequence alignment,0.1595743938078704
-InterProScan - an integration platform for the signature-recognition methods in InterPro,0.1595743938078704
-Fast and SNP-tolerant detection of complex variants and splicing in short reads,0.1591071428571429
-BioMart and Bioconductor: a powerful link between biological databases and microarray data analysis,0.1591071428571429
-COSMIC: somatic cancer genetics at high-resolution,0.1591071428571429
-Efficient and Effective Clustering Methods for Spatial Data Mining,0.15909765625000002
-MEGA3: Integrated software for Molecular Evolutionary Genetics Analysis and sequence alignment,0.15485306712962965
-A Greedy Algorithm for Aligning DNA Sequences,0.15485306712962965
-The evolutionary fate and consequences of duplicate genes.,0.15485306712962965
-"SMART, a simple modular architecture research tool: identification of signaling domains.",0.15485306712962965
-Exploiting EST databases for the development and characterization of gene-derived SSR-markers in barley (Hordeum vulgare L.),0.15485306712962965
-"BLAST 2 Sequences, a new tool for comparing protein and nucleotide sequences.",0.15485306712962965
+FSIM: A Feature Similarity Index for Image Quality Assessment,0.181875
+"Bias in meta-analysis detected by a simple, graphical test",0.181875
+The earth is round (p < .05),0.181875
+"Associations of Depression With C-Reactive Protein, IL-1, and IL-6: A Meta-Analysis",0.181875
+Aspirin for the Primary Prevention of Cardiovascular Events in Women and Men: A Sex-Specific Meta-Analysis of Randomized Controlled Trials,0.181875
+The Revised CONSORT Statement for Reporting Randomized Trials: Explanation and Elaboration,0.181875
+Reliability of the PEDro scale for rating quality of randomized controlled trials.,0.181875
+"A Transcriptome Database for Astrocytes, Neurons, and Oligodendrocytes: A New Resource for Understanding Brain Development and Function",0.17963616466672017
+The Pfam protein families database: towards a more sustainable future,0.1791366840396446
+RNAmmer: consistent and rapid annotation of ribosomal RNA genes,0.17607039473684213
+bold: The Barcode of Life Data System (http://www.barcodinglife.org),0.17607039473684213
+BLAST+: architecture and applications,0.1750805921052632
+Primer-BLAST: A tool to design target-specific primers for polymerase chain reaction,0.1750805921052632
+Fast and accurate long-read alignment with Burrows–Wheeler transform,0.1750805921052632
+"Generation and analysis of a 29,745 unique Expressed Sequence Tags from the Pacific oyster (Crassostrea gigas) assembled into a publicly accessible database: the GigasDatabase",0.17172532894736844
+Cd-hit: a fast program for clustering and comparing large sets of protein or nucleotide sequences,0.17089333781642002
+2016 update of the PRIDE database and its related tools,0.16821428571428573
+Fast Algorithms for Mining Association Rules in Large Databases,0.16593750000000002
+"DAVID: Database for Annotation, Visualization, and Integrated Discovery",0.16275000000000003
+Toward understanding the origin and evolution of cellular organisms,0.16275000000000003
+The KEGG resource for deciphering the genome,0.16275000000000003
+InterProScan - an integration platform for the signature-recognition methods in InterPro,0.1609223983253589
+MAFFT version 5: improvement in accuracy of multiple sequence alignment,0.1609223983253589
+"SMART, a simple modular architecture research tool: identification of signaling domains.",0.15335526315789477
+ARB: a software environment for sequence data.,0.15335526315789477
+MEGA3: Integrated software for Molecular Evolutionary Genetics Analysis and sequence alignment,0.15335526315789477
+Profile hidden Markov models,0.15335526315789477
+A Greedy Algorithm for Aligning DNA Sequences,0.15335526315789477
+The evolutionary fate and consequences of duplicate genes.,0.15335526315789477
+Gapped BLAST and PSI-BLAST: a new generation of protein database search programs.,0.15000000000000002
 Self-Efficacy: The Exercise of Control,0.15000000000000002
+Argonaute—a database for gene regulation by mammalian microRNAs,0.15000000000000002
+Distinctive Image Features from Scale-Invariant Keypoints,0.15000000000000002
 Image quality assessment: from error visibility to structural similarity,0.15000000000000002
 "MEGA5: molecular evolutionary genetics analysis using maximum likelihood, evolutionary distance, and maximum parsimony methods.",0.15000000000000002
 Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles,0.15000000000000002
+A Density-Based Algorithm for Discovering Clusters in Large Spatial Databases with Noise,0.15000000000000002
 KEGG: Kyoto Encyclopedia of Genes and Genomes,0.15000000000000002
+Naïve Bayesian Classifier for Rapid Assignment of rRNA Sequences into the New Bacterial Taxonomy,0.15000000000000002
 KEGG: Kyoto Encyclopedia of Genes and Genomes,0.15000000000000002
+Cochrane handbook for systematic reviews of interventions. Version 5.1.0 [updated March 2011]. The Cochrane Collaboration,0.15000000000000002
+Mining association rules between sets of items in large databases,0.15000000000000002
 The NCEP/NCAR 40-Year Reanalysis Project,0.15000000000000002
 UCI Repository of machine learning databases,0.15000000000000002
 Cochrane Handbook for Systematic Reviews of Interventions Edited by Julian P. T. Higgins &,0.15000000000000002
@@ -529,23 +256,28 @@ Cochrane Handbook for Systematic Reviews of Interventions Edited by Julian P. T.
 Binary alloy phase diagrams,0.15000000000000002
 Developing a New Definition and Assessing New Clinical Criteria for Septic Shock: For the Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3).,0.15000000000000002
 Comparative protein modelling by satisfaction of spatial restraints.,0.15000000000000002
+A method and server for predicting damaging missense mutations,0.15000000000000002
 Gene Expression Omnibus: NCBI gene expression and hybridization array data repository,0.15000000000000002
+Tissue-based map of the human proteome,0.15000000000000002
 SWISS‐MODEL and the Swiss‐Pdb Viewer: An environment for comparative protein modeling,0.15000000000000002
 Adapting a clinical comorbidity index for use with ICD-9-CM administrative databases.,0.15000000000000002
 Recommendations for cardiac chamber quantification by echocardiography in adults: an update from the American Society of Echocardiography and the European Association of Cardiovascular Imaging.,0.15000000000000002
 Social Research Methods: Qualitative and Quantitative Approaches,0.15000000000000002
 The human genome browser at UCSC.,0.15000000000000002
+Protein identification and analysis tools in the ExPASy server.,0.15000000000000002
 How to Do Things With Words,0.15000000000000002
 The Cambridge Structural Database: a quarter of a million crystal structures and rising.,0.15000000000000002
 Origin of the Overpotential for Oxygen Reduction at a Fuel-Cell Cathode.,0.15000000000000002
 Qualitative research for education: An introduction to theories and methods,0.15000000000000002
 Bidirectional recurrent neural networks,0.15000000000000002
+R-trees: a dynamic index structure for spatial searching,0.15000000000000002
 A fast quantum mechanical algorithm for database search,0.15000000000000002
 The file drawer problem and tolerance for null results,0.15000000000000002
 PatMaN: rapid alignment of short sequences to large databases,0.15000000000000002
 Distributed hierarchical processing in the primate cerebral cortex.,0.15000000000000002
 A database of human segmented natural images and its application to evaluating segmentation algorithms and measuring ecological statistics,0.15000000000000002
 Probability‐based protein identification by searching sequence databases using mass spectrometry data,0.15000000000000002
+The HITRAN 2008 molecular spectroscopic database,0.15000000000000002
 "Avogadro: an advanced semantic chemical editor, visualization, and analysis platform",0.15000000000000002
 The Genotype-Tissue Expression (GTEx) project,0.15000000000000002
 Mercury CSD 2.0 – new features for the visualization and investigation of crystal structures,0.15000000000000002
@@ -554,8 +286,8 @@ A Real-Time QRS Detection Algorithm,0.15000000000000002
 Bond‐valence parameters obtained from a systematic analysis of the Inorganic Crystal Structure Database,0.15000000000000002
 Circulating MicroRNAs as a Novel Class of Diagnostic Biomarkers in Gastrointestinal Tumors Detection: A Meta-Analysis Based on 42 Articles,0.15000000000000002
 The On-Line Encyclopedia of Integer Sequences,0.15000000000000002
-"The mutational constraint spectrum quantified from variation in 141,456 humans",0.15000000000000002
 Interventions for latent autoimmune diabetes (LADA) in adults.,0.15000000000000002
+"The mutational constraint spectrum quantified from variation in 141,456 humans",0.15000000000000002
 "MIMIC-III, a freely accessible critical care database",0.15000000000000002
 dbSNP: the NCBI database of genetic variation,0.15000000000000002
 Global trends in emerging infectious diseases,0.15000000000000002
@@ -563,6 +295,7 @@ The mnist database of handwritten digits,0.15000000000000002
 Why don't physicians follow clinical practice guidelines? A framework for improvement.,0.15000000000000002
 SCOP: a structural classification of proteins database for the investigation of sequences and structures.,0.15000000000000002
 Research Methods in Anthropology: Qualitative and Quantitative Approaches,0.15000000000000002
+Heart Disease and Stroke Statistics—2015 Update: A Report From the American Heart Association,0.15000000000000002
 A Design Science Research Methodology for Information Systems Research,0.15000000000000002
 An approach to correlate tandem mass spectral data of peptides with amino acid sequences in a protein database,0.15000000000000002
 Object-Oriented Modeling and Design,0.15000000000000002
@@ -573,13 +306,16 @@ Fast Training of Support Vector Machines using Sequential Minimal Optimization,0
 Empirical Analysis of Predictive Algorithms for Collaborative Filtering,0.15000000000000002
 A robust and high-throughput Cre reporting and characterization system for the whole mouse brain,0.15000000000000002
 Whole-genome random sequencing and assembly of Haemophilus influenzae Rd.,0.15000000000000002
+The gut microbiota as an environmental factor that regulates fat storage.,0.15000000000000002
 Foundations of Logic Programming,0.15000000000000002
+Gene Selection for Cancer Classification using Support Vector Machines,0.15000000000000002
 "Glide: a new approach for rapid, accurate docking and scoring. 2. Enrichment factors in database screening.",0.15000000000000002
 Introduction to WordNet: An On-line Lexical Database,0.15000000000000002
 Greengenes: Chimera-checked 16S rRNA gene database and workbench compatible in ARB,0.15000000000000002
 From Data Mining to Knowledge Discovery in Databases,0.15000000000000002
 Improved adsorption energetics within density-functional theory using revised Perdew-Burke-Ernzerhof functionals,0.15000000000000002
 Image Denoising Via Sparse and Redundant Representations Over Learned Dictionaries,0.15000000000000002
+BIRCH: an efficient data clustering method for very large databases,0.15000000000000002
 Rough Sets,0.15000000000000002
 THE MATHEMATICAL THEORY OF SAVING,0.15000000000000002
 Freebase: a collaboratively created graph database for structuring human knowledge,0.15000000000000002
@@ -601,6 +337,7 @@ A retrospective cohort study,0.15000000000000002
 The CHILDES project: tools for analyzing talk,0.15000000000000002
 Empirical statistical model to estimate the accuracy of peptide identifications made by MS/MS and database search.,0.15000000000000002
 Single cell gel/comet assay: Guidelines for in vitro and in vivo genetic toxicology testing,0.15000000000000002
+"miRBase: microRNA sequences, targets and gene nomenclature",0.15000000000000002
 Revisions in the International System for Staging Lung Cancer.,0.15000000000000002
 THE VERTICAL DISTRIBUTION OF SOIL ORGANIC CARBON AND ITS RELATION TO CLIMATE AND VEGETATION,0.15000000000000002
 Phylogeny.fr: robust phylogenetic analysis for the non-specialist,0.15000000000000002
@@ -611,12 +348,16 @@ N4ITK: Improved N3 Bias Correction,0.15000000000000002
 Foundations of Databases,0.15000000000000002
 "publCIF: software for editing, validating and formatting crystallographic information files",0.15000000000000002
 "Aid, Policies, and Growth",0.15000000000000002
+Final version of 2009 AJCC melanoma staging and classification.,0.15000000000000002
 "Clinical predictors of mortality due to COVID-19 based on an analysis of data of 150 patients from Wuhan, China",0.15000000000000002
+Distinctive Image Features from Scale-Invariant Keypoints,0.15000000000000002
 Fundamentals of Database Systems,0.15000000000000002
 External review and validation of the Swedish national inpatient register,0.15000000000000002
 "Interpretation of Infrared Spectra, A Practical Approach",0.15000000000000002
 PRODRG: a tool for high-throughput crystallography of protein-ligand complexes.,0.15000000000000002
 Decision aids for people facing health treatment or screening decisions.,0.15000000000000002
+Query by Image and Video Content: The QBIC System,0.15000000000000002
+Texture Features for Browsing and Retrieval of Image Data,0.15000000000000002
 The MNIST Database of Handwritten Digit Images for Machine Learning Research [Best of the Web],0.15000000000000002
 Gene Ontology Consortium: The Gene Ontology (GO) database and informatics resource,0.15000000000000002
 Genomic and epigenomic landscapes of adult de novo acute myeloid leukemia.,0.15000000000000002
@@ -629,11 +370,13 @@ Recognizing human actions: a local SVM approach,0.15000000000000002
 Protocols for secure computations,0.15000000000000002
 The AR face database,0.15000000000000002
 Global patterns and trends in colorectal cancer incidence and mortality,0.15000000000000002
+The prevalence of comorbid depression in adults with diabetes: a meta-analysis.,0.15000000000000002
 The COG database: a tool for genome-scale analysis of protein functions and evolution,0.15000000000000002
 Estimating the world cancer burden: Globocan 2000,0.15000000000000002
 Rough sets,0.15000000000000002
 Effective physician-patient communication and health outcomes: a review.,0.15000000000000002
 Multilocus sequence typing: a portable approach to the identification of clones within populations of pathogenic microorganisms.,0.15000000000000002
+The GeneMANIA prediction server: biological network integration for gene prioritization and predicting gene function,0.15000000000000002
 Using Dynamic Time Warping to Find Patterns in Time Series,0.15000000000000002
 A systematic review and meta-analysis,0.15000000000000002
 A haplotype map of the human genome.,0.15000000000000002
@@ -641,6 +384,7 @@ Ridge-based vessel segmentation in color images of the retina,0.1500000000000000
 Quantum Mechanics Helps in Searching for a Needle in a Haystack,0.15000000000000002
 Expanded sequence dependence of thermodynamic parameters improves prediction of RNA secondary structure.,0.15000000000000002
 The impact of the MIT-BIH Arrhythmia Database,0.15000000000000002
+The Montreal Definition and Classification of Gastroesophageal Reflux Disease: A Global Evidence-Based Consensus,0.15000000000000002
 Dali server: conservation mapping in 3D,0.15000000000000002
 Narrative configuration in qualitative analysis,0.15000000000000002
 A critical account on π–π stacking in metal complexes with aromatic nitrogen-containing ligands,0.15000000000000002
@@ -654,8 +398,8 @@ Proposed modifications to the Duke criteria for the diagnosis of infective endoc
 DEAP: A Database for Emotion Analysis ;Using Physiological Signals,0.15000000000000002
 Transaction Processing: Concepts and Techniques,0.15000000000000002
 IEEE Transactions on Pattern Analysis and Machine Intelligence,0.15000000000000002
-A New Kind of Science,0.15000000000000002
 Adherence to Protease Inhibitor Therapy and Outcomes in Patients with HIV Infection,0.15000000000000002
+A New Kind of Science,0.15000000000000002
 "NIST Standard Reference Database 23: Reference Fluid Thermodynamic and Transport Properties-REFPROP, Version 8.0",0.15000000000000002
 Billion-Scale Similarity Search with GPUs,0.15000000000000002
 Automated Talairach Atlas labels for functional brain mapping,0.15000000000000002
@@ -670,10 +414,12 @@ A second-generation reactive empirical bond order (REBO) potential energy expres
 "Comparison of PubMed, Scopus, Web of Science, and Google Scholar: strengths and weaknesses",0.15000000000000002
 Robust text-independent speaker identification using Gaussian mixture speaker models,0.15000000000000002
 IEMOCAP: interactive emotional dyadic motion capture database,0.15000000000000002
+Guidelines for snowballing in systematic literature studies and a replication in software engineering,0.15000000000000002
 "Non-small cell lung cancer: epidemiology, risk factors, treatment, and survivorship.",0.15000000000000002
 Database,0.15000000000000002
 Interpreting patterns of gene expression with self-organizing maps: methods and application to hematopoietic differentiation.,0.15000000000000002
 Plant cis-acting regulatory DNA elements (PLACE) database: 1999,0.15000000000000002
+"The NHGRI-EBI GWAS Catalog of published genome-wide association studies, targeted arrays and summary statistics 2019",0.15000000000000002
 The Berkeley FrameNet Project,0.15000000000000002
 "Online Mendelian Inheritance in Man (OMIM), a knowledgebase of human genes and genetic disorders",0.15000000000000002
 "Clinical Practice Guidelines for the Management of Pain, Agitation, and Delirium in Adult Patients in the Intensive Care Unit",0.15000000000000002
@@ -683,11 +429,15 @@ ATM and ATR Substrate Analysis Reveals Extensive Protein Networks Responsive to 
 The relationship between quality of research and citation frequency,0.15000000000000002
 Nrlmsise-00 Empirical Model of the Atmosphere: Statistical Comparisons and Scientific Issues,0.15000000000000002
 Outpatient antibiotic use in Europe and association with resistance: a cross-national database study,0.15000000000000002
+"Repbase Update, a database of eukaryotic repetitive elements",0.15000000000000002
 "Design of Density Functionals by Combining the Method of Constraint Satisfaction with Parametrization for Thermochemistry, Thermochemical Kinetics, and Noncovalent Interactions.",0.15000000000000002
+One-shot learning of object categories,0.15000000000000002
 Global Prevalence of Chronic Kidney Disease – A Systematic Review and Meta-Analysis,0.15000000000000002
 Achieving integration in mixed methods designs-principles and practices.,0.15000000000000002
+Human and machine recognition of faces: a survey,0.15000000000000002
 Measuring mutual fund performance with characteristic-based benchmarks,0.15000000000000002
 Estimating Causal Effects from Large Data Sets Using Propensity Scores,0.15000000000000002
+Effects of computerized clinical decision support systems on practitioner performance and patient outcomes: a systematic review.,0.15000000000000002
 Hypertext: An Introduction and Survey,0.15000000000000002
 The growing burden of tuberculosis: global trends and interactions with the HIV epidemic.,0.15000000000000002
 Cassandra: a decentralized structured storage system,0.15000000000000002
@@ -707,30 +457,37 @@ Protein backbone angle restraints from searching a database for chemical shift a
 Data Mining And Knowledge Discovery Handbook,0.15000000000000002
 Comprehensive database for facial expression analysis,0.15000000000000002
 MatInd and MatInspector: new fast and versatile tools for detection of consensus matches in nucleotide sequence data.,0.15000000000000002
+Genomics of Drug Sensitivity in Cancer (GDSC): a resource for therapeutic biomarker discovery in cancer cells,0.15000000000000002
 A systematic review and metaanalysis,0.15000000000000002
 An overview of data warehousing and OLAP technology,0.15000000000000002
 OSPF Version 2,0.15000000000000002
+Towards a worldwide wood economics spectrum.,0.15000000000000002
 "ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization",0.15000000000000002
 Suicide prevention strategies: a systematic review.,0.15000000000000002
 A general empirical model of protein evolution derived from multiple protein families using a maximum-likelihood approach.,0.15000000000000002
+"The biodiversity of species and their rates of extinction, distribution, and protection",0.15000000000000002
 Epidemiology and outcome of zygomycosis: a review of 929 reported cases.,0.15000000000000002
 The Merck index,0.15000000000000002
 Mediators in the architecture of future information systems,0.15000000000000002
 Nextstrain: real-time tracking of pathogen evolution,0.15000000000000002
+Private information retrieval,0.15000000000000002
 Helicobacter pylori infection.,0.15000000000000002
-Revised international prognostic scoring system for myelodysplastic syndromes.,0.15000000000000002
 Announcing the worldwide Protein Data Bank,0.15000000000000002
+Revised international prognostic scoring system for myelodysplastic syndromes.,0.15000000000000002
 "A 5‐decade analysis of 13,715 carcinoid tumors",0.15000000000000002
 The biology of chemokines and their receptors.,0.15000000000000002
+Completion of the 2011 National Land Cover Database for the Conterminous United States – Representing a Decade of Land Cover Change Information,0.15000000000000002
 Response to neoadjuvant therapy and long-term survival in patients with triple-negative breast cancer.,0.15000000000000002
 Basis Set Exchange: A Community Database for Computational Sciences,0.15000000000000002
 "Fast, efficient generation of high‐quality atomic charges. AM1‐BCC model: II. Parameterization and validation",0.15000000000000002
+A standard procedure for creating a frailty index,0.15000000000000002
 Diagnosis and Treatment of Low Back Pain: A Joint Clinical Practice Guideline from the American College of Physicians and the American Pain Society,0.15000000000000002
 Doing Your Research Project: A Guide for First-time Researchers,0.15000000000000002
 Assessment of Global Incidence and Mortality of Hospital-treated Sepsis. Current Estimates and Limitations.,0.15000000000000002
 Biological control of insect pests by insect parasitoids and predators: the BIOCAT database.,0.15000000000000002
 Status and distribution of mangrove forests of the world using earth observation satellite data,0.15000000000000002
 The Skyline operator,0.15000000000000002
+Bank Regulation and Supervision: What Works Best?,0.15000000000000002
 Maximum likelihood linear regression for speaker adaptation of continuous density hidden Markov models,0.15000000000000002
 Tmbase-A database of membrane spanning protein segments,0.15000000000000002
 Development of a global land cover characteristics database and IGBP DISCover from 1 km AVHRR data,0.15000000000000002
@@ -742,260 +499,3 @@ Learning to Detect A Salient Object,0.15000000000000002
 Meta-Analysis: High-Dosage Vitamin E Supplementation May Increase All-Cause Mortality,0.15000000000000002
 Interventions for enhancing medication adherence.,0.15000000000000002
 Anti-TNF antibody therapy in rheumatoid arthritis and the risk of serious infections and malignancies: systematic review and meta-analysis of rare harmful effects in randomized controlled trials.,0.15000000000000002
-The CELEX Lexical Database (CD-ROM),0.15000000000000002
-INVERSE PROBLEMS NEWSLETTER,0.15000000000000002
-Methods of combining multiple classifiers and their applications to handwriting recognition,0.15000000000000002
-High expression of ACE2 receptor of 2019-nCoV on the epithelial cells of oral mucosa,0.15000000000000002
-"Using the Internet to Promote Health Behavior Change: A Systematic Review and Meta-analysis of the Impact of Theoretical Basis, Use of Behavior Change Techniques, and Mode of Delivery on Efficacy",0.15000000000000002
-High Resolution XPS of Organic Polymers: The Scienta ESCA300 Database,0.15000000000000002
-Accurate Bond and Angle Parameters for X-ray Protein Structure Refinement,0.15000000000000002
-SYFPEITHI: database for MHC ligands and peptide motifs,0.15000000000000002
-Conditional Image Generation with PixelCNN Decoders,0.15000000000000002
-The effect of malaria control on Plasmodium falciparum in Africa between 2000 and 2015,0.15000000000000002
-Speech Enhancement: Theory and Practice,0.15000000000000002
-Okapi at TREC-3,0.15000000000000002
-New Flora Of The British Isles,0.15000000000000002
-UniProt: A hub for protein information,0.15000000000000002
-Perceived barriers and facilitators to mental health help-seeking in young people: a systematic review,0.15000000000000002
-The Genomic Landscapes of Human Breast and Colorectal Cancers,0.15000000000000002
-Human non-synonymous SNPs: server and survey.,0.15000000000000002
-Global Prevalence of Helicobacter pylori Infection: Systematic Review and Meta-Analysis.,0.15000000000000002
-International evidence-based recommendations for point-of-care lung ultrasound,0.15000000000000002
-Virtual time,0.15000000000000002
-The Australia Telescope National Facility Pulsar Catalogue,0.15000000000000002
-Marketing for Hospitality and Tourism,0.15000000000000002
-Using Multivariate Statistics,0.15000000000000002
-New software for searching the Cambridge Structural Database and visualizing crystal structures.,0.15000000000000002
-"DICHROWEB, an online server for protein secondary structure analyses from circular dichroism spectroscopic data",0.15000000000000002
-"Cancer treatment and survivorship statistics, 2014",0.15000000000000002
-Columbia Object Image Library (COIL100),0.15000000000000002
-Quantum computing in molecular magnets,0.15000000000000002
-The language of new media,0.15000000000000002
-"Prognostic factors analysis of 17,600 melanoma patients: validation of the American Joint Committee on Cancer melanoma staging system.",0.15000000000000002
-Exact sequence variants should replace operational taxonomic units in marker-gene data analysis,0.15000000000000002
-Mortality rates in patients with anorexia nervosa and other eating disorders. A meta-analysis of 36 studies.,0.15000000000000002
-The Lung Image Database Consortium (LIDC) and Image Database Resource Initiative (IDRI): a completed reference database of lung nodules on CT scans.,0.15000000000000002
-Mining high-speed data streams,0.15000000000000002
-Metformin and reduced risk of cancer in diabetic patients,0.15000000000000002
-The Leiden/Argentine/Bonn (LAB) Survey of Galactic HI - Final data release of the combined LDS and IAR surveys with improved stray-radiation corrections,0.15000000000000002
-Pembrolizumab plus Axitinib versus Sunitinib for Advanced Renal‐Cell Carcinoma,0.15000000000000002
-2022 AHA/ACC/HFSA Guideline for the Management of Heart Failure: A Report of the American College of Cardiology/American Heart Association Joint Committee on Clinical Practice Guidelines.,0.15000000000000002
-A knowledge-based approach in designing combinatorial or medicinal chemistry libraries for drug discovery. 1. A qualitative and quantitative characterization of known drug databases.,0.15000000000000002
-The Sequence Read Archive,0.15000000000000002
-Simple Features for R: Standardized Support for Spatial Vector Data,0.15000000000000002
-ArnetMiner: extraction and mining of academic social networks,0.15000000000000002
-Network Applications of Bloom Filters: A Survey,0.15000000000000002
-Worldwide prevalence of anaemia 1993-2005: WHO global database on anaemia.,0.15000000000000002
-Agency Costs and Ownership Structure,0.15000000000000002
-Presentation and validation of the Radboud Faces Database,0.15000000000000002
-Accumulation of Deficits as a Proxy Measure of Aging,0.15000000000000002
-A review of the measurement of grip strength in clinical and epidemiological studies: towards a standardised approach.,0.15000000000000002
-"ARAGORN, a program to detect tRNA genes and tmRNA genes in nucleotide sequences.",0.15000000000000002
-View-based and modular eigenspaces for face recognition,0.15000000000000002
-Advances in Knowledge Discovery and Data Mining,0.15000000000000002
-An Illustrated User Guide to the World Input–Output Database: The Case of Global Automotive Production,0.15000000000000002
-A Database for Handwritten Text Recognition Research,0.15000000000000002
-The Neurology of Eye Movements,0.15000000000000002
-A New Database on Financial Development and Structure,0.15000000000000002
-Predictors of hospital mortality in the global registry of acute coronary events.,0.15000000000000002
-Fuzzy ARTMAP: A neural network architecture for incremental supervised learning of analog multidimensional maps,0.15000000000000002
-The FIRST Survey: Faint Images of the Radio Sky at twenty centimeters,0.15000000000000002
-Soil Water Characteristic Estimates by Texture and Organic Matter for Hydrologic Solutions,0.15000000000000002
-Music Received,0.15000000000000002
-Developing an adaptive model of thermal comfort and preference,0.15000000000000002
-Global epidemiology of psoriasis: a systematic review of incidence and prevalence.,0.15000000000000002
-Research Methods in Education: An Introduction,0.15000000000000002
-"The University of South Florida free association, rhyme, and word fragment norms",0.15000000000000002
-"YIN, a fundamental frequency estimator for speech and music.",0.15000000000000002
-UCI Repository of Machine Learning Databases,0.15000000000000002
-Financial and Legal Constraints to Growth: Does Firm Size Matter?,0.15000000000000002
-ISfinder: the reference centre for bacterial insertion sequences,0.15000000000000002
-Duplicate Record Detection: A Survey,0.15000000000000002
-Soil organic carbon sequestration rates by tillage and crop rotation : A global data analysis,0.15000000000000002
-A data-based approach to diet questionnaire design and testing.,0.15000000000000002
-The KDD process for extracting useful knowledge from volumes of data,0.15000000000000002
-Updated Opal Opacities,0.15000000000000002
-Ubiquitous B-Tree,0.15000000000000002
-Aphids on the World's Crops: An Identification and Information Guide,0.15000000000000002
-A database of German emotional speech,0.15000000000000002
-Results of a Prospective Study of Acute Liver Failure at 17 Tertiary Care Centers in the United States,0.15000000000000002
-Protein structure alignment by incremental combinatorial extension (CE) of the optimal path.,0.15000000000000002
-Petri Nets,0.15000000000000002
-Patterns of Enterprise Application Architecture,0.15000000000000002
-Claudin-1 and -2: Novel Integral Membrane Proteins Localizing at Tight Junctions with No Sequence Similarity to Occludin,0.15000000000000002
-"Book Reviews: Knowledge Representation: Logical, Philosophical, and Computational Foundations",0.15000000000000002
-Socioeconomic status and obesity.,0.15000000000000002
-The act of discovery.,0.15000000000000002
-Hidden Markov models in computational biology. Applications to protein modeling.,0.15000000000000002
-An Introduction to Database Systems,0.15000000000000002
-100 of the World’s Worst Invasive Alien Species: A Selection From The Global Invasive Species Database,0.15000000000000002
-Compilation of the Dielectric Properties of Body Tissues at RF and Microwave Frequencies.,0.15000000000000002
-100 of the world's worst invasive alien species. A selection from the global invasive species database,0.15000000000000002
-Individual- and organizational-level consequences of organizational citizenship behaviors: A meta-analysis.,0.15000000000000002
-Assessment for automatic speech recognition: II. NOISEX-92: A database and an experiment to study the effect of additive noise on speech recognition systems,0.15000000000000002
-The notions of consistency and predicate locks in a database system,0.15000000000000002
-Cloning of a new cytokine that induces IFN-γ production by T cells,0.15000000000000002
-The SWISS-PROT protein sequence data bank and its supplement TrEMBL,0.15000000000000002
-Exome sequencing identifies the cause of a Mendelian disorder,0.15000000000000002
-Continuity of care: a multidisciplinary review,0.15000000000000002
-The MetaCyc database of metabolic pathways and enzymes and the BioCyc collection of pathway/genome databases,0.15000000000000002
-FactSage thermochemical software and databases,0.15000000000000002
-Person re-identification by Local Maximal Occurrence representation and metric learning,0.15000000000000002
-"An epidemic, toxin gene-variant strain of Clostridium difficile.",0.15000000000000002
-Instance-Based Learning Algorithms,0.15000000000000002
-"A New Dimension of Health Care: Systematic Review of the Uses, Benefits, and Limitations of Social Media for Health Communication",0.15000000000000002
-"Fracture and Dislocation Classification Compendium - 2007 Orthopaedic Trauma Association Classification, Database and Outcomes Committee",0.15000000000000002
-A Public Domain Dataset for Human Activity Recognition using Smartphones,0.15000000000000002
-Cooling for newborns with hypoxic ischaemic encephalopathy.,0.15000000000000002
-Epidemic algorithms for replicated database maintenance,0.15000000000000002
-Estimating historical changes in global land cover: Croplands from 1700 to 1992,0.15000000000000002
-A Systematic Review of the Prevalence of Schizophrenia,0.15000000000000002
-Introduction to Database Systems,0.15000000000000002
-"Antiphospholipid syndrome: clinical and immunologic manifestations and patterns of disease expression in a cohort of 1,000 patients.",0.15000000000000002
-Riding the Waves of Culture: Understanding Diversity in Global Business,0.15000000000000002
-A family of human receptors structurally related to Drosophila Toll.,0.15000000000000002
-Agroforestree Database: a tree reference and selection guide. Version 4.,0.15000000000000002
-Graph clustering by flow simulation,0.15000000000000002
-Epidemiology of trauma deaths: a reassessment.,0.15000000000000002
-Enabling Public Verifiability and Data Dynamics for Storage Security in Cloud Computing,0.15000000000000002
-"Incidence Estimate of Nonmelanoma Skin Cancer (Keratinocyte Carcinomas) in the U.S. Population, 2012.",0.15000000000000002
-Mutation of a mutL homolog in hereditary colon cancer.,0.15000000000000002
-Cryptography and Data Security,0.15000000000000002
-The role of databases in support of computational chemistry calculations,0.15000000000000002
-Scientific collaboration networks. I. Network construction and fundamental results.,0.15000000000000002
-The new NHGRI-EBI Catalog of published genome-wide association studies (GWAS Catalog),0.15000000000000002
-Super-resolution from a single image,0.15000000000000002
-Empirical studies assessing the quality of health information for consumers on the world wide web: a systematic review.,0.15000000000000002
-"Data Mining Techniques: For Marketing, Sales, and Customer Support",0.15000000000000002
-Burden of gastrointestinal disease in the United States: 2012 update.,0.15000000000000002
-A function for interleukin 2 in Foxp3-expressing regulatory T cells,0.15000000000000002
-Patient adherence to treatment: three decades of research. A comprehensive review,0.15000000000000002
-Subclinical thyroid disease: scientific review and guidelines for diagnosis and management.,0.15000000000000002
-Isotopic Patterns in Modern Global Precipitation,0.15000000000000002
-The Seattle Heart Failure Model: Prediction of Survival in Heart Failure,0.15000000000000002
-Economic Costs of Diabetes in the U.S. in 2012,0.15000000000000002
-FaceForensics++: Learning to Detect Manipulated Facial Images,0.15000000000000002
-A methodological review of resilience measurement scales,0.15000000000000002
-Storing and querying ordered XML using a relational database system,0.15000000000000002
-Systematic review of sedentary behaviour and health indicators in school-aged children and youth,0.15000000000000002
-ResFinder 4.0 for predictions of phenotypes from genotypes,0.15000000000000002
-CLOUDY 90: Numerical Simulation of Plasmas and Their Spectra,0.15000000000000002
-Structure and tie strengths in mobile communication networks,0.15000000000000002
-The Corporate Social Performance and Corporate Financial Performance Debate,0.15000000000000002
-American Society of Clinical Oncology recommendations on fertility preservation in cancer patients.,0.15000000000000002
-Depression and poor glycemic control: a meta-analytic review of the literature.,0.15000000000000002
-Fatal Toxic Effects Associated With Immune Checkpoint Inhibitors: A Systematic Review and Meta-analysis,0.15000000000000002
-Concordance of the toxicity of pharmaceuticals in humans and in animals.,0.15000000000000002
-SOPMA: significant improvements in protein secondary structure prediction by consensus prediction from multiple alignments,0.15000000000000002
-Serum 25-hydroxyvitamin D levels and risk of multiple sclerosis.,0.15000000000000002
-The Google Similarity Distance,0.15000000000000002
-No saturation in the accumulation of alien species worldwide,0.15000000000000002
-Principles Of Database And Knowledge-Base Systems,0.15000000000000002
-"Consensus development methods, and their use in clinical guideline development.",0.15000000000000002
-Anatomy of hot spots in protein interfaces.,0.15000000000000002
-"Globalization, Outsourcing, and Wage Inequality",0.15000000000000002
-Computer-aided multivariate analysis,0.15000000000000002
-Where Is Current Research on Blockchain Technology?—A Systematic Review,0.15000000000000002
-The Theory of Relational Databases,0.15000000000000002
-Chronic kidney disease after acute kidney injury: a systematic review and meta-analysis.,0.15000000000000002
-Global imprint of climate change on marine life,0.15000000000000002
-Database System Concepts,0.15000000000000002
-WordNet::Similarity - Measuring the Relatedness of Concepts,0.15000000000000002
-Inequality in the Built Environment Underlies Key Health Disparities in Physical Activity and Obesity,0.15000000000000002
-Reprint of: The HITRAN molecular spectroscopic database and HAWKS (HITRAN Atmospheric Workstation): 1996 edition,0.15000000000000002
-Positions statement: criteria for defining polycystic ovary syndrome as a predominantly hyperandrogenic syndrome: an Androgen Excess Society guideline.,0.15000000000000002
-"MINTEQA2/PRODEFA2, a geochemical assessment model for environmental systems: Version 3. 0 user's manual",0.15000000000000002
-The properties of known drugs. 1. Molecular frameworks.,0.15000000000000002
-"Clinical manifestations, risk factors, and maternal and perinatal outcomes of coronavirus disease 2019 in pregnancy: living systematic review and meta-analysis",0.15000000000000002
-National Center for Biotechnology Information,0.15000000000000002
-Quality indicators for colonoscopy and the risk of interval cancer.,0.15000000000000002
-Adaptive multiple-band CFAR detection of an optical pattern with unknown spectral distribution,0.15000000000000002
-"Structural stability and lattice defects in copper: Ab initio , tight-binding, and embedded-atom calculations",0.15000000000000002
-Principles of database and knowledge- base systems,0.15000000000000002
-"Data Resource Profile: the Survey of Health, Ageing and Retirement in Europe (SHARE).",0.15000000000000002
-CRISPRFinder: a web tool to identify clustered regularly interspaced short palindromic repeats,0.15000000000000002
-"Work Groups, Structural Diversity, and Knowledge Sharing in a Global Organization",0.15000000000000002
-Risk factors and outcome in European cardiac surgery: analysis of the EuroSCORE multinational database of 19030 patients.,0.15000000000000002
-Using Linear Algebra for Intelligent Information Retrieval,0.15000000000000002
-Making health care safer: a critical analysis of patient safety practices.,0.15000000000000002
-Structure and function of the feed-forward loop network motif,0.15000000000000002
-Impact of 16S rRNA Gene Sequence Analysis for Identification of Bacteria on Clinical Microbiology and Infectious Diseases,0.15000000000000002
-Local Grayvalue Invariants for Image Retrieval,0.15000000000000002
-Materials Design and Discovery with High-Throughput Density Functional Theory: The Open Quantum Materials Database (OQMD),0.15000000000000002
-Completion of the 2006 National Land Cover Database for the conterminous United States.,0.15000000000000002
-Exercise for depression.,0.15000000000000002
-Scope and impact of financial conflicts of interest in biomedical research: a systematic review.,0.15000000000000002
-Seed Germination and Dormancy.,0.15000000000000002
-A review of psychological risk factors in back and neck pain.,0.15000000000000002
-Synthesizing U.S. River Restoration Efforts,0.15000000000000002
-Ongoing revolution in bacteriology: routine identification of bacteria by matrix-assisted laser desorption ionization time-of-flight mass spectrometry.,0.15000000000000002
-Cannabinoids for Medical Use: A Systematic Review and Meta-analysis.,0.15000000000000002
-Psychosocial work environment and mental health--a meta-analytic review.,0.15000000000000002
-Saccharomyces Genome Database: the genomics resource of budding yeast,0.15000000000000002
-"MEGA 5 : Molecular Evolutionary Genetics Analysis using Maximum Likelihood , Evolutionary Distance , and Maximum Parsimony Methods",0.15000000000000002
-Conditioned emotional reactions,0.15000000000000002
-WordNet: An Electronic Lexical Database,0.15000000000000002
-Maternal obesity and pregnancy outcome: a study of 287 213 pregnancies in London,0.15000000000000002
-Health-related quality of life in total hip and total knee arthroplasty. A qualitative and systematic review of the literature.,0.15000000000000002
-GLC2000: a new approach to global land cover mapping from Earth observation data,0.15000000000000002
-Gender and helping behavior: A meta-analytic review of the social psychological literature.,0.15000000000000002
-End-to-End Recovery of Human Shape and Pose,0.15000000000000002
-"DIP, the Database of Interacting Proteins: a research tool for studying cellular networks of protein interactions",0.15000000000000002
-DECIPHER: Database of Chromosomal Imbalance and Phenotype in Humans Using Ensembl Resources.,0.15000000000000002
-I-Mutant2.0: predicting stability changes upon mutation from the protein sequence or structure,0.15000000000000002
-Possibility Theory - An Approach to Computerized Processing of Uncertainty,0.15000000000000002
-Interventions for treating obesity in children,0.15000000000000002
-The Ribosomal Database Project.,0.15000000000000002
-Effectiveness and efficiency of search methods in systematic reviews of complex evidence: audit of primary sources,0.15000000000000002
-Energy-Aware Database Management Systems,0.15000000000000002
-Old-growth forests as global carbon sinks,0.15000000000000002
-Notes on CEPII’s Distances Measures: The GeoDist Database,0.15000000000000002
-Quantum chemistry structures and properties of 134 kilo molecules,0.15000000000000002
-"Interaction between the serotonin transporter gene (5-HTTLPR), stressful life events, and risk of depression: a meta-analysis.",0.15000000000000002
-Population,0.15000000000000002
-XQuery 1.0 : An XML Query Language,0.15000000000000002
-Extending the database relational model to capture more meaning,0.15000000000000002
-The Global Burden of Snakebite: A Literature Analysis and Modelling Based on Regional Estimates of Envenoming and Deaths,0.15000000000000002
-Effects of computer-based clinical decision support systems on physician performance and patient outcomes: a systematic review.,0.15000000000000002
-Reading,0.15000000000000002
-Detecting protein function and protein-protein interactions from genome sequences.,0.15000000000000002
-Risk of myocardial infarction in patients with psoriasis.,0.15000000000000002
-Physiology of Soccer,0.15000000000000002
-"Changing epidemiology of small-cell lung cancer in the United States over the last 30 years: analysis of the surveillance, epidemiologic, and end results database.",0.15000000000000002
-A psychometric toolbox for testing validity and reliability.,0.15000000000000002
-"Ground-Motion Prediction Equations for the Average Horizontal Component of PGA, PGV, and 5%-Damped PSA at Spectral Periods between 0.01 s and 10.0 s",0.15000000000000002
-"Designing and developing a literature-derived, population-based dietary inflammatory index",0.15000000000000002
-World Register of Marine Species,0.15000000000000002
-APD3: the antimicrobial peptide database as a tool for research and education,0.15000000000000002
-Pan-tumor genomic biomarkers for PD-1 checkpoint blockade–based immunotherapy,0.15000000000000002
-Identification of protein coding regions by database similarity search,0.15000000000000002
-"Dysphagia After Stroke: Incidence, Diagnosis, and Pulmonary Complications",0.15000000000000002
-”Networks of Outrage and Hope. Social Movements in the Internet Age”.,0.15000000000000002
-"Norms of valence, arousal, and dominance for 13,915 English lemmas",0.15000000000000002
-Impact of mutant p53 functional properties on TP53 mutation patterns and tumor phenotype: lessons from recent developments in the IARC TP53 database,0.15000000000000002
-Computational method to predict mitochondrially imported proteins and their targeting sequences.,0.15000000000000002
-PRISM III: an updated Pediatric Risk of Mortality score.,0.15000000000000002
-Serine protease mechanism and specificity.,0.15000000000000002
-Impact of hospital volume on operative mortality for major cancer surgery.,0.15000000000000002
-Database Mining: A Performance Perspective,0.15000000000000002
-Computer Vision,0.15000000000000002
-Content validity of the expanded and revised Gross Motor Function Classification System,0.15000000000000002
-Risk prediction models for hospital readmission: a systematic review.,0.15000000000000002
-Anthropometric Standards for the Assessment of Growth and Nutritional Status,0.15000000000000002
-"ETE 3: Reconstruction, Analysis, and Visualization of Phylogenomic Data",0.15000000000000002
-The Impact of Positive Sagittal Balance in Adult Spinal Deformity,0.15000000000000002
-The UNITE database for molecular identification of fungi--recent updates and future perspectives.,0.15000000000000002
-The National Cancer Data Base: A Powerful Initiative to Improve Cancer Care in the United States,0.15000000000000002
-Monitoring and estimating tropical forest carbon stocks: making REDD a reality,0.15000000000000002
-Guidelines for the management of inflammatory bowel disease in adults,0.15000000000000002
-LinkedOmics: analyzing multi-omics data within and across 32 cancer types,0.15000000000000002
-The COVID-19 vaccine development landscape,0.15000000000000002
-Prevalence of and interventions for sarcopenia in ageing adults: a systematic review. Report of the International Sarcopenia Initiative (EWGSOP and IWGS),0.15000000000000002
-Multifacet's general execution-driven multiprocessor simulator (GEMS) toolset,0.15000000000000002
-Mindfulness-based stress reduction for stress management in healthy people: a review and meta-analysis.,0.15000000000000002
-Sequence complexity of disordered protein,0.15000000000000002
-Men and health help-seeking behaviour: literature review.,0.15000000000000002
-Femtomole sequencing of proteins from polyacrylamide gels by nano-electrospray mass spectrometry,0.15000000000000002
-Global epidemiology of haemoglobin disorders and derived service indicators.,0.15000000000000002
-CHIANTI - an atomic database for emission lines - I. Wavelengths greater than 50 Å,0.15000000000000002
-How Good is Volunteered Geographical Information? A Comparative Study of OpenStreetMap and Ordnance Survey Datasets,0.15000000000000002

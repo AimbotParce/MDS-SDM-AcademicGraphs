@@ -9,19 +9,29 @@ from neo4j import Driver, GraphDatabase
 ######
 ###### Reviewer recommendation (Cypher)
 ######
-PAGERANK_CREATE_PROJECTION = "CALL gds.graph.project('{graph_name}', 'Publication', 'Cites')"
+PUBLICATION_PAGERANK_CREATE_PROJECTION = (
+    "MATCH (dest:Publication) "
+    "OPTIONAL MATCH (source:Publication)-[e:Cites]->(dest) "
+    "RETURN gds.graph.project('{graph_name}', dest, source)"
+)
 PAGERANK_EXECUTE = (
     "CALL gds.pageRank.stream('{graph_name}') "
     "YIELD nodeId, score "
     "RETURN gds.util.asNode(nodeId).title AS title, score "
     "ORDER BY score DESC"
 )
-NODESIM_CREATE_PROJECTION = "CALL gds.graph.project('{graph_name}', ['Author', 'Publication'], ['Wrote', 'MainAuthor'])"
+PUBLICATION_SIM_CREATE_PROJECTION = (
+    "MATCH (dest:Publication) "
+    "OPTIONAL MATCH (source:Publication|Author)-[e:Cites|Wrote]->(dest) "
+    "RETURN gds.graph.project('{graph_name}', dest, source)"
+)
 NODESIM_EXECUTE = (
     "CALL gds.nodeSimilarity.stream('{graph_name}') "
     "YIELD node1, node2, similarity "
-    "RETURN gds.util.asNode(node1).name AS author1, gds.util.asNode(node2).name AS author2, similarity "
-    "ORDER BY similarity DESC, author1, author2"
+    "WITH gds.util.asNode(node1) AS node1, gds.util.asNode(node2) AS node2, similarity "
+    "WHERE LABELS(node1)=['Publication'] AND LABELS(node2)=['Publication'] "
+    "RETURN node1.title AS paper1, node2.title AS paper2, similarity "
+    "ORDER BY similarity DESC, paper1, paper2"
 )
 
 
@@ -57,7 +67,7 @@ def run_pagerank(driver: Driver) -> pd.DataFrame:
 
     with driver.session() as session:
         # Project citation graph of publications
-        session.run(PAGERANK_CREATE_PROJECTION.format(graph_name=graph_name))
+        session.run(PUBLICATION_PAGERANK_CREATE_PROJECTION.format(graph_name=graph_name))
 
         # Run PageRank, here the query can be modified further
         result = session.run(PAGERANK_EXECUTE.format(graph_name=graph_name))
@@ -82,7 +92,7 @@ def run_nodesim_author_similarity(driver: Driver):
 
     with driver.session() as session:
         # Project the graph using your actual node labels and relationship types
-        session.run(NODESIM_CREATE_PROJECTION.format(graph_name=graph_name))
+        session.run(PUBLICATION_SIM_CREATE_PROJECTION.format(graph_name=graph_name))
 
         # Run node similarity
         result = session.run(NODESIM_EXECUTE.format(graph_name=graph_name))
