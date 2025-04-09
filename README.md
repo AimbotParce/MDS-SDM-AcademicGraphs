@@ -182,16 +182,6 @@ Here's a breakdown of the manipulation scripts included in this repository:
   database and synthetically generates the review details (acceptance, revision
   counts and content), and adds them to the Neo4j database.
 
+## Datasets
 
-## TO-DO list
-Remaining tasks for the 1st delivery:
-- [ ] script to create synthetic data
-- [x] Neo4J data loading script
-- [x] Improve the Docker compose for the automatic ingestion
-- [ ] Check what is happening with the `IsPublishedIn` edges that go to empty nodes
-- [ ] Do the "evolving the graph" A.3 section 
-- [ ] Code the 4 queries in Cypher (2 for each member)
-- [ ] Code the 4 recommending queries in Cypher (2 for each member)
-- [ ] Implement the 2 graph algorithms using GDS library (1 for each member)
-- [ ] Interpret the results (1 for each member)
-- [ ] Write the final report overleaf (both)
+From the execution of the similarity and pagerank graph algorithms, the results have been saved and published inside the './datasets' folder.

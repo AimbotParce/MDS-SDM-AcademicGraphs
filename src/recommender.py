@@ -7,6 +7,8 @@ import json
 from loguru import logger
 from typing import List, Dict, Optional
 import re
+import argparse
+
 
 load_dotenv()
 neo4j_username = os.getenv("NEO4J_USER")
@@ -180,17 +182,14 @@ def step2_recsys_label_venues(tx,
     percentage: float = 0.9):
     
     query = f"""
-    CALL {{
-        MATCH (c:Community {{name: "{community}}})-[:HasKeyword]->(k:Keyword)       // Get community and its keywords
-        MATCH (v)<-[:PublishedIn]-(p:Publication)-[:HasKeyword]->(k)                // Get venues and keywords of a paper
-        WHERE v:Proceedings OR v:JournalVolume OR v.OtherPublicationVenue
-        WITH v, COUNT(DISTINCT p) as related_papers
-        MATCH (v)<-[:PublishedIn]-(all:Publication) // Get all papers of venue v 
-        WITH v, related_papers, COUNT(all) as total_papers
-        WHERE total_papers > 0 AND (related_papers * 1.0 / total_papers) >= {percentage}
-        SET v:{get_community_venue_label(community)}                                // Tag this venue for this community
-        
-    }}
+    MATCH (c:Community {{name: "{community}}})-[:HasKeyword]->(k:Keyword)       // Get community and its keywords
+    MATCH (v)<-[:PublishedIn]-(p:Publication)-[:HasKeyword]->(k)                // Get venues and keywords of a paper
+    WHERE v:Proceedings OR v:JournalVolume OR v.OtherPublicationVenue
+    WITH v, COUNT(DISTINCT p) as related_papers
+    MATCH (v)<-[:PublishedIn]-(all:Publication) // Get all papers of venue v 
+    WITH v, related_papers, COUNT(all) as total_papers
+    WHERE total_papers > 0 AND (related_papers * 1.0 / total_papers) >= {percentage}
+    SET v:{get_community_venue_label(community)}                                // Tag this venue for this community        
     """
     run_query(tx, query)
 
@@ -220,7 +219,7 @@ def step4_recsys_label_reviewers_and_gurus(tx,
     min_guru_top_papers: int = 2):
         
     query = f"""
-    MATCH (a:Author)-[:Authored]->(p:{get_community_toppaper_label(community)})
+    MATCH (a:Author)-[:Wrote]->(p:{get_community_toppaper_label(community)})
     WITH a, COUNT(p), AS top_papers
     SET a: {get_community_reviewer_label(community)} // Recommend community reviewer
     WITH a, top_papers
@@ -232,7 +231,7 @@ def step4_recsys_label_reviewers_and_gurus(tx,
 
 def undo_recsys_modifications(tx, steps: List[int] = [0,1,2,3,4]):
     undo_queries = {
-        0: "MATCH (c:Community {name: 'Database'})-[r:HAS_KEYWORD]->() DELETE r",
+        0: "MATCH (c:Community {name: 'Database'})-[r:HasKeyword]->() DELETE r",
         1: "MATCH (v:DatabaseVenue) REMOVE v:DatabaseVenue",
         2: "MATCH (p:TopDatabasePaper) REMOVE p:TopDatabasePaper",
         3: "MATCH (a:Reviewer) REMOVE a:Reviewer",
@@ -254,27 +253,53 @@ def execute_recommendation_algorithm(driver: GraphDatabase.driver = driver):
         
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Run recommendation system with optional preprocessing.")
+    parser.add_argument(
+        "--preprocess", 
+        action="store_true", 
+        help="Flag to indicate whether to run the preprocessing step (default is not to preprocess)"
+    )
+    parser.add_argument(
+        "--recommend", 
+        action="store_true", 
+        help="Flag to indicate whether to run the recommendation algorithm (default is not to recommend)"
+    )
+    return parser.parse_args()
+
+    
+
+
+
 if __name__ == "__main__":
+    # Parse command-line arguments
+    args = parse_args()
 
-    # PART 1: PREPROCESS KEYWORDS
-    papers = fetch_papers_from_neo4j()
-    logger.success(f"Fetched {len(papers)} papers from Neo4J sucessfully!")
-    papers_df = pd.DataFrame(papers)
+    # PART 1: PREPROCESS KEYWORDS (only if --preprocess flag is set)
+    if args.preprocess:
+        papers = fetch_papers_from_neo4j()
+        logger.success(f"Fetched {len(papers)} papers from Neo4J successfully!")
+        papers_df = pd.DataFrame(papers)
 
-    # YAKE is fast < 5s but updating the graph could tak elong
-    max_ngram = 2
-    num_keywords = 5
-    dedupthreshold = 0.8
+        # YAKE is fast < 5s but updating the graph could take long
+        max_ngram = 2
+        num_keywords = 5
+        dedupthreshold = 0.8
 
-    preprocess_keywords_and_update_graph(
-        papers_df,
-        max_ngram=max_ngram,
-        num_keywords=num_keywords,
-        dedupthreshold=dedupthreshold,
-    )
-    logger.success(
-        f"Extracted keywords from papers successfully! (Each paper with {num_keywords}, {max_ngram} max ngrams each, with a deduplication threshold of {dedupthreshold})"
-    )
+        preprocess_keywords_and_update_graph(
+            papers_df,
+            max_ngram=max_ngram,
+            num_keywords=num_keywords,
+            dedupthreshold=dedupthreshold,
+        )
+        logger.success(
+            f"Extracted keywords from papers successfully! (Each paper with {num_keywords}, {max_ngram} max ngrams each, with a deduplication threshold of {dedupthreshold})"
+        )
 
-    # PART 2: EXECUTE RECOMMENDATION ALGORITHM
-    execute_recommendation_algorithm()
+    if args.recommend:
+        # PART 2: EXECUTE RECOMMENDATION ALGORITHM
+        execute_recommendation_algorithm()
+        logger.success(
+            f"Successfully executed reviewer recommendation system, open your Neo4J browser to visualize results"
+        )
+        
